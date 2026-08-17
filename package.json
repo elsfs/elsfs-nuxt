@@ -1,0 +1,65 @@
+{
+  "name": "nuxt-module",
+  "version": "1.0.0",
+  "description": "My new Nuxt module",
+  "repository": "your-org/my-module",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/types.d.mts",
+      "import": "./dist/module.mjs"
+    }
+  },
+  "main": "./dist/module.mjs",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/types.d.mts"
+      ]
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "workspaces": [
+    "playground"
+  ],
+  "scripts": {
+    "prepack": "nuxt-module-build build",
+    "dev": "npm run dev:prepare && nuxt dev playground",
+    "dev:build": "nuxt build playground",
+    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxt prepare playground",
+    "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@module-federation/nuxt": "^0.1.0",
+    "@nuxt/fonts": "^0.14.0",
+    "@nuxt/icon": "^2.5.0",
+    "@nuxt/kit": "^4.5.2",
+    "@nuxt/ui": "^4.10.0",
+    "@nuxtjs/color-mode": "^4.0.1"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "^3.4.1",
+    "@nuxt/eslint": "^1.17.0",
+    "@nuxt/eslint-config": "^1.17.0",
+    "@nuxt/module-builder": "^1.0.3",
+    "@nuxt/schema": "^4.5.2",
+    "@nuxt/test-utils": "^4.1.0",
+    "@pinia/nuxt": "1.0.2",
+    "@types/node": "latest",
+    "changelogen": "^0.6.2",
+    "eslint": "^10.8.1",
+    "nuxt": "^4.5.2",
+    "pinia": "^4.0.3",
+    "typescript": "^6.0.3",
+    "vite-plugin-eslint2": "^5.3.0",
+    "vitest": "^4.1.10",
+    "vue-tsc": "^3.3.9"
+  }
+}
