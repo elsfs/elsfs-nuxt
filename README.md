@@ -1,84 +1,45 @@
-<!--
-Get your module up and running quickly.
+# elsfs-nuxt
 
-Find and replace all on all files (CMD+SHIFT+F):
-- Name: My Module
-- Package name: my-module
-- Description: My new Nuxt module
--->
+基于 [Nuxt](https://nuxt.com) 与 [Nuxt UI](https://ui.nuxt.com) 的应用。
 
-# My Module
+## 技术栈
 
-[![npm version][npm-version-src]][npm-version-href]
-[![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![License][license-src]][license-href]
-[![Nuxt][nuxt-src]][nuxt-href]
+- [Nuxt 4](https://nuxt.com)
+- [Nuxt UI v4](https://ui.nuxt.com)（Tailwind CSS v4）
+- [Pinia](https://pinia.vuejs.org)（状态管理，通过 `@pinia/nuxt`）
+- [Module Federation](https://module-federation.io)（通过 `@module-federation/nuxt`，作为 remote 应用）
 
-My new Nuxt module for doing amazing things.
-
-- [✨ &nbsp;Release Notes](/CHANGELOG.md)
-<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-module?file=playground%2Fapp.vue) -->
-<!-- - [📖 &nbsp;Documentation](https://example.com) -->
-
-## Features
-
-<!-- Highlight some of the features your module provide here -->
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
-
-## Quick Setup
-
-Install the module to your Nuxt application with one command:
+## 开发
 
 ```bash
-npx nuxt module add my-module
+# 安装依赖
+pnpm install
+
+# 启动开发服务器（http://localhost:3000）
+pnpm dev
+
+# 类型检查
+pnpm typecheck
+
+# Lint
+pnpm lint
+
+# 生产构建
+pnpm build
+
+# 预览生产构建
+pnpm preview
 ```
 
-That's it! You can now use My Module in your Nuxt app ✨
+## 目录结构
 
-
-## Contribution
-
-<details>
-  <summary>Local development</summary>
-  
-  ```bash
-  # Install dependencies
-  npm install
-  
-  # Generate type stubs
-  npm run dev:prepare
-  
-  # Develop with the playground
-  npm run dev
-  
-  # Build the playground
-  npm run dev:build
-  
-  # Run ESLint
-  npm run lint
-  
-  # Run Vitest
-  npm run test
-  npm run test:watch
-  
-  # Release new version
-  npm run release
-  ```
-
-</details>
-
-
-<!-- Badges -->
-[npm-version-src]: https://img.shields.io/npm/v/my-module/latest.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-version-href]: https://npmjs.com/package/my-module
-
-[npm-downloads-src]: https://img.shields.io/npm/dm/my-module.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-downloads-href]: https://npm.chart.dev/my-module
-
-[license-src]: https://img.shields.io/npm/l/my-module.svg?style=flat&colorA=020420&colorB=00DC82
-[license-href]: https://npmjs.com/package/my-module
-
-[nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt
-[nuxt-href]: https://nuxt.com
+```
+app.vue              应用入口
+assets/css/          Tailwind / Nuxt UI 样式
+components/          通用组件
+layouts/             布局（default / orange）
+middleware/          路由中间件（auth）
+pages/               页面
+server/              Nitro 服务端插件
+stores/              Pinia stores
+```

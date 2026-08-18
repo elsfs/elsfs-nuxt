@@ -27,7 +27,10 @@ jobs:
       - name: Lint
         run: npm run lint
 
-  test:
+      - name: Typecheck
+        run: npm run typecheck
+
+  build:
     runs-on: ubuntu-latest
 
     steps:
@@ -42,8 +45,5 @@ jobs:
       - name: Install dependencies
         run: npx nypm@latest i
 
-      - name: Playground prepare
-        run: npm run dev:prepare
-
-      - name: Test
-        run: npm run test
+      - name: Build
+        run: npm run build
