@@ -11,6 +11,11 @@
     "lint": "eslint .",
     "typecheck": "vue-tsc --noEmit"
   },
+  "pnpm": {
+    "overrides": {
+      "@module-federation/vite": "^1.20.1"
+    }
+  },
   "dependencies": {
     "@iconify-json/lucide": "^1.2.123",
     "@module-federation/nuxt": "^0.1.0",
