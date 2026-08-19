@@ -50,6 +50,13 @@ export default defineNuxtConfig({
       redirectOn: 'root',
     },
   },
+  icon: {
+    clientBundle: {
+      // 扫描源码中的图标用法并打进客户端包，避免运行时按需拉取图标
+      // （服务端渲染时相对路径 fetch 会失败，导致 SSR 图标告警）
+      scan: true,
+    },
+  },
   moduleFederation: {
     config: {
       name: 'remote', // 远程应用名称

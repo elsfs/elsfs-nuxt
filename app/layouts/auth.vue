@@ -1,6 +1,6 @@
 <script setup lang="ts">
-const { t } = useI18n()
-const { locale, locales } = useI18n()
+const { t, locale, setLocale } = useI18n()
+const { locales } = useI18n()
 const colorMode = useColorMode()
 
 const isDark = computed(() => colorMode.value === 'dark')
@@ -8,6 +8,15 @@ const isDark = computed(() => colorMode.value === 'dark')
 const localeItems = computed(() =>
   locales.value.map(l => ({ label: l.name || l.code, value: l.code })),
 )
+
+// 必须通过 setLocale() 切换语言：语言包是按需懒加载的，
+// 直接给 locale.value 赋值只会切换当前语言，不会加载对应语言包，导致 t() 回退显示 key
+async function onLocaleChange(code: unknown) {
+  const next = typeof code === 'string' ? code : undefined
+  if (next && next !== locale.value) {
+    await setLocale(next as typeof locale.value)
+  }
+}
 
 // vue-i18n v11 中 tm() 返回编译后的消息 AST，因此数组消息改为按索引翻译
 const featureKeys = ['common.features.0', 'common.features.1', 'common.features.2']
@@ -55,7 +64,7 @@ function toggleTheme() {
               class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300"
             >
               <UIcon
-                name="i-lucide-check-circle-2"
+                name="i-lucide-circle-check"
                 class="size-5 shrink-0 text-primary-500"
               />
               {{ feature }}
@@ -85,11 +94,12 @@ function toggleTheme() {
           <!-- 顶部工具条：语言切换 + 主题切换 -->
           <div class="mb-6 flex items-center justify-end gap-2">
             <USelect
-              v-model="locale"
+              :model-value="locale"
               :items="localeItems"
               size="sm"
               class="w-32"
               :aria-label="t('common.language')"
+              @update:model-value="onLocaleChange"
             />
             <UButton
               variant="ghost"
