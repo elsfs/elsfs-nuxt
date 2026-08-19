@@ -232,11 +232,8 @@ function handleReset() {
         size="lg"
         class="w-full justify-center"
         :loading="isSubmitting"
-      >
-        <template #label>
-          {{ isSubmitting ? t('register.submitLoading') : t('register.submit') }}
-        </template>
-      </UButton>
+        :label="isSubmitting ? t('register.submitLoading') : t('register.submit')"
+      />
 
       <div class="text-center">
         <button

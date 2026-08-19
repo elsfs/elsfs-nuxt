@@ -150,11 +150,8 @@ async function handleSocial(provider: string) {
         size="lg"
         class="w-full justify-center"
         :loading="isSubmitting"
-      >
-        <template #label>
-          {{ isSubmitting ? t('login.submitLoading') : t('login.submit') }}
-        </template>
-      </UButton>
+        :label="isSubmitting ? t('login.submitLoading') : t('login.submit')"
+      />
 
       <div class="text-center">
         <button
