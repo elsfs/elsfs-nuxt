@@ -4,6 +4,7 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@module-federation/nuxt',
     '@pinia/nuxt',
+    '@nuxtjs/i18n',
   ],
   devtools: { enabled: true },
   app: {
@@ -27,12 +28,26 @@ export default defineNuxtConfig({
   },
   compatibilityDate: 'latest',
   nitro: {
-    logLevel: 'info' // 或 'warn' 减少输出
+    logLevel: 'info', // 或 'warn' 减少输出
   },
   eslint: {
     checker: true,
     config: {
       stylistic: true,
+    },
+  },
+  i18n: {
+    locales: [
+      { code: 'zh-CN', name: '中文', file: 'zh-CN.json' },
+      { code: 'en', name: 'English', file: 'en.json' },
+    ],
+    defaultLocale: 'zh-CN',
+    strategy: 'no_prefix',
+    langDir: 'locales',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      redirectOn: 'root',
     },
   },
   moduleFederation: {

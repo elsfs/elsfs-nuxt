@@ -1,0 +1,78 @@
+{
+  "common": {
+    "appName": "ELSFS",
+    "brandTagline": "Secure, simple and reliable authentication",
+    "brandDescription": "Out-of-the-box identity solutions for your app: sign in, register, social login and more.",
+    "features": [
+      "Secure account system",
+      "Multi-language i18n support",
+      "Dark / light theme switching"
+    ],
+    "language": "Language",
+    "theme": "Theme",
+    "backToLogin": "Already have an account? Sign in",
+    "goRegister": "No account yet? Create one",
+    "orContinueWith": "or continue with",
+    "reset": "Reset form",
+    "logout": "Sign out",
+    "welcome": "Welcome back, {name}"
+  },
+  "login": {
+    "title": "Welcome back",
+    "subtitle": "Sign in to your account to continue",
+    "email": "Email",
+    "emailPlaceholder": "you{'@'}example.com",
+    "password": "Password",
+    "passwordPlaceholder": "Enter your password",
+    "rememberMe": "Remember me",
+    "forgotPassword": "Forgot password?",
+    "submit": "Sign in",
+    "submitLoading": "Signing in...",
+    "success": "Signed in, redirecting..."
+  },
+  "register": {
+    "title": "Create account",
+    "subtitle": "Register a free account and get started",
+    "username": "Username",
+    "usernamePlaceholder": "Enter a username",
+    "email": "Email",
+    "emailPlaceholder": "you{'@'}example.com",
+    "password": "Password",
+    "passwordPlaceholder": "Enter a password",
+    "confirmPassword": "Confirm password",
+    "confirmPasswordPlaceholder": "Enter the password again",
+    "strength": "Password strength",
+    "strength_0": "Too weak",
+    "strength_1": "Weak",
+    "strength_2": "Fair",
+    "strength_3": "Good",
+    "strength_4": "Strong",
+    "agreePrefix": "I have read and agree to the",
+    "terms": "Terms of Service and Privacy Policy",
+    "submit": "Sign up",
+    "submitLoading": "Signing up...",
+    "success": "Account created, redirecting..."
+  },
+  "validation": {
+    "required": "This field is required",
+    "emailInvalid": "Please enter a valid email address",
+    "passwordMin": "Password must be at least {min} characters",
+    "usernameMin": "Username must be at least {min} characters",
+    "usernameMax": "Username must not exceed {max} characters",
+    "passwordPattern": "Password must contain letters and numbers",
+    "confirmMismatch": "The two passwords do not match",
+    "termsRequired": "Please agree to the terms first"
+  },
+  "social": {
+    "github": "GitHub",
+    "google": "Google",
+    "wechat": "WeChat"
+  },
+  "errors": {
+    "VALIDATION_ERROR": "Invalid request, please check and retry",
+    "INVALID_CREDENTIALS": "Incorrect email or password",
+    "EMAIL_TAKEN": "This email is already registered",
+    "UNAUTHORIZED": "Your session has expired, please sign in again",
+    "NETWORK_ERROR": "Network error, please try again later"
+  }
+}

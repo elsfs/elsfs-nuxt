@@ -12,14 +12,19 @@
     "typecheck": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@iconify-json/lucide": "^1.2.123",
     "@module-federation/nuxt": "^0.1.0",
     "@nuxt/ui": "^4.10.0",
+    "@nuxtjs/i18n": "10.6.0",
+    "@nuxtjs/tailwindcss": "6.14.0",
     "@pinia/nuxt": "1.0.2",
+    "@vee-validate/yup": "4.15.1",
     "pinia": "^4.0.3",
+    "tailwindcss": "^4.3.3",
+    "vee-validate": "4.15.1",
     "vue": "^3.5.0",
     "vue-router": "^5.2.0",
-    "@nuxtjs/tailwindcss": "6.14.0",
-    "tailwindcss": "^4.3.3"
+    "yup": "1.7.1"
   },
   "devDependencies": {
     "@nuxt/devtools": "^3.4.1",

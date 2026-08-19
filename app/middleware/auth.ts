@@ -1,10 +1,14 @@
-function isAuthenticated(): boolean {
-  return false
-}
+/**
+ * 认证守卫：未登录用户重定向到登录页，并携带原始目标地址。
+ * 用法：definePageMeta({ middleware: 'auth' })
+ */
+export default defineNuxtRouteMiddleware((to) => {
+  const auth = useAuthStore()
 
-export default defineNuxtRouteMiddleware((_to, _from) => {
-  // isAuthenticated() 是一个示例方法，用于验证用户是否已认证
-  if (isAuthenticated() === false) {
-    return navigateTo('/login')
+  if (!auth.isAuthenticated) {
+    return navigateTo({
+      path: '/login',
+      query: { redirect: to.fullPath },
+    })
   }
 })
