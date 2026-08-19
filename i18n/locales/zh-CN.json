@@ -3,6 +3,8 @@
     "appName": "ELSFS",
     "brandTagline": "安全、简单、可靠的认证体验",
     "brandDescription": "为你的应用提供开箱即用的身份认证方案，支持登录、注册、社交账号等多种方式。",
+    "eyebrow": "身份认证与安全",
+    "rights": "保留所有权利",
     "features": [
       "安全可靠的账号体系",
       "多语言国际化支持",

@@ -99,7 +99,7 @@ async function handleSocial(provider: string) {
           <template #leading>
             <UIcon
               name="i-lucide-mail"
-              class="size-4"
+              class="size-4 text-dimmed"
             />
           </template>
         </UInput>
@@ -119,7 +119,7 @@ async function handleSocial(provider: string) {
           <template #leading>
             <UIcon
               name="i-lucide-lock"
-              class="size-4"
+              class="size-4 text-dimmed"
             />
           </template>
           <template #trailing>
@@ -148,7 +148,7 @@ async function handleSocial(provider: string) {
       <UButton
         type="submit"
         size="lg"
-        class="w-full justify-center"
+        block
         :loading="isSubmitting"
         :label="isSubmitting ? t('login.submitLoading') : t('login.submit')"
       />
@@ -169,9 +169,9 @@ async function handleSocial(provider: string) {
     </form>
 
     <div class="my-6 flex items-center gap-3">
-      <div class="h-px flex-1 bg-slate-200 dark:bg-white/10" />
-      <span class="text-xs text-slate-400">{{ t('common.orContinueWith') }}</span>
-      <div class="h-px flex-1 bg-slate-200 dark:bg-white/10" />
+      <div class="h-px flex-1 bg-slate-200/80 dark:bg-white/10" />
+      <span class="text-xs font-medium text-slate-400">{{ t('common.orContinueWith') }}</span>
+      <div class="h-px flex-1 bg-slate-200/80 dark:bg-white/10" />
     </div>
 
     <div class="grid grid-cols-3 gap-3">
@@ -180,7 +180,7 @@ async function handleSocial(provider: string) {
         :key="provider.key"
         variant="outline"
         size="lg"
-        class="justify-center"
+        class="py-2.5"
         :loading="socialLoading === provider.key"
         :aria-label="t(provider.labelKey)"
         @click="handleSocial(provider.key)"

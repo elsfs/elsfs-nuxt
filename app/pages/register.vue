@@ -97,7 +97,7 @@ function handleReset() {
           <template #leading>
             <UIcon
               name="i-lucide-user"
-              class="size-4"
+              class="size-4 text-dimmed"
             />
           </template>
         </UInput>
@@ -117,7 +117,7 @@ function handleReset() {
           <template #leading>
             <UIcon
               name="i-lucide-mail"
-              class="size-4"
+              class="size-4 text-dimmed"
             />
           </template>
         </UInput>
@@ -137,7 +137,7 @@ function handleReset() {
           <template #leading>
             <UIcon
               name="i-lucide-lock"
-              class="size-4"
+              class="size-4 text-dimmed"
             />
           </template>
           <template #trailing>
@@ -159,20 +159,24 @@ function handleReset() {
       <!-- 密码强度指示器 -->
       <div
         v-if="password"
-        class="-mt-2 space-y-1.5"
+        class="-mt-1.5 space-y-1.5"
       >
         <div class="flex gap-1.5">
           <div
             v-for="i in 4"
             :key="i"
-            class="h-1.5 flex-1 rounded-full bg-slate-200 transition-all duration-300 dark:bg-white/10"
+            class="h-1 flex-1 overflow-hidden rounded-full bg-slate-200/80 transition-colors duration-300 dark:bg-white/10"
             :class="i <= strength.score ? strength.bar : ''"
           />
         </div>
         <p
-          class="text-xs"
+          class="flex items-center gap-1 text-xs"
           :class="strength.text"
         >
+          <UIcon
+            name="i-lucide-gauge"
+            class="size-3"
+          />
           {{ t('register.strength') }}：{{ strength.label }}
         </p>
       </div>
@@ -191,7 +195,7 @@ function handleReset() {
           <template #leading>
             <UIcon
               name="i-lucide-lock-keyhole"
-              class="size-4"
+              class="size-4 text-dimmed"
             />
           </template>
           <template #trailing>
@@ -230,7 +234,7 @@ function handleReset() {
       <UButton
         type="submit"
         size="lg"
-        class="w-full justify-center"
+        block
         :loading="isSubmitting"
         :label="isSubmitting ? t('register.submitLoading') : t('register.submit')"
       />

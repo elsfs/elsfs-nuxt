@@ -28,67 +28,96 @@ function toggleTheme() {
 </script>
 
 <template>
-  <div class="relative min-h-screen overflow-hidden bg-slate-50 transition-colors duration-300 dark:bg-slate-950">
-    <!-- 环境光背景装饰（毛玻璃氛围） -->
+  <div class="relative min-h-screen w-full overflow-hidden bg-slate-50 transition-colors duration-300 dark:bg-slate-950">
+    <!-- 环境光背景：柔和渐变 + 光斑 + 微网格纹理 -->
     <div
       aria-hidden="true"
-      class="pointer-events-none absolute inset-0 overflow-hidden"
+      class="pointer-events-none absolute inset-0 -z-10"
     >
-      <div class="absolute -left-32 -top-32 h-[28rem] w-[28rem] rounded-full bg-primary-400/30 blur-3xl animate-blob" />
-      <div class="absolute -right-32 top-1/3 h-[30rem] w-[30rem] rounded-full bg-secondary-400/20 blur-3xl animate-blob [animation-delay:2s]" />
-      <div class="absolute -bottom-24 left-1/3 h-80 w-80 rounded-full bg-primary-500/10 blur-3xl animate-blob [animation-delay:4s]" />
+      <!-- 全局渐变底色 -->
+      <div class="absolute inset-0 bg-gradient-to-br from-primary-50/90 via-slate-50 to-secondary-50/60 dark:from-primary-950/40 dark:via-slate-950 dark:to-secondary-950/40" />
+      <!-- 光斑 -->
+      <div class="absolute -left-40 -top-40 h-[32rem] w-[32rem] rounded-full bg-primary-400/25 blur-3xl animate-blob" />
+      <div class="absolute -right-40 top-1/4 h-[28rem] w-[28rem] rounded-full bg-secondary-400/20 blur-3xl animate-blob [animation-delay:4s]" />
+      <div class="absolute -bottom-32 left-1/3 h-80 w-80 rounded-full bg-primary-500/10 blur-3xl animate-blob [animation-delay:8s]" />
+      <!-- 微网格纹理 -->
+      <div class="absolute inset-0 opacity-[0.035] dark:opacity-[0.06] [background-image:linear-gradient(to_right,currentColor_1px,transparent_1px),linear-gradient(to_bottom,currentColor_1px,transparent_1px)] [background-size:48px_48px]" />
     </div>
 
     <div class="relative z-10 mx-auto grid min-h-screen w-full max-w-7xl grid-cols-1 lg:grid-cols-2">
       <!-- 左侧品牌区（移动端隐藏） -->
-      <aside class="hidden flex-col justify-between gap-12 p-12 lg:flex">
-        <div class="flex items-center gap-3">
-          <UAvatar
-            icon="i-lucide-shield-check"
-            size="lg"
-          />
+      <aside class="hidden flex-col justify-between gap-12 p-12 lg:flex xl:p-16">
+        <!-- Logo -->
+        <div class="flex items-center gap-3.5">
+          <div class="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-secondary-500 shadow-lg shadow-primary-500/25">
+            <UIcon
+              name="i-lucide-shield-check"
+              class="size-6 text-white"
+            />
+          </div>
           <span class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">{{ t('common.appName') }}</span>
         </div>
 
-        <div class="space-y-8">
-          <h1 class="text-4xl font-bold leading-tight text-slate-900 dark:text-white">
-            {{ t('common.brandTagline') }}
-          </h1>
-          <p class="max-w-md text-base leading-relaxed text-slate-600 dark:text-slate-300">
-            {{ t('common.brandDescription') }}
-          </p>
-          <ul class="space-y-3">
+        <!-- 品牌主张 -->
+        <div class="max-w-md space-y-6">
+          <div class="space-y-4">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 dark:text-primary-400">
+              {{ t('common.eyebrow') }}
+            </p>
+            <h1 class="text-4xl font-bold leading-[1.15] tracking-tight text-slate-900 dark:text-white xl:text-[2.75rem]">
+              {{ t('common.brandTagline') }}
+            </h1>
+            <p class="text-base leading-relaxed text-slate-600 dark:text-slate-300">
+              {{ t('common.brandDescription') }}
+            </p>
+          </div>
+
+          <ul class="space-y-3.5">
             <li
               v-for="feature in features"
               :key="feature"
-              class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300"
+              class="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-300"
             >
-              <UIcon
-                name="i-lucide-circle-check"
-                class="size-5 shrink-0 text-primary-500"
-              />
+              <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary-500/10 text-primary-600 dark:bg-primary-400/15 dark:text-primary-400">
+                <UIcon
+                  name="i-lucide-circle-check"
+                  class="size-4"
+                />
+              </span>
               {{ feature }}
             </li>
           </ul>
         </div>
 
-        <p class="text-sm text-slate-400 dark:text-slate-500">
-          © {{ new Date().getFullYear() }} {{ t('common.appName') }}
-        </p>
+        <!-- 页脚 -->
+        <div class="flex items-center gap-2.5 text-xs text-slate-400 dark:text-slate-500">
+          <UIcon
+            name="i-lucide-shield"
+            class="size-3.5"
+          />
+          <span>© {{ new Date().getFullYear() }} {{ t('common.appName') }} · {{ t('common.rights') }}</span>
+        </div>
       </aside>
 
       <!-- 右侧表单区 -->
-      <main class="flex items-center justify-center px-4 py-10 sm:px-8">
+      <main class="flex items-center justify-center px-4 py-10 sm:px-6 lg:py-16">
         <div class="w-full max-w-md">
           <!-- 移动端品牌头 -->
-          <div class="mb-8 flex flex-col items-center gap-2 lg:hidden">
-            <UAvatar
-              icon="i-lucide-shield-check"
-              size="xl"
-            />
-            <h1 class="text-xl font-bold text-slate-900 dark:text-white">
-              {{ t('common.appName') }}
-            </h1>
+          <div class="mb-8 flex flex-col items-center gap-3 lg:hidden">
+            <div class="flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-secondary-500 shadow-lg shadow-primary-500/25">
+              <UIcon
+                name="i-lucide-shield-check"
+                class="size-6 text-white"
+              />
+            </div>
+            <div class="text-center">
+              <h1 class="text-xl font-bold text-slate-900 dark:text-white">
+                {{ t('common.appName') }}
+              </h1>
+              <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                {{ t('common.brandTagline') }}
+              </p>
+            </div>
           </div>
 
           <!-- 顶部工具条：语言切换 + 主题切换 -->
@@ -117,7 +146,12 @@ function toggleTheme() {
           </div>
 
           <!-- 毛玻璃卡片 -->
-          <div class="animate-fade-in rounded-3xl border border-slate-200/70 bg-white/70 p-8 shadow-2xl shadow-slate-900/5 backdrop-blur-2xl dark:border-white/10 dark:bg-white/5 dark:shadow-black/20 sm:p-10">
+          <div class="animate-fade-in relative overflow-hidden rounded-3xl border border-slate-200/60 bg-white/75 p-8 shadow-2xl shadow-slate-900/[0.06] backdrop-blur-2xl dark:border-white/10 dark:bg-white/[0.04] dark:shadow-black/20 sm:p-10">
+            <!-- 卡片顶部高光 -->
+            <div
+              aria-hidden="true"
+              class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/60 to-transparent dark:via-white/15"
+            />
             <slot />
           </div>
         </div>

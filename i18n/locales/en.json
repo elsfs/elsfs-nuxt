@@ -3,6 +3,8 @@
     "appName": "ELSFS",
     "brandTagline": "Secure, simple and reliable authentication",
     "brandDescription": "Out-of-the-box identity solutions for your app: sign in, register, social login and more.",
+    "eyebrow": "Identity & Security",
+    "rights": "All rights reserved",
     "features": [
       "Secure account system",
       "Multi-language i18n support",
