@@ -1,8 +1,6 @@
 export default defineNuxtConfig({
   modules: [
     '@nuxt/eslint',
-    '@nuxt/ui',
-    '@module-federation/nuxt',
     '@pinia/nuxt',
     '@nuxtjs/i18n',
   ],

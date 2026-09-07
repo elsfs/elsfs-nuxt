@@ -85,6 +85,8 @@ function handleReset() {
       @submit="onSubmit"
     >
       <UFormField
+        orientation="horizontal"
+        :ui="{ container: 'flex-1' }"
         :label="t('register.username')"
         :error="usernameError"
       >
@@ -104,6 +106,8 @@ function handleReset() {
       </UFormField>
 
       <UFormField
+        orientation="horizontal"
+        :ui="{ container: 'flex-1' }"
         :label="t('register.email')"
         :error="emailError"
       >
@@ -124,6 +128,8 @@ function handleReset() {
       </UFormField>
 
       <UFormField
+        orientation="horizontal"
+        :ui="{ container: 'flex-1' }"
         :label="t('register.password')"
         :error="passwordError"
       >
@@ -182,6 +188,8 @@ function handleReset() {
       </div>
 
       <UFormField
+        orientation="horizontal"
+        :ui="{ container: 'flex-1' }"
         :label="t('register.confirmPassword')"
         :error="confirmPasswordError"
       >

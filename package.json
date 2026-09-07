@@ -3,13 +3,6 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "nuxt dev",
-    "build": "nuxt build",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "lint": "eslint .",
-    "typecheck": "vue-tsc --noEmit"
   },
   "pnpm": {
     "overrides": {
@@ -17,29 +10,7 @@
     }
   },
   "dependencies": {
-    "@iconify-json/lucide": "^1.2.123",
-    "@module-federation/nuxt": "^0.1.0",
-    "@nuxt/ui": "^4.10.0",
-    "@nuxtjs/i18n": "10.6.0",
-    "@nuxtjs/tailwindcss": "6.14.0",
-    "@pinia/nuxt": "1.0.2",
-    "@vee-validate/yup": "4.15.1",
-    "pinia": "^4.0.3",
-    "tailwindcss": "^4.3.3",
-    "vee-validate": "4.15.1",
-    "vue": "^3.5.0",
-    "vue-router": "^5.2.0",
-    "yup": "1.7.1"
   },
   "devDependencies": {
-    "@nuxt/devtools": "^3.4.1",
-    "@nuxt/eslint": "^1.17.0",
-    "@nuxt/eslint-config": "^1.17.0",
-    "@types/node": "latest",
-    "eslint": "^10.8.1",
-    "nuxt": "^4.5.2",
-    "typescript": "^6.0.3",
-    "vite-plugin-eslint2": "^5.3.0",
-    "vue-tsc": "^3.3.9"
   }
 }

@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import "@nuxt/ui";
 
 /* ================= 页面过渡动画 ================= */
 .page-enter-active,

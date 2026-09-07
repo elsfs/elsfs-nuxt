@@ -86,6 +86,8 @@ async function handleSocial(provider: string) {
       @submit="onSubmit"
     >
       <UFormField
+        orientation="horizontal"
+        :ui="{ container: 'flex-1' }"
         :label="t('login.email')"
         :error="emailError"
       >
@@ -106,6 +108,8 @@ async function handleSocial(provider: string) {
       </UFormField>
 
       <UFormField
+        orientation="horizontal"
+        :ui="{ container: 'flex-1' }"
         :label="t('login.password')"
         :error="passwordError"
       >
