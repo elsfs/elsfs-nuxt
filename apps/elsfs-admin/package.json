@@ -20,7 +20,8 @@
     "vee-validate":"catalog:",
     "vue": "catalog:",
     "vue-router": "catalog:",
-    "zod":  "catalog:"
+    "zod":  "catalog:",
+    "tailwind-config": "workspace:*"
   },
   "devDependencies": {
     "@nuxt/devtools": "^3.4.1",

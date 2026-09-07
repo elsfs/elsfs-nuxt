@@ -17,13 +17,13 @@
     "@tailwindcss/typography": "catalog:",
     "tailwindcss": "catalog:",
     "tw-animate-css": "catalog:",
-    "@nuxtjs/tailwindcss": "catalog:"
+    "@nuxtjs/tailwindcss": "catalog:",
+    "nuxt": "catalog:"
   },
   "devDependencies": {
     "@nuxt/eslint": "catalog:",
     "@types/node": "catalog:",
     "eslint": "catalog:",
-    "nuxt": "catalog:",
     "typescript": "catalog:",
     "vue": "catalog:"
   }
