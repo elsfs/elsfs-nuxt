@@ -12,6 +12,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@iconify-json/mdi": "^1.2.0",
     "@iconify/tailwind4": "catalog:",
     "@tailwindcss/typography": "catalog:",
     "tailwindcss": "catalog:",

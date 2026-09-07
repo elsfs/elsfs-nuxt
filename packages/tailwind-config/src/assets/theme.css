@@ -18,11 +18,14 @@
 @plugin '@iconify/tailwind4';
 
 /* Monorepo source detection: scan all packages and apps for utility classes */
-/*这是 Tailwind CSS 的配置语法，用于告诉 Tailwind 在哪里扫描你的 HTML、JavaScript 或组件文件，以生成对应的样式。*/
+/*注意：Tailwind v4 中 @source 的相对路径以编译时的 base（即应用/playground 的 rootDir）为基准解析，
+ * 而不是以本 CSS 文件所在目录为基准。本文件由 packages/tailwind-config/.playground 的
+ * nuxt.config.ts（css 入口）加载，base 即 .playground，因此：
+ *   ../../../packages -> <仓库根>/packages
+ *   ../../../apps     -> <仓库根>/apps
+ */
 @source '../../../packages/';
 @source '../../../apps/';
-@source '../../../docs/';
-@source '../../../playground/';
 
 /* Dark mode uses .dark class selector, not prefers-color-scheme */
 /*自定义暗色模式的触发方式。*/
@@ -54,6 +57,48 @@
   --animate-collapsible-down: collapsible-down 0.2s ease-in-out;
   --animate-collapsible-up: collapsible-up 0.2s ease-in-out;
   --animate-float: float 5s linear 0ms infinite;
+
+  /*
+   * 兜底调色板通道变量：
+   * 下方语义色别名（--color-red-*: hsl(var(--red-*)) 等）依赖裸 HSL 通道变量，
+   * 在宿主应用中通常由 UI 主题层（antdv StyleProvider / vben design tokens）注入。
+   * 为保证脱离宿主独立使用（如本包的 .playground）时 `text-red-600`、`bg-green-500`
+   * 等调色板工具类仍能生效，这里按 Tailwind v4 默认调色板（oklch）提供同值 HSL 兜底；
+   * 宿主主题层可在 :root 上以同名自定义属性覆盖。
+   */
+  --red-50: 359.95 88.22% 97.32%;
+  --red-100: 359.96 98.79% 94.25%;
+  --red-200: 359.94 100% 89.49%;
+  --red-300: 359.72 100% 81.73%;
+  --red-400: 358.75 100% 69.56%;
+  --red-500: 356.94 95.9% 57.72%;
+  --red-600: 357.21 100% 45.32%;
+  --red-700: 357.72 100% 37.84%;
+  --red-800: 355.94 91.17% 32.55%;
+  --red-900: 358.79 69.31% 30.07%;
+  --red-950: 359.28 79.42% 15.35%;
+  --green-50: 138.47 76.4% 96.68%;
+  --green-100: 140.65 84.33% 92.45%;
+  --green-200: 141.15 81.05% 84.82%;
+  --green-300: 142.66 81.24% 71.39%;
+  --green-400: 150.06 95.56% 44.76%;
+  --green-500: 144.06 100% 39.36%;
+  --green-600: 142.29 100% 32.56%;
+  --green-700: 144.68 100% 25.5%;
+  --green-800: 147.72 97.15% 20.36%;
+  --green-900: 145.73 73.08% 18.99%;
+  --green-950: 145.39 87.57% 9.65%;
+  --yellow-50: 54.52 90.61% 95.28%;
+  --yellow-100: 54.88 97.52% 87.84%;
+  --yellow-200: 52.74 99.45% 76.08%;
+  --yellow-300: 51.51 100% 56.29%;
+  --yellow-400: 47.25 100% 49.65%;
+  --yellow-500: 44.17 100% 47.07%;
+  --yellow-600: 38.87 100% 40.88%;
+  --yellow-700: 34.39 100% 32.55%;
+  --yellow-800: 32.77 100% 26.8%;
+  --yellow-900: 29.52 83.35% 24.57%;
+  --yellow-950: 26.16 87.52% 13.96%;
 
   /* ===== Semantic Colors (shadcn-ui) ===== */
 
