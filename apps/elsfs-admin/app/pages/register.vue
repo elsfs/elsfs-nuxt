@@ -61,7 +61,7 @@ function handleReset() {
       </p>
     </header>
 
-    <UAlert
+    <ElAlert
       v-if="errorMessage"
       color="error"
       variant="soft"
@@ -70,7 +70,7 @@ function handleReset() {
       :title="errorMessage"
     />
 
-    <UAlert
+    <ElAlert
       v-if="successMessage"
       color="success"
       variant="soft"
@@ -84,64 +84,61 @@ function handleReset() {
       class="space-y-5"
       @submit="onSubmit"
     >
-      <UFormField
+      <ElFormItem
         orientation="horizontal"
         :ui="{ container: 'flex-1' }"
         :label="t('register.username')"
         :error="usernameError"
       >
-        <UInput
+        <ElInput
           v-model="username"
-          size="lg"
           :placeholder="t('register.usernamePlaceholder')"
           autocomplete="username"
         >
           <template #leading>
-            <UIcon
+            <ElIcon
               name="i-lucide-user"
               class="size-4 text-dimmed"
             />
           </template>
-        </UInput>
-      </UFormField>
+        </ElInput>
+      </ElFormItem>
 
-      <UFormField
+      <ElFormItem
         orientation="horizontal"
         :ui="{ container: 'flex-1' }"
         :label="t('register.email')"
         :error="emailError"
       >
-        <UInput
+        <ElInput
           v-model="email"
           type="email"
-          size="lg"
           :placeholder="t('register.emailPlaceholder')"
           autocomplete="email"
         >
           <template #leading>
-            <UIcon
+            <ElIcon
               name="i-lucide-mail"
               class="size-4 text-dimmed"
             />
           </template>
-        </UInput>
-      </UFormField>
+        </ElInput>
+      </ElFormItem>
 
-      <UFormField
+      <ElFormItem
         orientation="horizontal"
         :ui="{ container: 'flex-1' }"
         :label="t('register.password')"
         :error="passwordError"
       >
-        <UInput
+        <ElInput
           v-model="password"
           :type="showPassword ? 'text' : 'password'"
-          size="lg"
           :placeholder="t('register.passwordPlaceholder')"
           autocomplete="new-password"
         >
           <template #leading>
-            <UIcon
+            <ElIcon
               name="i-lucide-lock"
               class="size-4 text-dimmed"
             />
@@ -153,14 +150,14 @@ function handleReset() {
               :aria-label="showPassword ? 'Hide password' : 'Show password'"
               @click="showPassword = !showPassword"
             >
-              <UIcon
+              <ElIcon
                 :name="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
                 class="size-4"
               />
             </button>
           </template>
-        </UInput>
-      </UFormField>
+        </ElInput>
+      </ElFormItem>
 
       <!-- 密码强度指示器 -->
       <div
@@ -179,7 +176,7 @@ function handleReset() {
           class="flex items-center gap-1 text-xs"
           :class="strength.text"
         >
-          <UIcon
+          <ElIcon
             name="i-lucide-gauge"
             class="size-3"
           />
@@ -187,13 +184,13 @@ function handleReset() {
         </p>
       </div>
 
-      <UFormField
+      <ElFormItem
         orientation="horizontal"
         :ui="{ container: 'flex-1' }"
         :label="t('register.confirmPassword')"
         :error="confirmPasswordError"
       >
-        <UInput
+        <ElInput
           v-model="confirmPassword"
           :type="showConfirmPassword ? 'text' : 'password'"
           size="lg"
@@ -201,7 +198,7 @@ function handleReset() {
           autocomplete="new-password"
         >
           <template #leading>
-            <UIcon
+            <ElIcon
               name="i-lucide-lock-keyhole"
               class="size-4 text-dimmed"
             />
@@ -213,17 +210,17 @@ function handleReset() {
               :aria-label="showConfirmPassword ? 'Hide password' : 'Show password'"
               @click="showConfirmPassword = !showConfirmPassword"
             >
-              <UIcon
+              <ElIcon
                 :name="showConfirmPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
                 class="size-4"
               />
             </button>
           </template>
-        </UInput>
-      </UFormField>
+        </ElInput>
+      </ElFormItem>
 
-      <UFormField :error="agreeError">
-        <UCheckbox v-model="agree">
+      <ElFormItem :error="agreeError">
+        <ElCheckbox v-model="agree">
           <template #label>
             <span class="text-sm text-slate-600 dark:text-slate-300">
               {{ t('register.agreePrefix') }}
@@ -236,10 +233,10 @@ function handleReset() {
               </a>
             </span>
           </template>
-        </UCheckbox>
-      </UFormField>
+        </ElCheckbox>
+      </ElFormItem>
 
-      <UButton
+      <ElButton
         type="submit"
         size="lg"
         block
@@ -253,7 +250,7 @@ function handleReset() {
           class="inline-flex items-center gap-1 text-xs text-slate-400 transition-colors hover:text-slate-600 dark:hover:text-slate-300"
           @click="handleReset"
         >
-          <UIcon
+          <ElIcon
             name="i-lucide-rotate-ccw"
             class="size-3"
           />

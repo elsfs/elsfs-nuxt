@@ -26,19 +26,19 @@ async function handleLogout() {
       当前登录用户：{{ auth.user.email }}
     </div>
 
-    <UButton
+    <ElButton
       color="error"
       variant="soft"
       class="mt-6"
       @click="handleLogout"
     >
       <template #leading>
-        <UIcon
+        <ElIcon
           name="i-lucide-log-out"
           class="size-4"
         />
       </template>
       {{ t('common.logout') }}
-    </UButton>
+    </ElButton>
   </div>
 </template>

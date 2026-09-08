@@ -2,15 +2,13 @@
   "name": "elsfs-nuxt",
   "private": true,
   "type": "module",
-  "scripts": {
-  },
+  "scripts": {},
   "pnpm": {
     "overrides": {
       "@module-federation/vite": "^1.20.1"
     }
   },
   "dependencies": {
-  },
-  "devDependencies": {
+
   }
 }

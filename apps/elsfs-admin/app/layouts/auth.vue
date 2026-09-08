@@ -50,7 +50,7 @@ function toggleTheme() {
         <!-- Logo -->
         <div class="flex items-center gap-3.5">
           <div class="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-secondary-500 shadow-lg shadow-primary-500/25">
-            <UIcon
+            <ElIcon
               name="i-lucide-shield-check"
               class="size-6 text-white"
             />
@@ -79,7 +79,7 @@ function toggleTheme() {
               class="flex items-center gap-3 text-sm text-slate-600 dark:text-slate-300"
             >
               <span class="flex size-7 shrink-0 items-center justify-center rounded-full bg-primary-500/10 text-primary-600 dark:bg-primary-400/15 dark:text-primary-400">
-                <UIcon
+                <ElIcon
                   name="i-lucide-circle-check"
                   class="size-4"
                 />
@@ -91,7 +91,7 @@ function toggleTheme() {
 
         <!-- 页脚 -->
         <div class="flex items-center gap-2.5 text-xs text-slate-400 dark:text-slate-500">
-          <UIcon
+          <ElIcon
             name="i-lucide-shield"
             class="size-3.5"
           />
@@ -105,7 +105,7 @@ function toggleTheme() {
           <!-- 移动端品牌头 -->
           <div class="mb-8 flex flex-col items-center gap-3 lg:hidden">
             <div class="flex size-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-secondary-500 shadow-lg shadow-primary-500/25">
-              <UIcon
+              <ElIcon
                 name="i-lucide-shield-check"
                 class="size-6 text-white"
               />
@@ -122,27 +122,26 @@ function toggleTheme() {
 
           <!-- 顶部工具条：语言切换 + 主题切换 -->
           <div class="mb-6 flex items-center justify-end gap-2">
-            <USelect
+            <ElSelect
               :model-value="locale"
               :items="localeItems"
-              size="sm"
               class="w-32"
               :aria-label="t('common.language')"
               @update:model-value="onLocaleChange"
             />
-            <UButton
+            <ElButton
               variant="ghost"
               square
               :aria-label="t('common.theme')"
               @click="toggleTheme"
             >
               <template #leading>
-                <UIcon
+                <ElIcon
                   :name="isDark ? 'i-lucide-sun' : 'i-lucide-moon'"
                   class="size-4"
                 />
               </template>
-            </UButton>
+            </ElButton>
           </div>
 
           <!-- 毛玻璃卡片 -->

@@ -71,7 +71,7 @@ async function handleSocial(provider: string) {
       </p>
     </header>
 
-    <UAlert
+    <ElAlert
       v-if="errorMessage"
       color="error"
       variant="soft"
@@ -85,43 +85,41 @@ async function handleSocial(provider: string) {
       class="space-y-5"
       @submit="onSubmit"
     >
-      <UFormField
+      <ElFormItem
         orientation="horizontal"
         :ui="{ container: 'flex-1' }"
         :label="t('login.email')"
         :error="emailError"
       >
-        <UInput
+        <ElInput
           v-model="email"
           type="email"
-          size="lg"
           :placeholder="t('login.emailPlaceholder')"
           autocomplete="email"
         >
           <template #leading>
-            <UIcon
+            <ElIcon
               name="i-lucide-mail"
               class="size-4 text-dimmed"
             />
           </template>
-        </UInput>
-      </UFormField>
+        </ElInput>
+      </ElFormItem>
 
-      <UFormField
+      <ElFormItem
         orientation="horizontal"
         :ui="{ container: 'flex-1' }"
         :label="t('login.password')"
         :error="passwordError"
       >
-        <UInput
+        <ElInput
           v-model="password"
           :type="showPassword ? 'text' : 'password'"
-          size="lg"
           :placeholder="t('login.passwordPlaceholder')"
           autocomplete="current-password"
         >
           <template #leading>
-            <UIcon
+            <ElIcon
               name="i-lucide-lock"
               class="size-4 text-dimmed"
             />
@@ -133,25 +131,24 @@ async function handleSocial(provider: string) {
               :aria-label="showPassword ? 'Hide password' : 'Show password'"
               @click="showPassword = !showPassword"
             >
-              <UIcon
+              <ElIcon
                 :name="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
                 class="size-4"
               />
             </button>
           </template>
-        </UInput>
-      </UFormField>
+        </ElInput>
+      </ElFormItem>
 
       <div class="flex items-center justify-between">
-        <UCheckbox
+        <ElCheckbox
           v-model="remember"
           :label="t('login.rememberMe')"
         />
       </div>
 
-      <UButton
-        type="submit"
-        size="lg"
+      <ElButton
+        type="primary"
         block
         :loading="isSubmitting"
         :label="isSubmitting ? t('login.submitLoading') : t('login.submit')"
@@ -163,7 +160,7 @@ async function handleSocial(provider: string) {
           class="inline-flex items-center gap-1 text-xs text-slate-400 transition-colors hover:text-slate-600 dark:hover:text-slate-300"
           @click="handleReset"
         >
-          <UIcon
+          <ElIcon
             name="i-lucide-rotate-ccw"
             class="size-3"
           />
@@ -179,23 +176,22 @@ async function handleSocial(provider: string) {
     </div>
 
     <div class="grid grid-cols-3 gap-3">
-      <UButton
+      <ElButton
         v-for="provider in socialProviders"
         :key="provider.key"
         variant="outline"
-        size="lg"
         class="py-2.5"
         :loading="socialLoading === provider.key"
         :aria-label="t(provider.labelKey)"
         @click="handleSocial(provider.key)"
       >
         <template #leading>
-          <UIcon
+          <ElIcon
             :name="provider.icon"
             class="size-4"
           />
         </template>
-      </UButton>
+      </ElButton>
     </div>
 
     <p class="mt-8 text-center text-sm text-slate-500 dark:text-slate-400">

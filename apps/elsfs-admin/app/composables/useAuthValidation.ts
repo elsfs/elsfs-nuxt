@@ -1,5 +1,4 @@
-import { toTypedSchema } from '@vee-validate/yup'
-import * as yup from 'yup'
+import { z } from 'zod'
 
 export interface LoginFormValues {
   email: string
@@ -23,38 +22,42 @@ type Translate = (key: string, params?: Record<string, unknown>) => string
  * 校验消息使用函数形式，在「校验发生时」才调用 t()，因此语言切换后消息即时生效。
  */
 export function createLoginSchema(t: Translate) {
-  return yup.object({
-    email: yup.string()
-      .required(() => t('validation.required'))
-      .email(() => t('validation.emailInvalid')),
-    password: yup.string()
-      .required(() => t('validation.required'))
-      .min(8, () => t('validation.passwordMin', { min: 8 })),
-    remember: yup.boolean(),
+  return z.object({
+    email: z.string()
+      .min(1, { message: t('validation.required') })
+      .email({ message: t('validation.emailInvalid') }),
+    password: z.string()
+      .min(1, { message: t('validation.required') })
+      .min(8, { message: t('validation.passwordMin', { min: 8 }) }),
+    remember: z.boolean(),
   })
 }
 
 /**
  * 注册表单校验 Schema（yup）。
  */
+
 export function createRegisterSchema(t: Translate) {
-  return yup.object({
-    username: yup.string()
-      .required(() => t('validation.required'))
-      .min(3, () => t('validation.usernameMin', { min: 3 }))
-      .max(20, () => t('validation.usernameMax', { max: 20 })),
-    email: yup.string()
-      .required(() => t('validation.required'))
-      .email(() => t('validation.emailInvalid')),
-    password: yup.string()
-      .required(() => t('validation.required'))
-      .min(8, () => t('validation.passwordMin', { min: 8 }))
-      .matches(/^(?=.*[A-Z])(?=.*\d)/i, () => t('validation.passwordPattern')),
-    confirmPassword: yup.string()
-      .required(() => t('validation.required'))
-      .oneOf([yup.ref('password')], () => t('validation.confirmMismatch')),
-    agree: yup.boolean()
-      .oneOf([true], () => t('validation.termsRequired')),
+  return z.object({
+    username: z.string()
+      .min(1, { message: t('validation.required') })
+      .min(3, { message: t('validation.usernameMin', { min: 3 }) })
+      .max(20, { message: t('validation.usernameMax', { max: 20 }) }),
+    email: z.string()
+      .min(1, { message: t('validation.required') })
+      .email({ message: t('validation.emailInvalid') }),
+    password: z.string()
+      .min(1, { message: t('validation.required') })
+      .min(8, { message: t('validation.passwordMin', { min: 8 }) })
+      .regex(/^(?=.*[A-Z])(?=.*\d)/, { message: t('validation.passwordPattern') }),
+    confirmPassword: z.string()
+      .min(1, { message: t('validation.required') })
+      .refine((val, ctx) => {
+        const password = (ctx.parent as { password: string }).password
+        return val === password
+      }, { message: t('validation.confirmMismatch') }),
+    agree: z.boolean()
+      .refine(val => val === true, { message: t('validation.termsRequired') }),
   })
 }
 
@@ -66,7 +69,7 @@ export function useAuthValidation() {
   const translate: Translate = (key, params) => (params ? t(key, params) : t(key))
 
   return {
-    loginSchema: toTypedSchema(createLoginSchema(translate)),
-    registerSchema: toTypedSchema(createRegisterSchema(translate)),
+    loginSchema: createLoginSchema(translate),
+    registerSchema: createRegisterSchema(translate),
   }
 }
