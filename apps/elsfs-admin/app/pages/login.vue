@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate'
+import { ChatDotRound, ChromeFilled, Connection } from '@element-plus/icons-vue'
 
 definePageMeta({ layout: 'auth', middleware: 'guest' })
 
@@ -23,9 +24,9 @@ const showPassword = ref(false)
 const errorMessage = computed(() => (auth.errorCode ? t(`errors.${auth.errorCode}`) : ''))
 
 const socialProviders = [
-  { key: 'github', icon: 'i-lucide-github', labelKey: 'social.github' },
-  { key: 'google', icon: 'i-lucide-chrome', labelKey: 'social.google' },
-  { key: 'wechat', icon: 'i-lucide-message-circle', labelKey: 'social.wechat' },
+  { key: 'github', icon: Connection, labelKey: 'social.github' },
+  { key: 'google', icon: ChromeFilled, labelKey: 'social.google' },
+  { key: 'wechat', icon: ChatDotRound, labelKey: 'social.wechat' },
 ]
 const socialLoading = ref<string | null>(null)
 
@@ -73,9 +74,8 @@ async function handleSocial(provider: string) {
 
     <ElAlert
       v-if="errorMessage"
-      color="error"
-      variant="soft"
-      icon="i-lucide-circle-alert"
+      type="error"
+      show-icon
       class="mb-6"
       :title="errorMessage"
     />
@@ -97,9 +97,8 @@ async function handleSocial(provider: string) {
           :placeholder="t('login.emailPlaceholder')"
           autocomplete="email"
         >
-          <template #leading>
-            <ElIcon
-              name="i-lucide-mail"
+          <template #prefix>
+            <ElIconMessage
               class="size-4 text-dimmed"
             />
           </template>
@@ -118,21 +117,24 @@ async function handleSocial(provider: string) {
           :placeholder="t('login.passwordPlaceholder')"
           autocomplete="current-password"
         >
-          <template #leading>
-            <ElIcon
-              name="i-lucide-lock"
+          <template #prefix>
+            <ElIconLock
               class="size-4 text-dimmed"
             />
           </template>
-          <template #trailing>
+          <template #suffix>
             <button
               type="button"
               class="text-slate-400 transition-colors hover:text-slate-600 dark:hover:text-slate-200"
               :aria-label="showPassword ? 'Hide password' : 'Show password'"
               @click="showPassword = !showPassword"
             >
-              <ElIcon
-                :name="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+              <ElIconHide
+                v-if="showPassword"
+                class="size-4"
+              />
+              <ElIconView
+                v-else
                 class="size-4"
               />
             </button>
@@ -160,8 +162,7 @@ async function handleSocial(provider: string) {
           class="inline-flex items-center gap-1 text-xs text-slate-400 transition-colors hover:text-slate-600 dark:hover:text-slate-300"
           @click="handleReset"
         >
-          <ElIcon
-            name="i-lucide-rotate-ccw"
+          <ElIconRefreshLeft
             class="size-3"
           />
           {{ t('common.reset') }}
@@ -185,12 +186,10 @@ async function handleSocial(provider: string) {
         :aria-label="t(provider.labelKey)"
         @click="handleSocial(provider.key)"
       >
-        <template #leading>
-          <ElIcon
-            :name="provider.icon"
-            class="size-4"
-          />
-        </template>
+        <component
+          :is="provider.icon"
+          class="size-4"
+        />
       </ElButton>
     </div>
 

@@ -27,17 +27,13 @@ async function handleLogout() {
     </div>
 
     <ElButton
-      color="error"
-      variant="soft"
+      type="danger"
       class="mt-6"
       @click="handleLogout"
     >
-      <template #leading>
-        <ElIcon
-          name="i-lucide-log-out"
-          class="size-4"
-        />
-      </template>
+      <ElIconSwitchButton
+        class="size-4"
+      />
       {{ t('common.logout') }}
     </ElButton>
   </div>

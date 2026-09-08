@@ -63,18 +63,16 @@ function handleReset() {
 
     <ElAlert
       v-if="errorMessage"
-      color="error"
-      variant="soft"
-      icon="i-lucide-circle-alert"
+      type="error"
+      show-icon
       class="mb-6"
       :title="errorMessage"
     />
 
     <ElAlert
       v-if="successMessage"
-      color="success"
-      variant="soft"
-      icon="i-lucide-circle-check"
+      type="success"
+      show-icon
       class="mb-6"
       :title="successMessage"
     />
@@ -95,9 +93,8 @@ function handleReset() {
           :placeholder="t('register.usernamePlaceholder')"
           autocomplete="username"
         >
-          <template #leading>
-            <ElIcon
-              name="i-lucide-user"
+          <template #prefix>
+            <ElIconUser
               class="size-4 text-dimmed"
             />
           </template>
@@ -116,9 +113,8 @@ function handleReset() {
           :placeholder="t('register.emailPlaceholder')"
           autocomplete="email"
         >
-          <template #leading>
-            <ElIcon
-              name="i-lucide-mail"
+          <template #prefix>
+            <ElIconMessage
               class="size-4 text-dimmed"
             />
           </template>
@@ -137,21 +133,24 @@ function handleReset() {
           :placeholder="t('register.passwordPlaceholder')"
           autocomplete="new-password"
         >
-          <template #leading>
-            <ElIcon
-              name="i-lucide-lock"
+          <template #prefix>
+            <ElIconLock
               class="size-4 text-dimmed"
             />
           </template>
-          <template #trailing>
+          <template #suffix>
             <button
               type="button"
               class="text-slate-400 transition-colors hover:text-slate-600 dark:hover:text-slate-200"
               :aria-label="showPassword ? 'Hide password' : 'Show password'"
               @click="showPassword = !showPassword"
             >
-              <ElIcon
-                :name="showPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+              <ElIconHide
+                v-if="showPassword"
+                class="size-4"
+              />
+              <ElIconView
+                v-else
                 class="size-4"
               />
             </button>
@@ -176,8 +175,7 @@ function handleReset() {
           class="flex items-center gap-1 text-xs"
           :class="strength.text"
         >
-          <ElIcon
-            name="i-lucide-gauge"
+          <ElIconOdometer
             class="size-3"
           />
           {{ t('register.strength') }}：{{ strength.label }}
@@ -193,25 +191,28 @@ function handleReset() {
         <ElInput
           v-model="confirmPassword"
           :type="showConfirmPassword ? 'text' : 'password'"
-          size="lg"
+          size="large"
           :placeholder="t('register.confirmPasswordPlaceholder')"
           autocomplete="new-password"
         >
-          <template #leading>
-            <ElIcon
-              name="i-lucide-lock-keyhole"
+          <template #prefix>
+            <ElIconKey
               class="size-4 text-dimmed"
             />
           </template>
-          <template #trailing>
+          <template #suffix>
             <button
               type="button"
               class="text-slate-400 transition-colors hover:text-slate-600 dark:hover:text-slate-200"
               :aria-label="showConfirmPassword ? 'Hide password' : 'Show password'"
               @click="showConfirmPassword = !showConfirmPassword"
             >
-              <ElIcon
-                :name="showConfirmPassword ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+              <ElIconHide
+                v-if="showConfirmPassword"
+                class="size-4"
+              />
+              <ElIconView
+                v-else
                 class="size-4"
               />
             </button>
@@ -237,8 +238,9 @@ function handleReset() {
       </ElFormItem>
 
       <ElButton
-        type="submit"
-        size="lg"
+        type="primary"
+        native-type="submit"
+        size="large"
         block
         :loading="isSubmitting"
         :label="isSubmitting ? t('register.submitLoading') : t('register.submit')"
@@ -250,8 +252,7 @@ function handleReset() {
           class="inline-flex items-center gap-1 text-xs text-slate-400 transition-colors hover:text-slate-600 dark:hover:text-slate-300"
           @click="handleReset"
         >
-          <ElIcon
-            name="i-lucide-rotate-ccw"
+          <ElIconRefreshLeft
             class="size-3"
           />
           {{ t('common.reset') }}
