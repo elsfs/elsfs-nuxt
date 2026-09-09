@@ -13,7 +13,10 @@ export default defineNuxtConfig({
       },
     },
   },
-  css: ['~~/assets/css/main.css'],
+  css: [
+    '~~/assets/css/main.css',
+    '~~/assets/css/tokens.css',
+  ],
   experimental: {
     // 如果设置为 true，Nuxt 会在用户浏览器匹配 prefers-reduced-motion: reduce 时不应用过渡（推荐）。
     // 如果设置为 'always'，Nuxt 将始终应用过渡，由你来决定是否尊重用户的偏好。

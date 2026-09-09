@@ -122,5 +122,22 @@
   },
   "thirdParty": {
     "label": "Third-party login"
+  },
+  "layoutMode": {
+    "label": "Layout",
+    "left": "Left panel",
+    "center": "Center panel",
+    "right": "Right panel"
+  },
+  "toolbar": {
+    "color": "主题色",
+    "colors": {
+      "violet": "Violet",
+      "blue": "Blue",
+      "green": "Green",
+      "amber": "Amber",
+      "rose": "Rose",
+      "cyan": "Cyan"
+    }
   }
 }

@@ -1,0 +1,63 @@
+/* ================= 设计令牌（shadcn 语义色，全局） =================
+ * tailwind-config 层把 --color-foreground / --color-primary 等映射为
+ * hsl(var(--foreground)) / hsl(var(--primary))，但上游 HSL 通道变量
+ * 此前未在应用内赋值，导致 bg-background / text-foreground / text-primary
+ * 等语义工具类在浏览器失效。此文件补齐亮/暗两套通道值。
+ */
+:root {
+  --background: 0 0% 100%;
+  --background-deep: 0 0% 96%;
+  --foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --primary: 262 83% 58%;
+  --primary-hover: 261 73% 53%;
+  --primary-active: 262 83% 44%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --success: 142.1 76.2% 36.3%;
+  --success-foreground: 355.7 100% 97.3%;
+  --warning: 47.9 95.8% 53.1%;
+  --warning-foreground: 26 83.3% 14.1%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --ring: 262 83% 58%;
+}
+
+:root.dark {
+  --background: 240 10% 3.9%;
+  --background-deep: 240 12% 5%;
+  --foreground: 0 0% 98%;
+  --card: 240 10% 5.9%;
+  --card-foreground: 0 0% 98%;
+  --popover: 240 10% 5.9%;
+  --popover-foreground: 0 0% 98%;
+  --primary: 262 83% 70%;
+  --primary-hover: 261 90% 75%;
+  --primary-active: 262 83% 62%;
+  --primary-foreground: 240 10% 3.9%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --success: 142.1 70.6% 45.3%;
+  --success-foreground: 0 0% 98%;
+  --warning: 47.9 95.8% 53.1%;
+  --warning-foreground: 26 83.3% 14.1%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 262 83% 70%;
+}

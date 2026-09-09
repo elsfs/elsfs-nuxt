@@ -85,19 +85,19 @@ function goToLogin(): void {
       :title="errorMessage"
     />
 
-    <form
+    <ElForm
+      label-position="top"
       novalidate
-      class="space-y-5"
+      class="auth-form"
       @submit="onSubmit"
     >
       <ElFormItem
-        orientation="horizontal"
-        :ui="{ container: 'flex-1' }"
         :label="t('register.username')"
         :error="usernameError"
       >
         <ElInput
           v-model="username"
+          size="large"
           :placeholder="t('register.usernamePlaceholder')"
           autocomplete="username"
         >
@@ -111,14 +111,13 @@ function goToLogin(): void {
       </ElFormItem>
 
       <ElFormItem
-        orientation="horizontal"
-        :ui="{ container: 'flex-1' }"
         :label="t('register.email')"
         :error="emailError"
       >
         <ElInput
           v-model="email"
           type="email"
+          size="large"
           :placeholder="t('register.emailPlaceholder')"
           autocomplete="email"
         >
@@ -132,13 +131,12 @@ function goToLogin(): void {
       </ElFormItem>
 
       <ElFormItem
-        orientation="horizontal"
-        :ui="{ container: 'flex-1' }"
         :label="t('register.password')"
         :error="passwordError"
       >
         <ElInput
           v-model="password"
+          size="large"
           :type="showPassword ? 'text' : 'password'"
           :placeholder="t('register.passwordPlaceholder')"
           autocomplete="new-password"
@@ -168,7 +166,7 @@ function goToLogin(): void {
       <!-- 密码强度指示器 -->
       <div
         v-if="password"
-        class="-mt-1.5 space-y-1.5"
+        class="-mt-2 mb-4 space-y-1.5"
       >
         <div class="flex gap-1.5">
           <div
@@ -191,13 +189,12 @@ function goToLogin(): void {
       </div>
 
       <ElFormItem
-        orientation="horizontal"
-        :ui="{ container: 'flex-1' }"
         :label="t('register.confirmPassword')"
         :error="confirmPasswordError"
       >
         <ElInput
           v-model="confirmPassword"
+          size="large"
           :type="showConfirmPassword ? 'text' : 'password'"
           :placeholder="t('register.confirmPasswordPlaceholder')"
           autocomplete="new-password"
@@ -243,13 +240,13 @@ function goToLogin(): void {
 
       <ElButton
         type="primary"
-        class="w-full"
+        class="auth-submit w-full"
         native-type="submit"
         :loading="isSubmitting || loading"
       >
         {{ submitButtonText || t('register.submit') }}
       </ElButton>
-    </form>
+    </ElForm>
 
     <p class="mt-4 text-center text-sm text-muted-foreground">
       {{ t('common.backToLogin') }}

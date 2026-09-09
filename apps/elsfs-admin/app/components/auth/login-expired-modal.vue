@@ -86,61 +86,73 @@ const onSubmit = handleSubmit(async (values) => {
       :title="errorMessage"
     />
 
-    <form
+    <ElForm
+      label-position="top"
       novalidate
-      class="space-y-4"
+      class="auth-form space-y-4"
       @submit="onSubmit"
     >
-      <ElInput
-        v-model="email"
-        type="email"
-        :placeholder="t('login.emailPlaceholder')"
-        autocomplete="email"
-        :class="{ 'is-error': emailError }"
+      <ElFormItem
+        :label="t('login.email')"
+        :error="emailError"
       >
-        <template #prefix>
-          <AppIcon
-            name="message"
-            class="size-4 text-dimmed"
-          />
-        </template>
-      </ElInput>
-      <ElInput
-        v-model="password"
-        :type="showPassword ? 'text' : 'password'"
-        :placeholder="t('login.passwordPlaceholder')"
-        autocomplete="current-password"
-        :class="{ 'is-error': passwordError }"
-      >
-        <template #prefix>
-          <AppIcon
-            name="lock"
-            class="size-4 text-dimmed"
-          />
-        </template>
-        <template #suffix>
-          <button
-            type="button"
-            class="text-slate-400 transition-colors hover:text-slate-600 dark:hover:text-slate-200"
-            :aria-label="showPassword ? 'Hide password' : 'Show password'"
-            @click="showPassword = !showPassword"
-          >
+        <ElInput
+          v-model="email"
+          type="email"
+          size="large"
+          :placeholder="t('login.emailPlaceholder')"
+          autocomplete="email"
+        >
+          <template #prefix>
             <AppIcon
-              :name="showPassword ? 'hide' : 'view'"
-              class="size-4"
+              name="message"
+              class="size-4 text-dimmed"
             />
-          </button>
-        </template>
-      </ElInput>
+          </template>
+        </ElInput>
+      </ElFormItem>
+
+      <ElFormItem
+        :label="t('login.password')"
+        :error="passwordError"
+      >
+        <ElInput
+          v-model="password"
+          size="large"
+          :type="showPassword ? 'text' : 'password'"
+          :placeholder="t('login.passwordPlaceholder')"
+          autocomplete="current-password"
+        >
+          <template #prefix>
+            <AppIcon
+              name="lock"
+              class="size-4 text-dimmed"
+            />
+          </template>
+          <template #suffix>
+            <button
+              type="button"
+              class="text-slate-400 transition-colors hover:text-slate-600 dark:hover:text-slate-200"
+              :aria-label="showPassword ? 'Hide password' : 'Show password'"
+              @click="showPassword = !showPassword"
+            >
+              <AppIcon
+                :name="showPassword ? 'hide' : 'view'"
+                class="size-4"
+              />
+            </button>
+          </template>
+        </ElInput>
+      </ElFormItem>
 
       <ElButton
         type="primary"
-        class="w-full"
+        class="auth-submit w-full"
         native-type="submit"
         :loading="isSubmitting"
       >
         {{ t('common.login') }}
       </ElButton>
-    </form>
+    </ElForm>
   </ElDialog>
 </template>

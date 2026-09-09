@@ -126,20 +126,20 @@ onBeforeUnmount(() => {
       :title="t(`errors.${auth.errorCode}`)"
     />
 
-    <form
+    <ElForm
+      label-position="top"
       novalidate
-      class="space-y-5"
+      class="auth-form"
       @submit="onSubmit"
     >
       <ElFormItem
-        orientation="horizontal"
-        :ui="{ container: 'flex-1' }"
         :label="t('codeLogin.email')"
         :error="emailError"
       >
         <ElInput
           v-model="email"
           type="email"
+          size="large"
           :placeholder="t('codeLogin.emailPlaceholder')"
           autocomplete="email"
         >
@@ -153,14 +153,13 @@ onBeforeUnmount(() => {
       </ElFormItem>
 
       <ElFormItem
-        orientation="horizontal"
-        :ui="{ container: 'flex-1' }"
         :label="t('codeLogin.code')"
         :error="codeError"
       >
         <ElInput
           v-model="code"
           inputmode="numeric"
+          size="large"
           maxlength="6"
           :placeholder="t('codeLogin.codePlaceholder')"
           autocomplete="one-time-code"
@@ -186,13 +185,13 @@ onBeforeUnmount(() => {
 
       <ElButton
         type="primary"
-        class="w-full"
+        class="auth-submit w-full"
         native-type="submit"
         :loading="isSubmitting || loading"
       >
         {{ submitButtonText || t('codeLogin.submit') }}
       </ElButton>
-    </form>
+    </ElForm>
 
     <ElButton
       v-if="showBack"

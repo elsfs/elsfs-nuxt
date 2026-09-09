@@ -122,5 +122,22 @@
   },
   "thirdParty": {
     "label": "第三方登录"
+  },
+  "layoutMode": {
+    "label": "布局",
+    "left": "左侧面板",
+    "center": "居中面板",
+    "right": "右侧面板"
+  },
+  "toolbar": {
+    "color": "主题色",
+    "colors": {
+      "violet": "紫罗兰",
+      "blue": "蓝色",
+      "green": "绿色",
+      "amber": "琥珀",
+      "rose": "玫瑰",
+      "cyan": "青色"
+    }
   }
 }

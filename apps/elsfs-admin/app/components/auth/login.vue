@@ -108,20 +108,20 @@ function goTo(path: string): void {
       :title="errorMessage"
     />
 
-    <form
+    <ElForm
+      label-position="top"
       novalidate
-      class="space-y-5"
+      class="auth-form"
       @submit="onSubmit"
     >
       <ElFormItem
-        orientation="horizontal"
-        :ui="{ container: 'flex-1' }"
         :label="t('login.email')"
         :error="emailError"
       >
         <ElInput
           v-model="email"
           type="email"
+          size="large"
           :placeholder="t('login.emailPlaceholder')"
           autocomplete="email"
         >
@@ -135,13 +135,12 @@ function goTo(path: string): void {
       </ElFormItem>
 
       <ElFormItem
-        orientation="horizontal"
-        :ui="{ container: 'flex-1' }"
         :label="t('login.password')"
         :error="passwordError"
       >
         <ElInput
           v-model="password"
+          size="large"
           :type="showPassword ? 'text' : 'password'"
           :placeholder="t('login.passwordPlaceholder')"
           autocomplete="current-password"
@@ -169,10 +168,7 @@ function goTo(path: string): void {
       </ElFormItem>
 
       <!-- 记住我 / 忘记密码 -->
-      <div
-        v-if="showRememberMe || showForgetPassword"
-        class="flex items-center justify-between"
-      >
+      <div class="flex items-center justify-between">
         <ElCheckbox
           v-if="showRememberMe"
           v-model="remember"
@@ -190,13 +186,13 @@ function goTo(path: string): void {
 
       <ElButton
         type="primary"
-        class="w-full"
+        class="auth-submit w-full"
         native-type="submit"
         :loading="isSubmitting || loading"
       >
         {{ submitButtonText || t('common.login') }}
       </ElButton>
-    </form>
+    </ElForm>
 
     <!-- 手机验证码 / 二维码登录入口 -->
     <div

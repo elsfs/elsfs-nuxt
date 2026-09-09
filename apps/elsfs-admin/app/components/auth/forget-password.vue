@@ -74,20 +74,20 @@ function goToLogin(): void {
       :title="t(`errors.${auth.errorCode}`)"
     />
 
-    <form
+    <ElForm
+      label-position="top"
       novalidate
-      class="space-y-5"
+      class="auth-form"
       @submit="onSubmit"
     >
       <ElFormItem
-        orientation="horizontal"
-        :ui="{ container: 'flex-1' }"
         :label="t('forgetPassword.email')"
         :error="emailError"
       >
         <ElInput
           v-model="email"
           type="email"
+          size="large"
           :placeholder="t('forgetPassword.emailPlaceholder')"
           autocomplete="email"
         >
@@ -102,13 +102,13 @@ function goToLogin(): void {
 
       <ElButton
         type="primary"
-        class="w-full"
+        class="auth-submit w-full"
         native-type="submit"
         :loading="isSubmitting || loading"
       >
         {{ submitButtonText || t('forgetPassword.submit') }}
       </ElButton>
-    </form>
+    </ElForm>
 
     <ElButton
       v-if="showBack"
