@@ -17,7 +17,10 @@
     "orContinueWith": "or continue with",
     "reset": "Reset form",
     "logout": "Sign out",
-    "welcome": "Welcome back, {name}"
+    "welcome": "Welcome back, {name}",
+    "back": "Back",
+    "login": "Sign in",
+    "confirm": "Confirm"
   },
   "login": {
     "title": "Welcome back",
@@ -30,7 +33,15 @@
     "forgotPassword": "Forgot password?",
     "submit": "Sign in",
     "submitLoading": "Signing in...",
-    "success": "Signed in, redirecting..."
+    "success": "Signed in, redirecting...",
+    "welcomeBack": "Welcome back",
+    "mobileLogin": "Code login",
+    "qrcodeLogin": "QR code login",
+    "thirdPartyLogin": "Third-party login",
+    "noAccountTip": "No account yet?",
+    "createAccount": "Create one",
+    "loginAgainTitle": "Session expired",
+    "loginAgainSubTitle": "Your sign-in has expired, please sign in again"
   },
   "register": {
     "title": "Create account",
@@ -63,12 +74,16 @@
     "usernameMax": "Username must not exceed {max} characters",
     "passwordPattern": "Password must contain letters and numbers",
     "confirmMismatch": "The two passwords do not match",
-    "termsRequired": "Please agree to the terms first"
+    "termsRequired": "Please agree to the terms first",
+    "codeInvalid": "Please enter a 6-digit numeric code",
+    "agreeRequired": "Please read and accept the terms first"
   },
   "social": {
     "github": "GitHub",
     "google": "Google",
-    "wechat": "WeChat"
+    "wechat": "WeChat",
+    "qq": "QQ",
+    "dingding": "DingTalk"
   },
   "errors": {
     "VALIDATION_ERROR": "Invalid request, please check and retry",
@@ -76,5 +91,36 @@
     "EMAIL_TAKEN": "This email is already registered",
     "UNAUTHORIZED": "Your session has expired, please sign in again",
     "NETWORK_ERROR": "Network error, please try again later"
+  },
+  "codeLogin": {
+    "title": "Code login",
+    "subtitle": "Enter your email and get a code",
+    "email": "Email",
+    "emailPlaceholder": "you{'@'}example.com",
+    "code": "Code",
+    "codePlaceholder": "Enter the 6-digit code",
+    "getCode": "Get code",
+    "resendAfter": "Resend in {s}s",
+    "submit": "Sign in",
+    "mockHint": "Demo: the code is always {code}",
+    "sendSuccess": "Code sent (demo: 123456)"
+  },
+  "qrcodeLogin": {
+    "title": "QR code login",
+    "subtitle": "Scan with your phone to sign in",
+    "prompt": "Scan the QR code with your phone",
+    "expired": "Code expired, click to refresh"
+  },
+  "forgetPassword": {
+    "title": "Reset password",
+    "subtitle": "Enter your email to receive a reset link",
+    "email": "Email",
+    "emailPlaceholder": "you{'@'}example.com",
+    "submit": "Send reset link",
+    "successTitle": "Email sent",
+    "successDesc": "Check your inbox and follow the link to reset your password"
+  },
+  "thirdParty": {
+    "label": "Third-party login"
   }
 }

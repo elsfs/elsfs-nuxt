@@ -14,6 +14,17 @@ export interface RegisterFormValues {
   agree: boolean
 }
 
+/** 手机号 / 邮箱 + 验证码登录 */
+export interface CodeLoginFormValues {
+  email: string
+  code: string
+}
+
+/** 忘记密码（发送重置邮件） */
+export interface ForgetPasswordFormValues {
+  email: string
+}
+
 /** i18n 翻译函数（vue-i18n 的 t 的简化签名） */
 type Translate = (key: string, params?: Record<string, unknown>) => string
 
@@ -51,13 +62,17 @@ export function createRegisterSchema(t: Translate) {
       .min(8, { message: t('validation.passwordMin', { min: 8 }) })
       .regex(/^(?=.*[A-Z])(?=.*\d)/, { message: t('validation.passwordPattern') }),
     confirmPassword: z.string()
-      .min(1, { message: t('validation.required') })
-      .refine((val, ctx) => {
-        const password = (ctx.parent as { password: string }).password
-        return val === password
-      }, { message: t('validation.confirmMismatch') }),
+      .min(1, { message: t('validation.required') }),
     agree: z.boolean()
       .refine(val => val === true, { message: t('validation.termsRequired') }),
+  }).superRefine((data, ctx) => {
+    if (data.password !== data.confirmPassword) {
+      ctx.addIssue({
+        code: 'custom',
+        path: ['confirmPassword'],
+        message: t('validation.confirmMismatch'),
+      })
+    }
   })
 }
 
@@ -71,5 +86,33 @@ export function useAuthValidation() {
   return {
     loginSchema: createLoginSchema(translate),
     registerSchema: createRegisterSchema(translate),
+    codeLoginSchema: createCodeLoginSchema(translate),
+    forgetPasswordSchema: createForgetPasswordSchema(translate),
   }
+}
+
+/**
+ * 验证码登录 Schema。
+ * - code 仅为演示用 6 位数字；实际项目应通过后端发送并在服务端校验。
+ */
+export function createCodeLoginSchema(t: Translate) {
+  return z.object({
+    email: z.string()
+      .min(1, { message: t('validation.required') })
+      .email({ message: t('validation.emailInvalid') }),
+    code: z.string()
+      .min(1, { message: t('validation.required') })
+      .regex(/^\d{6}$/, { message: t('validation.codeInvalid') }),
+  })
+}
+
+/**
+ * 忘记密码（发送重置邮件）Schema。
+ */
+export function createForgetPasswordSchema(t: Translate) {
+  return z.object({
+    email: z.string()
+      .min(1, { message: t('validation.required') })
+      .email({ message: t('validation.emailInvalid') }),
+  })
 }

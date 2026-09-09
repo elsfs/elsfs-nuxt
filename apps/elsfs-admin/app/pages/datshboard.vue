@@ -31,7 +31,8 @@ async function handleLogout() {
       class="mt-6"
       @click="handleLogout"
     >
-      <ElIconSwitchButton
+      <AppIcon
+        name="switch-button"
         class="size-4"
       />
       {{ t('common.logout') }}
