@@ -135,11 +135,12 @@ const onSubmit = handleSubmit(async (values) => {
 
       <ElButton
         type="primary"
-        block
+        class="w-full"
         native-type="submit"
         :loading="isSubmitting"
-        :label="t('common.login')"
-      />
+      >
+        {{ t('common.login') }}
+      </ElButton>
     </form>
   </ElDialog>
 </template>

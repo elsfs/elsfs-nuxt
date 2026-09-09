@@ -176,8 +176,9 @@ function goTo(path: string): void {
         <ElCheckbox
           v-if="showRememberMe"
           v-model="remember"
-          :label="t('login.rememberMe')"
-        />
+        >
+          {{ t('login.rememberMe') }}
+        </ElCheckbox>
         <span
           v-if="showForgetPassword"
           class="vben-link text-sm font-normal"
@@ -189,11 +190,12 @@ function goTo(path: string): void {
 
       <ElButton
         type="primary"
-        block
+        class="w-full"
         native-type="submit"
         :loading="isSubmitting || loading"
-        :label="submitButtonText || t('common.login')"
-      />
+      >
+        {{ submitButtonText || t('common.login') }}
+      </ElButton>
     </form>
 
     <!-- 手机验证码 / 二维码登录入口 -->

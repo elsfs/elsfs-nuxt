@@ -106,8 +106,7 @@ function goToLogin(): void {
       v-if="showBack"
       type="default"
       plain
-      block
-      class="mt-4"
+      class="mt-4 w-full"
       @click="goToLogin()"
     >
       {{ t('common.back') }}

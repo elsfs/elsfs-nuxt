@@ -243,11 +243,12 @@ function goToLogin(): void {
 
       <ElButton
         type="primary"
-        block
+        class="w-full"
         native-type="submit"
         :loading="isSubmitting || loading"
-        :label="submitButtonText || t('register.submit')"
-      />
+      >
+        {{ submitButtonText || t('register.submit') }}
+      </ElButton>
     </form>
 
     <p class="mt-4 text-center text-sm text-muted-foreground">

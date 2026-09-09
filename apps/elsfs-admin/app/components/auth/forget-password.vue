@@ -102,19 +102,19 @@ function goToLogin(): void {
 
       <ElButton
         type="primary"
-        block
+        class="w-full"
         native-type="submit"
         :loading="isSubmitting || loading"
-        :label="submitButtonText || t('forgetPassword.submit')"
-      />
+      >
+        {{ submitButtonText || t('forgetPassword.submit') }}
+      </ElButton>
     </form>
 
     <ElButton
       v-if="showBack"
       type="default"
       plain
-      block
-      class="mt-4"
+      class="mt-4 w-full"
       @click="goToLogin()"
     >
       {{ t('common.back') }}

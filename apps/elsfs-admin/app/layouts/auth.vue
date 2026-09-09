@@ -124,14 +124,19 @@ function toggleTheme() {
           <div class="mb-6 flex items-center justify-end gap-2">
             <ElSelect
               :model-value="locale"
-              :items="localeItems"
               class="w-32"
               :aria-label="t('common.language')"
-              @update:model-value="onLocaleChange"
-            />
+              @change="onLocaleChange"
+            >
+              <ElOption
+                v-for="item in localeItems"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </ElSelect>
             <ElButton
-              variant="ghost"
-              square
+              circle
               :aria-label="t('common.theme')"
               @click="toggleTheme"
             >
