@@ -1,32 +1,13 @@
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate'
 
-import type { RegisterFormValues } from '~/composables/useAuthValidation'
+import type { RegisterFormValues } from './useAuthValidation.ts'
+import { useAuthValidation } from './useAuthValidation.ts'
+import AuthTitle from './-auth-title.vue'
 
-interface Props {
-  /** 是否处于提交加载状态 */
-  loading?: boolean
-  /** 登录路径 */
-  loginPath?: string
-  /** 标题 */
-  title?: string
-  /** 描述 */
-  subTitle?: string
-  /** 提交按钮文本 */
-  submitButtonText?: string
-}
+definePageMeta({ layout: 'auth', middleware: 'guest' })
 
 defineOptions({ name: 'AuthRegister' })
-
-const props = withDefaults(defineProps<Props>(), {
-  loading: false,
-  loginPath: '/login',
-  submitButtonText: '',
-  subTitle: '',
-  title: '',
-})
-
-const emit = defineEmits<{ submit: [values: RegisterFormValues] }>()
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -54,26 +35,34 @@ const showConfirmPassword = ref(false)
 
 const strength = computed(() => passwordMeta(password.value || ''))
 const errorMessage = computed(() => (auth.errorCode ? t(`errors.${auth.errorCode}`) : ''))
+const loading = computed(() => auth.status === 'loading')
 
-const onSubmit = handleSubmit((values) => {
-  emit('submit', values)
+const onSubmit = handleSubmit(async (values) => {
+  try {
+    await auth.register({
+      username: values.username,
+      email: values.email,
+      password: values.password,
+    })
+    ElMessage.success(t('register.success'))
+    await router.push('/')
+  }
+  catch {
+    // 错误码已写入 store，由 Alert 展示
+  }
 })
 
 function goToLogin(): void {
-  router.push(props.loginPath)
+  router.push('/auth/login')
 }
 </script>
 
 <template>
   <div>
     <AuthTitle>
-      <slot name="title">
-        {{ title || `${t('register.title')} 🚀` }}
-      </slot>
+      {{ t('register.title') }} 🚀
       <template #desc>
-        <slot name="subTitle">
-          {{ subTitle || t('register.subtitle') }}
-        </slot>
+        {{ t('register.subtitle') }}
       </template>
     </AuthTitle>
 
@@ -244,7 +233,7 @@ function goToLogin(): void {
         native-type="submit"
         :loading="isSubmitting || loading"
       >
-        {{ submitButtonText || t('register.submit') }}
+        {{ t('register.submit') }}
       </ElButton>
     </ElForm>
 

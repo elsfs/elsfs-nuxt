@@ -1,6 +1,8 @@
 <script setup lang="ts">
-type AuthPanelMode = 'left' | 'center' | 'right'
+import AuthToolbar from './-auth-toolbar.vue'
+import AuthenticationFormView from './-authentication-form-view.vue'
 
+type AuthPanelMode = 'left' | 'center' | 'right'
 const { t } = useI18n()
 
 /** 认证面板形态：默认左侧表单 + 右侧 slogan；可切换居中或镜像 */

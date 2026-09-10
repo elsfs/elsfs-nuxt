@@ -1,39 +1,16 @@
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate'
 import { onBeforeUnmount } from 'vue'
-
-import type { CodeLoginFormValues } from '~/composables/useAuthValidation'
-
-interface Props {
-  /** 是否处于登录提交加载状态 */
-  loading?: boolean
-  /** 登录路径（返回用） */
-  loginPath?: string
-  /** 标题 */
-  title?: string
-  /** 描述 */
-  subTitle?: string
-  /** 按钮文本 */
-  submitButtonText?: string
-  /** 是否显示返回按钮 */
-  showBack?: boolean
-}
+import type { CodeLoginFormValues } from './useAuthValidation'
+import { useAuthValidation } from './useAuthValidation'
+import AuthTitle from './-auth-title.vue'
+definePageMeta({ layout: 'auth', middleware: 'guest' })
 
 defineOptions({ name: 'AuthCodeLogin' })
 
-const props = withDefaults(defineProps<Props>(), {
-  loading: false,
-  loginPath: '/login',
-  submitButtonText: '',
-  subTitle: '',
-  title: '',
-  showBack: true,
-})
-
-const emit = defineEmits<{ submit: [values: CodeLoginFormValues] }>()
-
 const { t } = useI18n()
 const auth = useAuthStore()
+const route = useRoute()
 const router = useRouter()
 
 const { codeLoginSchema } = useAuthValidation()
@@ -73,7 +50,7 @@ async function handleSendCode(): Promise<void> {
     startCountdown()
   }
   catch {
-    // 错误码已写入 store，可由父层展示；此处仅停止倒计时
+    // 错误码已写入 store，由模板内 Alert 展示
   }
   finally {
     sendingCode.value = false
@@ -92,12 +69,19 @@ function startCountdown(): void {
   }, 1000)
 }
 
-const onSubmit = handleSubmit((values) => {
-  emit('submit', values)
+const onSubmit = handleSubmit(async (values) => {
+  try {
+    await auth.codeLogin(values)
+    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
+    await router.push(redirect)
+  }
+  catch {
+    // 错误码已写入 store，由模板内 Alert 展示
+  }
 })
 
 function goToLogin(): void {
-  router.push(props.loginPath)
+  router.push('/auth/login')
 }
 
 onBeforeUnmount(() => {
@@ -109,11 +93,11 @@ onBeforeUnmount(() => {
   <div>
     <AuthTitle>
       <slot name="title">
-        {{ title || `${t('login.welcomeBack')} 📲` }}
+        {{ t('login.welcomeBack') }} 📲
       </slot>
       <template #desc>
         <slot name="subTitle">
-          {{ subTitle || t('codeLogin.subtitle') }}
+          {{ t('codeLogin.subtitle') }}
         </slot>
       </template>
     </AuthTitle>
@@ -187,14 +171,13 @@ onBeforeUnmount(() => {
         type="primary"
         class="auth-submit w-full"
         native-type="submit"
-        :loading="isSubmitting || loading"
+        :loading="isSubmitting || auth.status === 'loading'"
       >
-        {{ submitButtonText || t('codeLogin.submit') }}
+        {{ t('codeLogin.submit') }}
       </ElButton>
     </ElForm>
 
     <ElButton
-      v-if="showBack"
       type="default"
       plain
       class="mt-4 w-full"

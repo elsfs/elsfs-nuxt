@@ -1,7 +1,10 @@
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate'
 
-import type { LoginFormValues } from '~/composables/useAuthValidation'
+import type { LoginFormValues } from './useAuthValidation.ts'
+import { useAuthValidation } from './useAuthValidation.ts'
+import AuthThirdPartyLogin from './-third-party-login.vue'
+import AuthTitle from './-auth-title.vue'
 
 interface Props {
   /** 是否处于提交加载状态 */
@@ -31,10 +34,10 @@ withDefaults(defineProps<Props>(), {
   title: '',
   subTitle: '',
   submitButtonText: '',
-  codeLoginPath: '/code-login',
-  qrcodeLoginPath: '/qrcode-login',
-  registerPath: '/register',
-  forgetPasswordPath: '/forget-password',
+  codeLoginPath: '/auth/code-login',
+  qrcodeLoginPath: '/auth/qrcode-login',
+  registerPath: '/auth/register',
+  forgetPasswordPath: '/auth/forget-password',
   showRememberMe: true,
   showForgetPassword: true,
   showCodeLogin: true,
@@ -42,6 +45,8 @@ withDefaults(defineProps<Props>(), {
   showThirdPartyLogin: true,
   showRegister: true,
 })
+
+definePageMeta({ layout: 'auth', middleware: 'guest' })
 
 const emit = defineEmits<{
   submit: [values: LoginFormValues]
@@ -51,6 +56,7 @@ const emit = defineEmits<{
 const { t } = useI18n()
 const auth = useAuthStore()
 const router = useRouter()
+const route = useRoute()
 
 const { loginSchema } = useAuthValidation()
 
@@ -84,6 +90,31 @@ function handleSocial(provider: string): void {
 
 function goTo(path: string): void {
   router.push(path)
+}
+
+async function onLogin(values: LoginFormValues) {
+  try {
+    await auth.login({
+      email: values.email,
+      password: values.password,
+      remember: values.remember,
+    })
+    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
+    await router.push(redirect)
+  }
+  catch {
+    // 错误码已写入 store，由组件内 Alert 展示
+  }
+}
+
+async function onSocial(provider: string) {
+  try {
+    await auth.socialLogin(provider)
+    await router.push('/')
+  }
+  catch {
+    // 错误码已写入 store，由组件内 Alert 展示
+  }
 }
 </script>
 

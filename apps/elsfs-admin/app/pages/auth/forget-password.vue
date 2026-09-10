@@ -1,35 +1,14 @@
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate'
 
-import type { ForgetPasswordFormValues } from '~/composables/useAuthValidation'
+import type { ForgetPasswordFormValues } from './useAuthValidation.ts'
 
-interface Props {
-  /** 是否处于提交加载状态 */
-  loading?: boolean
-  /** 登录路径（返回用） */
-  loginPath?: string
-  /** 标题 */
-  title?: string
-  /** 描述 */
-  subTitle?: string
-  /** 按钮文本 */
-  submitButtonText?: string
-  /** 是否显示返回按钮 */
-  showBack?: boolean
-}
+import { useAuthValidation } from './useAuthValidation.ts'
+import AuthTitle from './-auth-title.vue'
 
 defineOptions({ name: 'AuthForgetPassword' })
 
-const props = withDefaults(defineProps<Props>(), {
-  loading: false,
-  loginPath: '/login',
-  submitButtonText: '',
-  subTitle: '',
-  title: '',
-  showBack: true,
-})
-
-const emit = defineEmits<{ submit: [values: ForgetPasswordFormValues] }>()
+definePageMeta({ layout: 'auth', middleware: 'guest' })
 
 const { t } = useI18n()
 const auth = useAuthStore()
@@ -44,25 +23,31 @@ const { handleSubmit, isSubmitting } = useForm<ForgetPasswordFormValues>({
 
 const { value: email, errorMessage: emailError } = useField<string>('email')
 
-const onSubmit = handleSubmit((values) => {
-  emit('submit', values)
+async function onSubmit(values: ForgetPasswordFormValues) {
+  try {
+    await auth.forgetPassword(values.email)
+    ElMessage.success(t('forgetPassword.successTitle'))
+  }
+  catch {
+    // 错误码已写入 store，由组件内 Alert 展示
+  }
+}
+
+const submitHandler = handleSubmit((values) => {
+  onSubmit(values)
 })
 
 function goToLogin(): void {
-  router.push(props.loginPath)
+  router.push('/auth/login')
 }
 </script>
 
 <template>
   <div>
     <AuthTitle>
-      <slot name="title">
-        {{ title || `${t('forgetPassword.title')} 🤦🏻‍♂️` }}
-      </slot>
+      {{ t('forgetPassword.title') }} 🤦🏻‍♂️
       <template #desc>
-        <slot name="subTitle">
-          {{ subTitle || t('forgetPassword.subtitle') }}
-        </slot>
+        {{ t('forgetPassword.subtitle') }}
       </template>
     </AuthTitle>
 
@@ -78,7 +63,7 @@ function goToLogin(): void {
       label-position="top"
       novalidate
       class="auth-form"
-      @submit="onSubmit"
+      @submit="submitHandler"
     >
       <ElFormItem
         :label="t('forgetPassword.email')"
@@ -104,14 +89,13 @@ function goToLogin(): void {
         type="primary"
         class="auth-submit w-full"
         native-type="submit"
-        :loading="isSubmitting || loading"
+        :loading="isSubmitting || auth.status === 'loading'"
       >
-        {{ submitButtonText || t('forgetPassword.submit') }}
+        {{ t('forgetPassword.submit') }}
       </ElButton>
     </ElForm>
 
     <ElButton
-      v-if="showBack"
       type="default"
       plain
       class="mt-4 w-full"

@@ -1,4 +1,7 @@
 <script setup lang="ts">
+definePageMeta({ layout: 'auth', middleware: 'guest' })
+import AuthTitle from './-auth-title.vue'
+
 interface Props {
   /** 是否处于加载处理状态 */
   loading?: boolean
@@ -18,13 +21,11 @@ interface Props {
   qrcodeText?: string
 }
 
-defineOptions({ name: 'AuthQrcodeLogin' })
-
 const props = withDefaults(defineProps<Props>(), {
   description: '',
   loading: false,
   showBack: true,
-  loginPath: '/login',
+  loginPath: '/auth/login',
   submitButtonText: '',
   subTitle: '',
   title: '',
