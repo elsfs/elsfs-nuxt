@@ -19,18 +19,6 @@ export default defineNuxtConfig({
       adobe: false,
     },
   },
-  icon: {
-    serverBundle: {
-      // 只打包本地已有的图标集，避免联网下载
-      collections: ['custom'],  // 换成你项目里实际用到的本地图标集名
-    },
-    // 如果不需要 material symbols，可以限制客户端图标集
-    clientBundle: {
-      scan: true,
-      // sizeLimitKb: 256,
-    },
-  },
-})
   content: {
     experimental: {
       sqliteConnector: 'native',
