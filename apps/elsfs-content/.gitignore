@@ -9,9 +9,6 @@ dist
 # Node dependencies
 node_modules
 
-# pnpm store (project-local, sandbox-friendly)
-.pnpm-store
-
 # Logs
 logs
 *.log
@@ -25,5 +22,3 @@ logs
 .env
 .env.*
 !.env.example
-
-apps/elsfs-content/.data
