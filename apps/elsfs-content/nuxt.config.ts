@@ -23,6 +23,42 @@ export default defineNuxtConfig({
       adobe: false,
     },
   },
+  icon: {
+    // docus 默认 provider: 'iconify'，图标会在运行时去 api.iconify.design 拉取，
+    // 国内网络下必然超时（[Icon] loading icon ... timed out）并导致图标缺失。
+    // 改为使用本地已安装的 @iconify-json/* 集合（server bundle），并禁止回退到 Iconify API。
+    provider: 'server',
+    serverBundle: 'local',
+    fallbackToApi: false,
+    clientBundle: {
+      // 下面这些图标是运行时拼出来的，静态扫描扫不到，必须显式打进 client bundle：
+      // - lucide:terminal 由 @nuxt/ui 的 CodeIcon 按文件名 "Terminal" 映射
+      // - lucide:cloud-upload / square-code / square-function 来自 content 的 .navigation.yml
+      // - vscode-icons:file-type-* 由 CodeIcon 按代码块文件名的扩展名映射
+      icons: [
+        'lucide:cloud-upload',
+        'lucide:square-code',
+        'lucide:square-function',
+        'lucide:terminal',
+        'vscode-icons:file-type-bun',
+        'vscode-icons:file-type-css',
+        'vscode-icons:file-type-deno',
+        'vscode-icons:file-type-dotenv',
+        'vscode-icons:file-type-excel',
+        'vscode-icons:file-type-json',
+        'vscode-icons:file-type-json2',
+        'vscode-icons:file-type-markdown',
+        'vscode-icons:file-type-node',
+        'vscode-icons:file-type-npm',
+        'vscode-icons:file-type-nuxt',
+        'vscode-icons:file-type-pnpm',
+        'vscode-icons:file-type-typescript',
+        'vscode-icons:file-type-vue',
+        'vscode-icons:file-type-yaml',
+        'vscode-icons:file-type-yarn',
+      ],
+    },
+  },
   content: {
     experimental: {
       sqliteConnector: 'native',

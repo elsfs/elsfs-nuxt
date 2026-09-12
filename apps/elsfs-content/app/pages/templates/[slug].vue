@@ -82,7 +82,7 @@ const images = computed(() => template.value
               label="Preview"
               color="neutral"
               trailing
-              icon="i-ph-arrow-square-out"
+              icon="i-lucide-external-link"
               :to="template.demo"
               target="_blank"
             />
@@ -91,7 +91,7 @@ const images = computed(() => template.value
               color="primary"
               variant="solid"
               :to="`https://github.com/${template.owner}/${template.name}/tree/${template.branch}`"
-              trailing-icon="i-ph-arrow-right"
+              trailing-icon="i-lucide-arrow-right"
             />
           </div>
         </template>

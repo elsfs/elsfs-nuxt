@@ -23,7 +23,7 @@ This article was published before the merge of the [Content](https://github.com/
 
 Continuing our journey to make Nuxt Studio the tool for non-technical users to edit their content with Nuxt websites, we're excited to announce that `YAML` and `JSON` files can now be edited through a generated visual form. This update removes the need for users to interact directly with complex file syntax such as YAML or JSON.
 
-::callout{icon="i-ph-info"}
+::callout{icon="i-lucide-info"}
 Arrays are not yet handled as form but we'll work on it once collections and user-defined schemas will be released with Nuxt Content v3. See the section below.
 ::
 

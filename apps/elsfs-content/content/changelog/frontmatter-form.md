@@ -27,7 +27,7 @@ You can now edit your markdown front-matter without writing in the `YAML` syntax
 
 Front-matter is a convention used in Markdown-based CMSs to provide metadata for pages, such as descriptions, titles, and more. In [Nuxt Content](/docs/files/markdown#front-matter), the front-matter uses the YAML syntax.
 
-::callout{icon="i-ph-info" to="/docs/files/markdown#front-matter"}
+::callout{icon="i-lucide-info" to="/docs/files/markdown#front-matter"}
 For more detailed information about front-matter syntax, visit the Nuxt Content documentation.
 ::
 
@@ -43,7 +43,7 @@ Soon, the form generation feature will extend to all `YAML` and `JSON` files you
 
 ## Looking ahead to Nuxt Content v3
 
-::callout{icon="i-ph-lightbulb"}
+::callout{icon="i-lucide-lightbulb"}
 This section is just a teaser of [Nuxt Content v3](https://github.com/nuxt/content/tree/v3). We will publish a more detailed blog post soon.
 ::
 
@@ -112,6 +112,6 @@ image: z.object({
 icon: z.string().editor({ type: 'icon' })
 ```
 
-::callout{icon="i-ph-lightbulb" to="https://github.com/nuxt/content/tree/main"}
+::callout{icon="i-lucide-lightbulb" to="https://github.com/nuxt/content/tree/main"}
 Nuxt Content v3 has been officially released. Don't hesitate to try it out and give us feedback.
 ::
