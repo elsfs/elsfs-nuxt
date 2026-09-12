@@ -14,7 +14,6 @@
       应用名称
     </div>
   </div>
-
 </template>
 
 <style>
@@ -131,4 +130,3 @@
   filter: grayscale(1);
 }
 </style>
-

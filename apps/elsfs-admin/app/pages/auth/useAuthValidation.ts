@@ -60,7 +60,8 @@ export function createRegisterSchema(t: Translate) {
     password: z.string()
       .min(1, { message: t('validation.required') })
       .min(8, { message: t('validation.passwordMin', { min: 8 }) })
-      .regex(/^(?=.*[A-Z])(?=.*\d)/, { message: t('validation.passwordPattern') }),
+      .regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/, {
+        message: t('validation.passwordPattern') }),
     confirmPassword: z.string()
       .min(1, { message: t('validation.required') }),
     agree: z.boolean()

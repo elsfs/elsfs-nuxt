@@ -72,7 +72,7 @@
     "passwordMin": "Password must be at least {min} characters",
     "usernameMin": "Username must be at least {min} characters",
     "usernameMax": "Username must not exceed {max} characters",
-    "passwordPattern": "Password must contain letters and numbers",
+    "passwordPattern": "Must include uppercase, lowercase, and a number",
     "confirmMismatch": "The two passwords do not match",
     "termsRequired": "Please agree to the terms first",
     "codeInvalid": "Please enter a 6-digit numeric code",
