@@ -6,10 +6,15 @@ pnpm workspace 单仓多包。**根目录 `package.json` 是空容器**（`scrip
 
 | 包 | 路径 | 说明 |
 | --- | --- | --- |
-| `elsfs-nuxt` | `apps/elsfs-admin` | 唯一的 Nuxt 4 应用（目录名与包名不一致，注意 filter 用包名） |
-| `tailwind-config` | `packages/tailwind-config` | Nuxt Layer，被应用以 `extends: ['tailwind-config']` 复用 |
+| `elsfs-nuxt` | `apps/elsfs-admin` | Nuxt 4 应用：认证后台（目录名与包名不一致，注意 filter 用包名） |
+| `elsfs-content` | `apps/elsfs-content` | Nuxt 4 应用：基于 `docus` 的文档站（Nuxt Content + Nuxt UI + NuxtHub） |
+| `tailwind-config` | `packages/tailwind-config` | Nuxt Layer，被 `elsfs-admin` 以 `extends: ['tailwind-config']` 复用 |
 
-应用技术栈：Nuxt 4.5 + Vue 3.5 + Pinia + Element Plus 2.14（`@element-plus/nuxt`）+ `@nuxtjs/i18n` v10 + `@nuxtjs/color-mode` + vee-validate 5 + zod 4 + Tailwind v4（CSS-first，配置在 layer）。
+两个应用互不相干，各自的命令都要进到自己的目录里跑（端口默认都是 3000，同时开发时后启动的会自动退到 3001）。
+
+`elsfs-admin` 技术栈：Nuxt 4.5 + Vue 3.5 + Pinia + Element Plus 2.14（`@element-plus/nuxt`）+ `@nuxtjs/i18n` v10 + `@nuxtjs/color-mode` + vee-validate 5 + zod 4 + Tailwind v4（CSS-first，配置在 layer）。
+
+`elsfs-content` 技术栈：`docus` v5 layer + `@nuxt/content` v3（sqlite/libsql）+ `@nuxt/ui` v4 + `@nuxthub/core` + `nuxt-studio` + `@nuxtjs/mcp-toolkit`；内容在 `content/`，集合定义在 `content.config.ts`。
 
 没有后端服务、没有数据库、没有测试框架；验证手段只有 `lint` + `typecheck` + `build`。
 
@@ -125,6 +130,16 @@ Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 
 - 新增认证表单：在 `useAuthValidation.ts` 加 zod 工厂 → 页面用 vee-validate 的 `toTypedSchema` 接上 → 文案补双语言
 - 新增 iconify 图标：优先直接在模板写 `icon-[lucide--xxx]`；要按名传参就登记进 `AppIcon.vue` 的 `ICONIFY_CLASSES`
 - 新增组件：放 `app/components/auth/` 会得到 `AuthXxx` 名字（自动导入），公用组件放 `app/components/` 根
+
+## elsfs-content（文档站）专有坑
+
+- **字体 provider：`googleicons` 与 `google` 是两个独立开关**，只关 `google` 不够。`unifont`/`fontless` 在启动时会 eager 初始化所有未禁用的 provider，`googleicons` 默认启用且会去 `fetch https://fonts.google.com/metadata/icons?...`，国内直连必然超时并打印 `Could not initialize provider googleicons`（重试 3 次、每次 10s）。本项目不用 web font，已在 `nuxt.config.ts` 里显式 `googleicons: false`，**别把它删掉**
+- 该报警是**非致命**的（`unifont` 内部 catch，`throwOnError` 未开）；排查时可看 `.nuxt/nuxt-fonts-global.css` 是否为空，空就代表没有任何 `@font-face` 生成
+- 需要图标就用 iconify（`@nuxt/icon`，bundle 模式为 local，不发网络请求），不要引入 Google 图标字体
+- 真要自托管字体：用 `@nuxt/fonts` 的 `local` 或 `@fontsource/*`，不要走运行时从 Google 拉取；`unifont` 也认 `HTTPS_PROXY`/`HTTP_PROXY`（会挂 `EnvHttpProxyAgent`）
+- `main.css` 的 `@theme static { --font-sans: 'Public Sans', sans-serif }` 引用了并未加载的 Public Sans，会回退到 `sans-serif`
+- **改 `nuxt.config.ts` 的 `css` 数组后必须重启 dev**：Vite 的 module runner（vite-node SSR）会把 `virtual:nuxt:.nuxt/css.mjs` 里的 `~/assets/css/main.css` 解析失败并整页 500（`Cannot find module '~/assets/css/main.css'`），重启即可恢复；`googleicons` 的改动也踩过同一个坑
+- `package.json` 里的 `pnpm.onlyBuiltDependencies`（better-sqlite3）**放错了位置**——pnpm 要求放在 workspace 根，否则 `better-sqlite3` 不会被构建，日志会提示 `This will not take effect`
 
 ## 其他约定与待修项
 
