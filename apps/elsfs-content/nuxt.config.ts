@@ -12,6 +12,10 @@ export default defineNuxtConfig({
   },
   fonts: {
     providers: {
+      // googleicons 是与 google 并列的独立 provider（提供 Material Symbols 图标字体），
+      // 默认启用且字体模块启动时会 eager 初始化，会去 fetch fonts.google.com，
+      // 国内网络下必然超时并打印 ERROR。本项目未使用 web font，直接关闭。
+      googleicons: false,
       google: false,
       fontsource: false,
       bunny: false,
