@@ -1,6 +1,6 @@
 ---
-title: Behind the scenes of Nuxt Studio's visual editor
-description: Discover the inner workings of Nuxt Studio's visual editor and how it interprets the Markdown syntax and generate it back.
+title: 深入 Nuxt Studio 可视化编辑器的幕后
+description: 了解 Nuxt Studio 可视化编辑器的内部机制，以及它如何解析 Markdown 语法并将结果重新生成。
 image:
   src: /blog/visual-editor.webp
 authors:
@@ -18,66 +18,66 @@ date: 2024-09-04T00:00:00.000Z
 category: studio
 ---
 
-## **Introduction**
+## **引言**
 
-Nuxt Studio offers a versatile workspace for both developers and content writers, giving them the freedom to choose between two distinct editors for content creation and management: the Markdown editor and the Visual editor.
+Nuxt Studio 为开发者和内容写作者提供了一个多用途的工作区，让他们可以自由地在两种不同的编辑器之间选择，用于内容创作与管理：Markdown 编辑器和可视化编辑器。
 
-![Select your favorit editor from the project settings](/blog/favorite-editor.webp)
+![在项目设置中选择你喜欢的编辑器](/blog/favorite-editor.webp)
 
-Each editor serves its own purpose—some users are used to Markdown edition, while others prefer a non-technical, visual approach.
+每种编辑器各有用途——有些用户习惯用 Markdown 编辑，另一些则更偏爱无需技术的可视化方式。
 
-At the end, **Markdown syntax is the final output** for both editors.
+最终，**Markdown 语法是两种编辑器共同的最终产物**。
 
-This article explains the technical processes behind the visual editor, exploring how it interprets Markdown, converts it back, and why this process might occasionally lead to changes from the original content.
+本文将讲解可视化编辑器背后的技术流程，探讨它如何解析 Markdown、如何转换回去，以及这个过程为何偶尔会导致内容与原文出现差异。
 
-## **Markdown Editor**
+## **Markdown 编辑器**
 
-![Edit directly markdown on Nuxt Studio](/blog/markdown-editor.webp)
+![在 Nuxt Studio 中直接编辑 Markdown](/blog/markdown-editor.webp)
 
-The Markdown editor in Nuxt Studio provides full control over your content, allowing you to write directly in [MDC](/docs/files/markdown) (an empowered Markdown syntax). This syntax enables integration of Vue components directly into your Markdown files, offering more flexibility to structure your pages.
+Nuxt Studio 的 Markdown 编辑器让你完全掌控内容，可以直接用 [MDC](/docs/files/markdown)（一种增强的 Markdown 语法）编写。这种语法允许把 Vue 组件直接集成到 Markdown 文件中，让你在组织页面时更灵活。
 
-When your file is saved with the Markdown editor, the content is stored exactly as you've written it, preserving all specific syntax and formatting. This editor is ideal for users comfortable with Markdown who want precise control over the layout and structure of their content.
+用 Markdown 编辑器保存文件时，内容会完全按你写的样子存储，保留所有特定语法和格式。对于熟悉 Markdown、希望对内容布局与结构有精确掌控的用户，这个编辑器最为理想。
 
-## **Visual Editor**
+## **可视化编辑器**
 
-![Edit your content with a visual editor on Nuxt Studio](/blog/visual-editor.webp)
+![在 Nuxt Studio 中使用可视化编辑器编辑内容](/blog/visual-editor.webp)
 
-The Visual Editor is a sort of WYSIWYG (What You See Is What You Get) tool built on top of [TipTap](https://tiptap.dev/) and [ProseMirror](https://prosemirror.net/), designed to abstract away the complexities of Markdown syntax and offer a more intuitive, visual editing experience. This editor is particularly user-friendly for those who prefer not to deal with raw Markdown code.
+可视化编辑器是一种所见即所得（WYSIWYG）工具，构建在 [TipTap](https://tiptap.dev/) 和 [ProseMirror](https://prosemirror.net/) 之上，旨在把 Markdown 语法的复杂性隐藏起来，提供更直观的可视化编辑体验。对于不想直接面对 Markdown 原始代码的用户，这个编辑器尤其友好。
 
-### **How the visual editor processes files**
+### **可视化编辑器如何处理文件**
 
-When you open a Markdown file with the Visual Editor, Nuxt Studio first parses the original Markdown file. Using the [MDC module](https://github.com/nuxt-modules/mdc), it generates an Abstract Syntax Tree (AST). This AST is then converted into a TipTap-compatible format (TipTap AST), allowing the editor to accurately render the document visually.
+当你用可视化编辑器打开一个 Markdown 文件时，Nuxt Studio 会先解析原始 Markdown 文件。它使用 [MDC 模块](https://github.com/nuxt-modules/mdc)生成抽象语法树（AST），再把该 AST 转换为 TipTap 兼容的格式（TipTap AST），从而让编辑器能准确地以可视化方式渲染文档。
 
-Once the Visual Editor displays the content, users can make updates in a visually intuitive way. Behind the scenes, the editor continuously transforms the TipTap AST back into MDC AST then MDC syntax, ensuring that your content remains in Markdown format.
+一旦可视化编辑器显示出内容，用户就能以直观的可视化方式进行修改。在背后，编辑器会持续把 TipTap AST 转换回 MDC AST，再转成 MDC 语法，确保你的内容始终保持 Markdown 格式。
 
-### **Why Changes might occur in the original markdown file without user modification**
+### **为什么用户没有修改，原始 markdown 文件也会发生变化**
 
-![Alert is displayed when automatic markdown parsing is detected](/blog/automatic-parsing-modal.webp)
+![检测到自动 Markdown 解析时显示的提示](/blog/automatic-parsing-modal.webp)
 
-#### **Non-Critical Changes**
+#### **非关键性变更**
 
-As the Visual Editor translates the visual formatting back into Markdown, it applies a parsing algorithm that applies predefined Markdown standards. In some cases, these standards may differ slightly from the original content. These changes are typically non-impactful and are only another working syntax of the Markdown, the rendered website should remain consistent with the original.
+可视化编辑器在把可视化格式转换回 Markdown 时，会套用一个解析算法，应用预定义的 Markdown 标准。在某些情况下，这些标准可能与原始内容略有差异。这类变更通常没有实际影响，只是 Markdown 的另一种可用写法，渲染出的网站应与原来保持一致。
 
-#### **Critical Changes**
+#### **关键性变更**
 
-Ideally, every feature in Markdown has a direct and accurate equivalent in the Visual Editor. We've built custom TipTap extensions to support custom MDC syntax such as [Vue components](/docs/files/markdown#vue-components) edition or [front-matter](/docs/files/markdown#front-matter). However, in rare cases, particularly with complex or unconventional Markdown elements, the Visual Editor may not fully support or correctly interpret these elements. When this happens, the editor might approximate, simplify, or even omit these elements during the parsing process.
+理想情况下，Markdown 中的每个特性在可视化编辑器里都有直接而准确的对应实现。我们构建了自定义 TipTap 扩展，以支持自定义 MDC 语法，比如 [Vue 组件](/docs/files/markdown#vue-components)编辑或 [front-matter](/docs/files/markdown#front-matter)。但在少数情况下，尤其是遇到复杂或不常规的 Markdown 元素时，可视化编辑器可能无法完全支持或正确解析它们。此时，编辑器在解析过程中可能会对这些元素做近似处理、简化，甚至直接省略。
 
-Such discrepancies can result in data loss or regressions when converting back to Markdown. While these occurrences are rare, they can disrupt the intended display or functionality of your content.
+这类差异在转换回 Markdown 时可能导致数据丢失或功能退化。虽然这种情况很少见，但它可能破坏你内容原本的展示效果或功能。
 
-Our primary objective is to prevent any loss of content and to maintain the integrity of your Markdown files. If you encounter any issues where the transition from visual to Markdown isn’t perfect, we encourage you to report them on our Discord server. Your feedback is invaluable in helping us refine and improve the Visual Editor, ensuring it meets the needs of all users.
+我们的首要目标是防止任何内容丢失，维护 Markdown 文件的完整性。如果你遇到可视化转 Markdown 不够完美的问题，欢迎在我们的 Discord 服务器上反馈。你的反馈对我们打磨和改进可视化编辑器、让它满足所有用户的需求极为宝贵。
 
-## **Best practices to minimize unintended changes**
+## **减少意外变更的最佳实践**
 
-To avoid losing crucial formatting or content, consider the following best practices:
+为避免丢失关键格式或内容，可以参考以下最佳实践：
 
-- **Avoid using complex HTML structures**. As the MDC syntax allows you to integrate Vue components, It's more effective to create reusable components that can be easily inserted into the Markdown and edited within the editor, rather than relying on intricate HTML code.
-- **Use one editor consistently.** Whenever possible, select the editor that best suits your needs and stick with it for the entire page.
-- **Review changes after switching from an editor to the other.** After switching editors, always review the Markdown (on the review page) and check the preview to ensure no important elements have been altered.
+- **避免使用复杂的 HTML 结构**。既然 MDC 语法允许你集成 Vue 组件，那么更有效的做法是创建可复用的组件，以便轻松插入 Markdown 并在编辑器中编辑，而不是依赖复杂的 HTML 代码。
+- **始终使用同一种编辑器。** 尽可能选择最适合你需求的编辑器，并在整个页面中坚持使用它。
+- **在两种编辑器之间切换后检查改动。** 切换编辑器后，务必（在审阅页面）检查 Markdown 并查看预览，确认没有重要元素被改动。
 
-## **Conclusion**
+## **结语**
 
-Switching between the Markdown editor and the visual editor in Nuxt Studio offers flexibility, but it's important to be aware of the technical implications.
+在 Nuxt Studio 中于 Markdown 编辑器和可视化编辑器之间切换带来了灵活性，但也要注意其技术层面的影响。
 
-Understanding how the visual editor processes and converts Markdown can help ensure that what you craft in Markdown is accurately displayed in the visual editor, allowing non-technical users to easily edit everything without altering the original Markdown file.
+理解可视化编辑器如何处理和转换 Markdown，有助于确保你在 Markdown 中精心写下的内容能准确呈现在可视化编辑器里，让非技术用户也能轻松编辑一切，而不改动原始 Markdown 文件。
 
 ###

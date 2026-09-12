@@ -23,7 +23,7 @@ const result = computed(() => miniSearch.search(toValue(query)).slice(0, 10))
     <UCard>
       <UInput
         v-model="query"
-        placeholder="Search..."
+        placeholder="搜索..."
         class="w-full"
       />
       <ul>

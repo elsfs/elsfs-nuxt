@@ -1,10 +1,10 @@
 ---
-title: 你好
-description: Back home
+title: 关于
+description: 关于本站
 navigation:
-  title: nhma
+  title: 关于
 ---
 
-# About Content Version 3
+# 关于内容版本 3
 
-[Back home](/)
+[返回首页](/)

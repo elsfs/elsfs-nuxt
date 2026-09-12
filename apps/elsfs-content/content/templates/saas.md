@@ -1,12 +1,12 @@
 ---
 slug: saas
 subtitle: ""
-title: Saas
+title: SaaS
 baseDir: .
 branch: main
 category: docs
 demo: https://saas-template.nuxt.dev/
-description: A fully built SaaS application to launch your next project.
+description: 一个功能完备的 SaaS 应用，助你启动下一个项目。
 licenseType: nuxt-ui
 mainScreen: /templates/saas-dark.png
 name: SaaS
@@ -17,33 +17,33 @@ image2: /templates/saas-dark.png
 ---
 
 ::template-core
-[Nuxt UI](https://ui.nuxt.com) is a collection of premium components designed to facilitate the creation of appealing and responsive Nuxt applications in a matter of minutes.
+[Nuxt UI](https://ui.nuxt.com) 是一套优质组件集合，旨在帮助你在几分钟内创建美观、响应式的 Nuxt 应用。
 
-The Nuxt UI team is dedicated to deliver the best integration and customization experience, while the Studio team is providing full compatibility with Nuxt Studio.
+Nuxt UI 团队致力于提供最佳的集成与自定义体验，而 Studio 团队则确保与 Nuxt Studio 完全兼容。
 
-- **Fully customizable**: change the style of any component from your App Config or customize them specifically through the ui prop.
-- **Write Markdown with ease**: Nuxt UI overrides Nuxt Content prose components to make them awesome but also adds new ones like Callout, CodeGroup, Field, etc.
-- **Beautiful Typography styles**: Tailwind CSS typography plugin is pre-configured and styled to match Nuxt UI components and colors.
-- **Full-Text Search out of the box**: Nuxt UI ships with a ready to use command palette component. No need to setup Algolia DocSearch anymore.
-- **Slots for everything**: Each component leverages the power of Vue's slots to give you the flexibility to build anything.
-- **Responsive by design**: Nuxt UI components aims to structure your content, they are responsive by design and will adapt to any screen size.
+- **完全可自定义**：可以从 App Config 修改任意组件的样式，也可以通过 ui prop 单独定制。
+- **轻松编写 Markdown**：Nuxt UI 重写了 Nuxt Content 的 prose 组件，让它们更出色，同时还新增了 Callout、CodeGroup、Field 等组件。
+- **精美的排版样式**：Tailwind CSS typography 插件已预先配置，其样式与 Nuxt UI 的组件和配色保持一致。
+- **开箱即用的全文搜索**：Nuxt UI 自带可直接使用的命令面板组件，无需再配置 Algolia DocSearch。
+- **处处可用插槽**：每个组件都充分利用 Vue 插槽的能力，让你能灵活构建任何内容。
+- **天生响应式**：Nuxt UI 组件旨在组织你的内容，它们天生响应式，能适配任何屏幕尺寸。
 
 #right
   :::template-features
   ---
   features:
     - label: Nuxt 3
-      content: Powered by Nuxt 3 for optimal performances and SEO.
+      content: 基于 Nuxt 3 构建，带来最佳性能与 SEO。
     - label: Markdown
-      content: Write your pages with MDC thanks to Nuxt Content.
+      content: 借助 Nuxt Content，使用 MDC 编写页面。
     - label: Nuxt UI
-      content: Offers a very large set of full customizable components.
+      content: 提供大量完全可自定义的组件。
     - label: TypeScript
-      content: A fully typed development experience.
+      content: 全程类型化的开发体验。
     - label: Nuxt Studio
-      content: Use Nuxt Studio module for fast updates and previews.
+      content: 使用 Nuxt Studio 模块快速更新和预览。
     - label: Search
-      content: A full-text search modal empowered by Fuse.js.
+      content: 由 Fuse.js 驱动的全文搜索弹窗。
   ---
   :::
 ::

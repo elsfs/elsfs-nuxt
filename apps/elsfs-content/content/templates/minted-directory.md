@@ -1,12 +1,12 @@
 ---
 slug: minted-directory
-subtitle: Starter kit to build directory website
+subtitle: 用于构建目录网站的起步套件
 title: Minted Directory
 baseDir: .
 branch: main
 category: Blog
 demo: https://www.minteddirectory.com/
-description: A SEO optimized directory starter kit that does not require a database.
+description: 一个针对 SEO 优化、无需数据库的目录站起步套件。
 licenseType: free
 mainScreen: /templates/minted-directory-thumbnail.png
 name: minted-directory
@@ -18,30 +18,30 @@ draft: true
 ---
 
 ::template-core
-Minted Directory is a highly customizable template designed for building successful directory websites quickly.
+Minted Directory 是一个高度可自定义的模板，专为快速构建成功的目录网站而设计。
 
-- Create a directory website with a customized style/brand
-- Manage listings with markdown
-- SEO optimized
-- Search and Categorization with tags
-- Blog Pages
+- 创建带有自定义样式/品牌的目录网站
+- 使用 Markdown 管理列表
+- 针对 SEO 优化
+- 通过标签进行搜索与分类
+- 博客页面
 
 #right
   :::template-features
   ---
   features:
-    - label: Nuxt Architecture
-      content: Harness the full power of Nuxt 3 and its modules ecosystem.
-    - label: Nuxt Studio ready
-      content: Edit your content with live-preview within Nuxt Studio module.
-    - label: Vue Components
-      content: Insert built-in components (or your own) inside your content.
-    - label: Write Markdown
-      content: Enjoy the ease and simplicity of Markdown and discover MDC syntax.
-    - label: Deploy anywhere
-      content: In one click from Studio or with zero config on Vercel or Netlify. Choose between static generation, on-demand rendering (Node) or edge-side rendering on CloudFlare workers.
-    - label: Extensible
-      content: Customize the whole design, or add components using slots - you can make Minted Directory your own.
+    - label: Nuxt 架构
+      content: 充分发挥 Nuxt 3 及其模块生态的全部能力。
+    - label: 支持 Nuxt Studio
+      content: 在 Nuxt Studio 模块中以实时预览方式编辑内容。
+    - label: Vue 组件
+      content: 在内容中插入内置组件（或你自己的组件）。
+    - label: 编写 Markdown
+      content: 享受 Markdown 的简洁易用，并探索 MDC 语法。
+    - label: 随处部署
+      content: 在 Studio 中一键部署，或在 Vercel、Netlify 上零配置部署。可在静态生成、按需渲染（Node）或 CloudFlare workers 边缘渲染之间任选。
+    - label: 可扩展
+      content: 自定义整套设计，或用插槽添加组件 —— 你可以打造属于自己的 Minted Directory。
   ---
   :::
 ::

@@ -2,11 +2,11 @@
 defineProps({
   title: {
     type: String,
-    default: 'Default title',
+    default: '默认标题',
   },
   description: {
     type: String,
-    default: 'Default description',
+    default: '默认描述',
   },
   icon: {
     type: String,

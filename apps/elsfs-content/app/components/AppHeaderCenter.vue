@@ -3,7 +3,7 @@ const route = useRoute()
 
 const links = computed(() => [
   {
-    label: 'Documentation',
+    label: '文档',
     icon: 'i-lucide-book-open',
     to: '/docs/getting-started',
     active: route.path.startsWith('/docs') && !route.path.startsWith('/docs/studio'),
@@ -13,11 +13,11 @@ const links = computed(() => [
     to: 'https://nuxt.studio',
     target: '_blank',
   }, {
-    label: 'Templates',
+    label: '模板',
     icon: 'i-lucide-layout-template',
     to: '/templates',
   }, {
-    label: 'Blog',
+    label: '博客',
     icon: 'i-lucide-file-text',
     to: '/blog',
   },

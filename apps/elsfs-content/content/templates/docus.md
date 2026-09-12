@@ -7,7 +7,7 @@ branch: main
 category: docs
 createdAt: 2023-11-15T17:41:03.087Z
 demo: https://docus.dev
-description: Write beautiful docs with Markdown
+description: 使用 Markdown 编写精美的文档
 licenseType: nuxt-ui
 mainScreen: /templates/docus.webp
 name: docus
@@ -18,22 +18,22 @@ image3: ""
 ---
 
 ::template-core
-> A beautiful, minimal starter for creating documentation with Docus
+> 一个美观、极简的起步模板，用于借助 Docus 创建文档
 
-This is the default Docus starter template that provides everything you need to build beautiful documentation sites with Markdown and Vue components.
+这是默认的 Docus 起步模板，提供了使用 Markdown 和 Vue 组件构建精美文档站所需的一切。
 
-## ✨ Features
+## ✨ 特性
 
-- 🎨 **Beautiful Design** - Clean, modern documentation theme
-- 📱 **Responsive** - Mobile-first responsive design  
-- 🌙 **Dark Mode** - Built-in dark/light mode support
-- 🔍 **Search** - Full-text search functionality
-- 📝 **Markdown Enhanced** - Extended markdown with custom components
-- 🎨 **Customizable** - Easy theming and brand customization
-- ⚡ **Fast** - Optimized for performance with Nuxt 4
-- 🔧 **TypeScript** - Full TypeScript support
+- 🎨 **精美设计** - 干净、现代的文档主题
+- 📱 **响应式** - 移动优先的响应式设计  
+- 🌙 **暗色模式** - 内置亮色/暗色模式支持
+- 🔍 **搜索** - 全文搜索功能
+- 📝 **增强的 Markdown** - 使用自定义组件扩展 Markdown
+- 🎨 **可自定义** - 轻松定制主题与品牌
+- ⚡ **快速** - 借助 Nuxt 4 优化性能
+- 🔧 **TypeScript** - 完整的 TypeScript 支持
 
-## 🚀 Quick Start
+## 🚀 快速开始
 
 ```bash
 # Install dependencies
@@ -43,9 +43,9 @@ npm install
 npm run dev
 ```
 
-Your documentation site will be running at `http://localhost:3000`
+你的文档站将运行在 `http://localhost:3000`
 
-## 📁 Project Structure
+## 📁 项目结构
 
 ```text
 my-docs/
@@ -57,51 +57,51 @@ my-docs/
 └── package.json         # Dependencies and scripts
 ```
 
-## ⚡ Built with
+## ⚡ 技术栈
 
-This starter comes pre-configured with:
+该起步模板已预先配置：
 
-- [Nuxt 4](https://nuxt.com) - The web framework
-- [Nuxt Content](https://content.nuxt.com/) - File-based CMS
-- [Nuxt UI](https://ui.nuxt.com) - Premium UI components
-- [Nuxt Image](https://image.nuxt.com/) - Optimized images
-- [Tailwind CSS 4](https://tailwindcss.com/) - Utility-first CSS
-- [Docus Layer](https://www.npmjs.com/package/docus) - Documentation theme
+- [Nuxt 4](https://nuxt.com) - Web 框架
+- [Nuxt Content](https://content.nuxt.com/) - 基于文件的 CMS
+- [Nuxt UI](https://ui.nuxt.com) - 优质 UI 组件
+- [Nuxt Image](https://image.nuxt.com/) - 图片优化
+- [Tailwind CSS 4](https://tailwindcss.com/) - 原子化 CSS
+- [Docus Layer](https://www.npmjs.com/package/docus) - 文档主题
 
-## 📖 Documentation
+## 📖 文档
 
-For detailed documentation on customizing your Docus project, visit the [Docus Documentation](https://docus.dev)
+有关自定义 Docus 项目的详细文档，请访问 [Docus 文档](https://docus.dev)
 
-## 🚀 Deployment
+## 🚀 部署
 
-Build for production:
+生产环境构建：
 
 ```bash
 npm run build
 ```
 
-The built files will be in the `.output` directory, ready for deployment to any hosting provider that supports Node.js.
+构建产物将位于 `.output` 目录中，可直接部署到任何支持 Node.js 的托管服务商。
 
-## 📄 License
+## 📄 许可证
 
-[MIT License](https://opensource.org/licenses/MIT)
+[MIT 许可证](https://opensource.org/licenses/MIT)
 
 #right
   :::template-features
   ---
   features:
     - label: Nuxt 4
-      content: Powered by Nuxt 4 for optimal performances and SEO.
+      content: 基于 Nuxt 4 构建，带来最佳性能与 SEO。
     - label: Markdown
-      content: Write your pages with MDC thanks to Nuxt Content.
+      content: 借助 Nuxt Content，使用 MDC 编写页面。
     - label: Nuxt UI
-      content: Offers a very large set of full customizable components.
+      content: 提供大量完全可自定义的组件。
     - label: TypeScript
-      content: A fully typed development experience.
+      content: 全程类型化的开发体验。
     - label: Nuxt Studio
-      content: Supported by Nuxt Studio for fast updates and previews.
+      content: 支持 Nuxt Studio，可快速更新和预览。
     - label: Search
-      content: A full-text search modal empowered by Fuse.js.
+      content: 由 Fuse.js 驱动的全文搜索弹窗。
   ---
   :::
 ::

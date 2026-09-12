@@ -1,6 +1,6 @@
 ---
-title: Migrate Nuxt UI Pro Documentation Starter
-description: How to upgrade your Nuxt UI Pro documentation to Content and UI v3
+title: 迁移 Nuxt UI Pro 文档起步模板
+description: 如何把 Nuxt UI Pro 文档升级到 Content 和 UI v3
 image:
   src: /blog/migrate-docs-starter.png
 authors:
@@ -13,21 +13,21 @@ date: 2025-01-21T01:00:00.000Z
 category: Migration
 ---
 
-# How to upgrade your Nuxt documentation website to Content x UI v3
+# 如何把你的 Nuxt 文档网站升级到 Content × UI v3
 
-**2025 kicks off with the power of 3!**
+**2025 年以“3”的力量开场！**
 
-This start of year is marked by major updates to our favorite tools. The UI team is about to launch **version 3** of the **UI / UI Pro libraries** (currently in alpha), while the Content team has already released **Nuxt Content v3**.
+年初伊始，我们喜爱的工具迎来了重大更新。UI 团队即将发布 **UI / UI Pro 库的 v3**（目前处于 alpha 阶段），而 Content 团队已经发布了 **Nuxt Content v3**。
 
-These updates mean that all our starter templates combining **Content** and **UI** will need to be updated to align with the latest versions. To help you make the transition, this guide walks through migrating the **Nuxt UI Pro Docs Starter** to the new **Content v3 and Nuxt UI v3** packages.
+这些更新意味着，我们所有结合 **Content** 与 **UI** 的起步模板都需要升级以对齐最新版本。为帮助你完成过渡，本指南将带你把 **Nuxt UI Pro Docs Starter** 迁移到新的 **Content v3 与 Nuxt UI v3** 包。
 
 ::prose-tip{to="https://github.com/nuxt-ui-pro/docs/tree/v3"}
-Check the UI Pro documentation starter repository source code.
+查看 UI Pro 文档起步模板仓库的源码。
 ::
 
-## Content migration (v2 → v3)
+## Content 迁移（v2 → v3）
 
-### 1. Update package to v3
+### 1. 把包更新到 v3
 
 ::code-group
 ```bash [pnpm]
@@ -47,9 +47,9 @@ bun add @nuxt/content@^3
 ```
 ::
 
-### 2. Create `content.config.ts` file
+### 2. 创建 `content.config.ts` 文件
 
-This configuration file defines your data structure. A collection represents a set of related items. In the case of the docs starter, there are two different collections, the `landing` collection representing the home page and another `docs` collection for the documentation pages.
+这个配置文件定义了你的数据结构。一个集合代表一组相关的条目。就文档起步模板而言，它有两个不同的集合：`landing` 集合代表首页，另一个 `docs` 集合用于文档页面。
 
 ```js [content.config.ts]
 import { defineContentConfig, defineCollection, z } from '@nuxt/content'
@@ -79,16 +79,16 @@ export default defineContentConfig({
 })
 ```
 
-On top of the built-in fields provided by the [`page`](/docs/collections/types#page-type) type, we added the extra field `links` to the `docs` collection so we can optionally display them in the docs [page header](https://ui3.nuxt.dev/components/page-header).
+除了 [`page`](/docs/collections/types#page-type) 类型提供的内置字段外，我们还为 `docs` 集合添加了额外的 `links` 字段，以便可选地在文档[页面头部](https://ui3.nuxt.dev/components/page-header)中展示它们。
 
 ::prose-tip
-The `type: page` means there is a 1-to-1 relationship between the content file and a page on your site.
+`type: page` 表示内容文件与站点页面之间是一一对应的关系。
 ::
 
-### 3. Migrate `app.vue`
+### 3. 迁移 `app.vue`
 
 ::prose-steps{level="4"}
-#### Navigation fetch can be updated by moving from `fetchContentNavigation` to `queryCollectionNavigation` method
+#### 导航数据的获取可以从 `fetchContentNavigation` 改为 `queryCollectionNavigation` 方法
 
   :::prose-code-group
   ```ts [app.vue (v3)]
@@ -101,7 +101,7 @@ The `type: page` means there is a 1-to-1 relationship between the content file a
   ```
   :::
 
-#### Content search command palette data can use the new `queryCollectionSearchSections` method
+#### 内容搜索命令面板的数据可以使用新的 `queryCollectionSearchSections` 方法
 
   :::prose-code-group
   ```ts [app.vue (v3)]
@@ -119,10 +119,10 @@ The `type: page` means there is a 1-to-1 relationship between the content file a
   :::
 ::
 
-### 4. Migrate landing page
+### 4. 迁移落地页
 
 ::prose-steps{level="4"}
-#### Home page data fetching can be updated by moving from `queryContent` to `queryCollection` method
+#### 首页数据获取可以从 `queryContent` 改为 `queryCollection` 方法
 
   :::prose-code-group
   ```ts [index.vue (v3)]
@@ -134,7 +134,7 @@ The `type: page` means there is a 1-to-1 relationship between the content file a
   ```
   :::
 
-#### `useSeoMeta` can be populated using the `seo` field provided by the [page](/docs/collections/types#page-type) type
+#### 可以用 [page](/docs/collections/types#page-type) 类型提供的 `seo` 字段来填充 `useSeoMeta`
 
 ```ts [index.vue]
 useSeoMeta({
@@ -146,14 +146,14 @@ useSeoMeta({
 ```
 
   :::prose-note
-  Please note that the `seo` field is automatically overridden by the root `title` and `description` if not set.
+  请注意，如果未设置，`seo` 字段会被根级的 `title` 和 `description` 自动覆盖。
   :::
 ::
 
-### 5. Migrate catch-all docs page
+### 5. 迁移文档全捕获页面
 
 ::prose-steps{level="4"}
-#### Docs page data and surround fetching can be updated and mutualised by moving from `queryContent` to `queryCollection` and `queryCollectionItemSurroundings` methods
+#### 文档页面数据与前后篇数据的获取可以从 `queryContent` 改为 `queryCollection` 和 `queryCollectionItemSurroundings` 方法，从而合并处理
 
   :::prose-code-group
   ```ts [docs/[...slug\\].vue (v3)]
@@ -181,7 +181,7 @@ useSeoMeta({
   ```
   :::
 
-#### Populate `useSeoMeta` with the `seo` field provided by the [page](/docs/collections/types#page-type) type
+#### 用 [page](/docs/collections/types#page-type) 类型提供的 `seo` 字段填充 `useSeoMeta`
 
 ```ts [index.vue]
 useSeoMeta({
@@ -193,15 +193,15 @@ useSeoMeta({
 ```
 
   :::prose-note
-  Please note that the `seo` field is automatically overridden by the root `title` and `description` if not set.
+  请注意，如果未设置，`seo` 字段会被根级的 `title` 和 `description` 自动覆盖。
   :::
 ::
 
-### 6. Update types
+### 6. 更新类型
 
-Types have been significantly enhanced in Content v3, eliminating the need for most manual typings, as they are now directly provided by the Nuxt Content APIs.
+Content v3 对类型做了大幅增强，大多数手动类型声明已不再需要，因为现在由 Nuxt Content 的 API 直接提供。
 
-Concerning the documentation starter, the only typing needed concerns the navigation items where `NavItem` can be replaced by `ContentNavigationItem` .
+就文档起步模板而言，唯一需要的类型声明是导航项：把 `NavItem` 替换为 `ContentNavigationItem` 即可。
 
 ```ts
 import type { ContentNavigationItem } from '@nuxt/content'
@@ -209,15 +209,15 @@ import type { ContentNavigationItem } from '@nuxt/content'
 const navigation = inject<Ref<ContentNavigationItem[]>>('navigation')
 ```
 
-### 7. Replace folder metadata files
+### 7. 替换文件夹元数据文件
 
-All `_dir.yml` files become `.navigation.yml`
+所有 `_dir.yml` 文件都改为 `.navigation.yml`
 
-### 8. Migrate Studio activation
+### 8. 迁移 Studio 的启用方式
 
-Since the [studio module](https://nuxt.studio) has been deprecated and a new generic `Preview API` has been implemented directly into Nuxt Content, we can remove the `@nuxthq/studio` package from our dependencies and from the `nuxt.config.ts` modules.
+由于 [Studio 模块](https://nuxt.studio)已弃用，且 Nuxt Content 中直接实现了新的通用 `Preview API`，我们可以从依赖和 `nuxt.config.ts` 的 modules 中移除 `@nuxthq/studio` 包。
 
-Instead we just need to enable the preview mode in the Nuxt configuration file by binding the Studio API.
+取而代之，我们只需在 Nuxt 配置文件中绑定 Studio API 来启用预览模式。
 
 ```ts [nuxt.config.ts]
 export default defineNuxtConfig({
@@ -230,23 +230,23 @@ export default defineNuxtConfig({
 ```
 
 ::prose-tip
-That's it, content v3 is now powering the starter. Let's now migrate to version 3 of [Nuxt UI / UI Pro](https://ui3.nuxt.dev).
+就这样，Content v3 现在驱动着这个起步模板。接下来我们迁移到 [Nuxt UI / UI Pro](https://ui3.nuxt.dev) 的 v3。
 ::
 
-## Nuxt UI Pro Migration (v1 → v3)
+## Nuxt UI Pro 迁移（v1 → v3）
 
 ::prose-caution
-This is a migration case, it won't cover all breaking changes introduced by the version upgrade. You should check each component you're using in the documentation to know if you need updates concerning props, slots or styles.
+本文只针对迁移本身，不会覆盖版本升级带来的所有破坏性变更。你应当逐一检查文档中使用的每个组件，确认 props、slots 或样式是否需要调整。
 ::
 
-### 1. Setup package to v3
+### 1. 把包配置到 v3
 
 ::prose-note
-To maintain consistency with the UI versioning, which transitioned from v1 to v2. The Nuxt UI Pro version 2 is being skipped, and the update jumps directly to v3.
+为了与 UI 的版本编号保持一致（UI 从 v1 过渡到了 v2），Nuxt UI Pro 跳过了 v2，直接升级到 v3。
 ::
 
 ::prose-steps{level="4"}
-#### Install the Nuxt UI v3 alpha package
+#### 安装 Nuxt UI v3 alpha 包
 
   :::code-group{sync="pm"}
   ```bash [pnpm]
@@ -266,9 +266,9 @@ To maintain consistency with the UI versioning, which transitioned from v1 to v2
   ```
   :::
 
-#### Add the module in the Nuxt configuration file
+#### 在 Nuxt 配置文件中添加模块
 
-It's no longer required to add `@nuxt/ui` in modules as it is automatically imported by `@nuxt/ui-pro` .
+不再需要在 modules 中添加 `@nuxt/ui`，因为它会由 `@nuxt/ui-pro` 自动引入。
 
   :::prose-code-group
   ```ts [nuxt.config.ts (v3)]
@@ -286,10 +286,10 @@ It's no longer required to add `@nuxt/ui` in modules as it is automatically impo
   :::
 
   :::prose-note
-  **Nuxt UIPro V3** is now considered as a module and no longer as a layer.
+  **Nuxt UIPro V3** 现在被视为一个模块，而不再是一个 layer。
   :::
 
-#### Import Tailwind CSS and Nuxt UI Pro in your CSS
+#### 在 CSS 中引入 Tailwind CSS 和 Nuxt UI Pro
 
 ```css [assets/css/main.css]
 @import "tailwindcss" theme(static);
@@ -303,13 +303,13 @@ export default defineNuxtConfig({
 })
 ```
 
-#### Remove tailwind config file and use CSS-first theming
+#### 删除 tailwind 配置文件，改用 CSS 优先的主题方案
 
-Nuxt UI v3 uses Tailwind CSS v4 that follows a CSS-first configuration approach. You can now customize your theme with CSS variables inside a `@theme` directive.
+Nuxt UI v3 使用 Tailwind CSS v4，采用 CSS 优先的配置方式。现在你可以在 `@theme` 指令中用 CSS 变量自定义主题。
 
-- Delete the `tailwind.config.ts` file
-- Use the `@theme` directive to apply your theme in `main.css` file
-- Use the `@source` directive in order for Tailwind to detect classes in `markdown` files.
+- 删除 `tailwind.config.ts` 文件
+- 在 `main.css` 文件中使用 `@theme` 指令应用你的主题
+- 使用 `@source` 指令，让 Tailwind 能检测 `markdown` 文件中的类名。
 
 ```css [assets/css/main.css]
 @import "tailwindcss" theme(static);
@@ -336,10 +336,10 @@ Nuxt UI v3 uses Tailwind CSS v4 that follows a CSS-first configuration approach.
 ```
 ::
 
-### 2. Update `ui` overloads in `app.config.ts`
+### 2. 更新 `app.config.ts` 中的 `ui` 覆盖配置
 
 ::prose-caution{to="https://ui3.nuxt.dev/getting-started/theme#customize-theme"}
-All overloads using the `ui` props in a component or the `ui` key in the `app.config.ts` are obsolete and need to be checked in the **UI / UI Pro** documentation.
+组件中使用 `ui` props 或在 `app.config.ts` 中使用 `ui` 键的所有覆盖写法都已过时，需要对照 **UI / UI Pro** 文档逐一检查。
 ::
 
 ::prose-code-group
@@ -378,9 +378,9 @@ export default defineAppConfig({
 ```
 ::
 
-### 3. Migrate `error.vue` page
+### 3. 迁移 `error.vue` 页面
 
-New `UError` component can be used as full page structure.
+新的 `UError` 组件可以用作整页结构。
 
 ::prose-code-group
 ```vue [error.vue (v3)]
@@ -430,11 +430,11 @@ New `UError` component can be used as full page structure.
 ```
 ::
 
-### 4. Migrate `app.vue` page
+### 4. 迁移 `app.vue` 页面
 
-- `Main`, `Footer` and `LazyUContentSearch` components do not need any updates in our case.
-- `Notification` component can be removed since `Toast` components are directly handled by the `App` component.
-- Instead of the `NavigationTree` component you can use the `NavigationMenu` component or the `ContentNavigation` component to display content navigation.
+- 在我们的场景中，`Main`、`Footer` 和 `LazyUContentSearch` 组件无需任何改动。
+- `Notification` 组件可以移除，因为 `Toast` 组件已由 `App` 组件直接处理。
+- 可以改用 `NavigationMenu` 组件或 `ContentNavigation` 组件来展示内容导航，替代 `NavigationTree` 组件。
 
 ::prose-code-group
 ```vue [Header.vue (v3)]
@@ -471,16 +471,16 @@ const navigation = inject<Ref<NavItem[]>>('navigation')
 ```
 ::
 
-### 5. Update landing page
+### 5. 更新落地页
 
-We've decided to move the landing content from `YML` to `Markdown` .
+我们决定把落地页内容从 `YML` 迁移到 `Markdown`。
 
 ::prose-tip
-This decision was made because components used in Markdown no longer need to be exposed globally (nor do they need to be created in the `components/content` folder). Content v3 handles it under the hood.
+这样做是因为 Markdown 中使用的组件不再需要全局暴露（也不需要放在 `components/content` 文件夹里）。Content v3 会在底层处理这些。
 ::
 
 ::prose-steps{level="4"}
-#### Update content configuration
+#### 更新内容配置
 
 ```ts [content.config.ts]
 export default defineContentConfig({
@@ -501,10 +501,10 @@ export default defineContentConfig({
 })
 ```
 
-#### Use `ContentRenderer` to render `Markdown`
+#### 使用 `ContentRenderer` 渲染 `Markdown`
 
   :::prose-note
-  `prose` property must be set to `false` in `ContentRendered` as we don't want `Mardown` to be applied with prose styling in the case of a landing page integrating non prose Vue components.
+  必须在 `ContentRendered` 中把 `prose` 属性设为 `false`，因为对于集成了非 prose Vue 组件的落地页，我们不希望 `Mardown` 被套用 prose 样式。
   :::
 
   :::prose-code-group
@@ -584,28 +584,28 @@ export default defineContentConfig({
   ```
   :::
 
-#### Migrate Vue components to MDC
+#### 把 Vue 组件迁移到 MDC
 
-Move all components in `index.md` following the [MDC syntax](/docs/files/markdown).
+按照 [MDC 语法](/docs/files/markdown)把所有组件移到 `index.md` 中。
 
-Landing components have been reorganised and standardised as generic `Page` components.
+落地页组件已被重新组织并统一为通用的 `Page` 组件。
 
 - `LandingHero` => `PageHero`
 - `LandingSection` => `PageSection`
-- `LandingCard` => `PageCard` (we'll use the `PageFeature` instead)
+- `LandingCard` => `PageCard`（不过我们会改用 `PageFeature`）
 
   :::prose-tip{to="https://github.com/nuxt-ui-pro/docs/blob/v3/content/index.md"}
-  Have a look at the final `Markdown` result on GitHub.
+  在 GitHub 上查看最终的 `Markdown` 结果。
   :::
 ::
 
-### 6. Migrate docs page
+### 6. 迁移文档页面
 
 ::prose-steps{level="4"}
-#### Layout
+#### 布局
 
-- `Aside` component has been renamed to `PageAside` .
-- `ContentNavigation` component can be used (instead of `NavigationTree`) to display the content navigation returned by `queryCollectionNavigation`.
+- `Aside` 组件已重命名为 `PageAside`。
+- 可以使用 `ContentNavigation` 组件（替代 `NavigationTree`）来展示由 `queryCollectionNavigation` 返回的内容导航。
 
   :::prose-code-group
   ```vue [layout/docs.vue (v3)]
@@ -644,22 +644,22 @@ Landing components have been reorganised and standardised as generic `Page` comp
   ```
   :::
 
-#### Catch-all pages
+#### 全捕获页面
 
-- `Divider` has been renamed to `Separator`
-- `findPageHeadline` must be imported from `#ui-pro/utils/content`
-- `prose` property does not exist no more on `PageBody` component.
+- `Divider` 已重命名为 `Separator`
+- `findPageHeadline` 必须从 `#ui-pro/utils/content` 导入
+- `PageBody` 组件上已不再有 `prose` 属性。
 ::
 
 ::prose-tip{to="https://github.com/nuxt-ui-pro/docs/tree/v3"}
-That's it! The docs starter is now fully running on both UI and Content v3 🎉
+搞定！文档起步模板现在完全运行在 UI 与 Content v3 之上 🎉
 ::
 
-## Edit on Studio
+## 在 Studio 中编辑
 
-If you're using Nuxt Studio to edit your documentation you also need to migrate the related code.
+如果你使用 Nuxt Studio 编辑文档，也需要迁移相关代码。
 
-The Studio module has been deprecated and a new generic `Preview API` has been implemented directly into Nuxt Content, you can remove the `@nuxthq/studio` package from your dependencies and from the`nuxt.config.ts` modules. Instead you just need to enable the preview mode in the Nuxt configuration file by binding the Studio API.
+Studio 模块已弃用，Nuxt Content 中直接实现了新的通用 `Preview API`，你可以从依赖和 `nuxt.config.ts` 的 modules 中移除 `@nuxthq/studio` 包。取而代之，只需在 Nuxt 配置文件中绑定 Studio API 来启用预览模式。
 
 ```ts [nuxt.config.ts]
 export default defineNuxtConfig({
@@ -671,6 +671,6 @@ export default defineNuxtConfig({
 })
 ```
 
-In order to keep the app config file updatable from Studio you need to update the helper import of the `nuxt.schema.ts` file from `@nuxthq/studio/theme` to `@nuxt/content/preview`.
+为了让 app config 文件仍可从 Studio 更新，你需要把 `nuxt.schema.ts` 文件中 helper 的引入路径从 `@nuxthq/studio/theme` 改为 `@nuxt/content/preview`。
 
 :video{autoplay controls loop poster="https://res.cloudinary.com/nuxt/video/upload/v1737458923/studio/docs-v3_lqfasl.png" src="https://res.cloudinary.com/nuxt/video/upload/v1737458923/studio/docs-v3_lqfasl.mp4"}

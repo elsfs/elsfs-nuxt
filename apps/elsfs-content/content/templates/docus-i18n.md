@@ -7,7 +7,7 @@ branch: main
 category: docs
 createdAt: 2023-11-15T17:41:03.087Z
 demo: https://docus.dev
-description: Write beautiful internationalized docs with Markdown and Nuxt I18n uesssh
+description: 使用 Markdown 和 Nuxt I18n 编写美观的国际化文档
 licenseType: nuxt-ui
 mainScreen: /templates/docus.webp
 name: docus
@@ -19,23 +19,23 @@ draft: true
 ---
 
 ::template-core
-> A beautiful, internationalized starter for creating multi-language documentation with Docus
+> 一个美观、支持国际化的起步模板，用于借助 Docus 创建多语言文档
 
-This is the i18n Docus starter template that provides everything you need to build beautiful, multi-language documentation sites with Markdown and Vue components.
+这是 i18n 版 Docus 起步模板，提供了使用 Markdown 和 Vue 组件构建美观的多语言文档站所需的一切。
 
-## ✨ Features
+## ✨ 特性
 
-- 🌍 **Internationalization** - Native i18n support for multi-language docs
-- 🎨 **Beautiful Design** - Clean, modern documentation theme
-- 📱 **Responsive** - Mobile-first responsive design  
-- 🌙 **Dark Mode** - Built-in dark/light mode support
-- 🔍 **Search** - Full-text search functionality per language
-- 📝 **Markdown Enhanced** - Extended markdown with custom components
-- 🎨 **Customizable** - Easy theming and brand customization
-- ⚡ **Fast** - Optimized for performance with Nuxt 4
-- 🔧 **TypeScript** - Full TypeScript support
+- 🌍 **国际化** - 为多语言文档提供原生 i18n 支持
+- 🎨 **精美设计** - 干净、现代的文档主题
+- 📱 **响应式** - 移动优先的响应式设计  
+- 🌙 **暗色模式** - 内置亮色/暗色模式支持
+- 🔍 **搜索** - 按语言提供全文搜索功能
+- 📝 **增强的 Markdown** - 使用自定义组件扩展 Markdown
+- 🎨 **可自定义** - 轻松定制主题与品牌
+- ⚡ **快速** - 借助 Nuxt 4 优化性能
+- 🔧 **TypeScript** - 完整的 TypeScript 支持
 
-## 🚀 Quick Start
+## 🚀 快速开始
 
 ```bash
 # Install dependencies
@@ -45,16 +45,16 @@ npm install
 npm run dev
 ```
 
-Your multilingual documentation site will be running at `http://localhost:3000`
+你的多语言文档站将运行在 `http://localhost:3000`
 
-## 🌍 Languages
+## 🌍 语言
 
-This starter comes pre-configured with:
+该起步模板已预先配置：
 
-- 🇺🇸 **English** (`en`) - Default language
-- 🇫🇷 **Français** (`fr`) - French translation
+- 🇺🇸 **English** (`en`) - 默认语言
+- 🇫🇷 **Français** (`fr`) - 法语翻译
 
-## 📁 Project Structure
+## 📁 项目结构
 
 ```text
 my-docs/
@@ -70,9 +70,9 @@ my-docs/
 └── package.json         # Dependencies and scripts
 ```
 
-### Content Structure
+### 内容结构
 
-The content is organized by language, making it easy to manage translations:
+内容按语言组织，便于管理翻译：
 
 ```text
 content/
@@ -94,64 +94,64 @@ content/
         └── components.md
 ```
 
-## 🔗 URL Structure
+## 🔗 URL 结构
 
-The i18n starter generates URLs with language prefixes:
+i18n 起步模板会生成带语言前缀的 URL：
 
-- English: `/en/getting-started/installation`
-- French: `/fr/getting-started/installation`
-- Default locale fallback: `/getting-started/installation` (redirects to English)
+- 英语：`/en/getting-started/installation`
+- 法语：`/fr/getting-started/installation`
+- 默认语言回退：`/getting-started/installation`（重定向到英语）
 
-## ⚡ Built with
+## ⚡ 技术栈
 
-This starter comes pre-configured with:
+该起步模板已预先配置：
 
-- [Nuxt 4](https://nuxt.com) - The web framework
-- [Nuxt Content](https://content.nuxt.com/) - File-based CMS
-- [Nuxt i18n](https://i18n.nuxt.com/) - Internationalization
-- [Nuxt UI](https://ui.nuxt.com) - Premium UI components
-- [Nuxt Image](https://image.nuxt.com/) - Optimized images
-- [Tailwind CSS 4](https://tailwindcss.com/) - Utility-first CSS
-- [Docus Layer](https://www.npmjs.com/package/docus) - Documentation theme
+- [Nuxt 4](https://nuxt.com) - Web 框架
+- [Nuxt Content](https://content.nuxt.com/) - 基于文件的 CMS
+- [Nuxt i18n](https://i18n.nuxt.com/) - 国际化
+- [Nuxt UI](https://ui.nuxt.com) - 优质 UI 组件
+- [Nuxt Image](https://image.nuxt.com/) - 图片优化
+- [Tailwind CSS 4](https://tailwindcss.com/) - 原子化 CSS
+- [Docus Layer](https://www.npmjs.com/package/docus) - 文档主题
 
-## 📖 Documentation
+## 📖 文档
 
-For detailed documentation on customizing your Docus project, visit the [Docus Documentation](https://docus.dev)
+有关自定义 Docus 项目的详细文档，请访问 [Docus 文档](https://docus.dev)
 
-## 🚀 Deployment
+## 🚀 部署
 
-Build for production:
+生产环境构建：
 
 ```bash
 npm run build
 ```
 
-The built files will be in the `.output` directory, ready for deployment to any hosting provider that supports Node.js.
+构建产物将位于 `.output` 目录中，可直接部署到任何支持 Node.js 的托管服务商。
 
-## 📄 License
+## 📄 许可证
 
-[MIT License](https://opensource.org/licenses/MIT)
+[MIT 许可证](https://opensource.org/licenses/MIT)
 
 #right
   :::template-features
   ---
   features:
     - label: Nuxt 4
-      content: The web framework
+      content: Web 框架
     - label: Nuxt I18n
-      content: Internationalization support.
+      content: 国际化支持。
     - label: Nuxt UI
-      content: Offers a very large set of full customizable components.
+      content: 提供大量完全可自定义的组件。
     - label: TypeScript
-      content: A fully typed development experience.
+      content: 全程类型化的开发体验。
     - label: Nuxt Studio
-      content: Supported by Nuxt Studio for fast updates and previews.
+      content: 支持 Nuxt Studio，可快速更新和预览。
     - label: Search
-      content: A full-text search modal empowered by Fuse.js.
+      content: 由 Fuse.js 驱动的全文搜索弹窗。
     - label: Nuxt Image
-      content: A powerful image component.
+      content: 强大的图片组件。
     - label: Nuxt Content
-      content: A powerful content component.
+      content: 强大的内容组件。
   ---
   :::
 ::

@@ -19,7 +19,7 @@ const result = computed<Array<{ item: typeof data.value[0] }>>(() => fuse.search
     <UCard>
       <UInput
         v-model="query"
-        placeholder="Search..."
+        placeholder="搜索..."
         class="w-full"
       />
       <ul>

@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { titleCase } from 'scule'
-
 const { type } = defineProps({
   type: {
     type: String as PropType<'blog' | 'changelog'>,
@@ -39,19 +37,19 @@ useSeoMeta({
 const links = [
   {
     icon: 'i-simple-icons-x',
-    label: 'Follow on X',
+    label: '在 X 上关注',
     to: 'https://x.com/nuxtstudio',
     target: '_blank',
   },
   {
     icon: 'i-simple-icons-bluesky',
-    label: 'Follow on Bluesky',
+    label: '在 Bluesky 上关注',
     to: 'https://go.nuxt.com/bluesky',
     target: '_blank',
   },
   {
     icon: 'i-simple-icons-discord',
-    label: 'Chat on Discord',
+    label: '在 Discord 上交流',
     to: 'https://discord.gg/sBXDm6e8SP',
     target: '_blank',
   },
@@ -79,7 +77,7 @@ function copyLink() {
           <div class="flex flex-col gap-6">
             <UBreadcrumb
               :items="[
-                { label: titleCase(type),
+                { label: formatPostType(type),
                   icon: 'i-lucide-newspaper',
                   to: `/${type}` },
                 { label: post.title },
@@ -88,7 +86,7 @@ function copyLink() {
             <div class="flex items-center gap-3">
               <UBadge
                 v-if="post.category"
-                :label="titleCase(post.category)"
+                :label="formatCategory(post.category)"
                 variant="outline"
                 color="neutral"
               />
@@ -120,21 +118,21 @@ function copyLink() {
             :to="`/${type}`"
             variant="link"
             color="neutral"
-            :aria-label="`Back to ${type}`"
+            :aria-label="`返回${formatPostType(type)}`"
             :padded="false"
           >
-            ← Back to {{ type }}
+            ← 返回{{ formatPostType(type) }}
           </UButton>
           <div class="flex justify-end items-center gap-1.5">
-            <UTooltip text="Copy to clipboard">
+            <UTooltip text="复制到剪贴板">
               <UButton
                 :color="copied ? 'success' : 'neutral'"
                 variant="link"
                 :icon="copied ? 'i-lucide-copy-check' : 'i-lucide-copy'"
-                aria-label="Copy link"
+                aria-label="复制链接"
                 @click="copyLink"
               >
-                Copy URL
+                复制链接
               </UButton>
             </UTooltip>
           </div>
@@ -159,7 +157,7 @@ function copyLink() {
           <template #bottom>
             <div class="hidden md:block">
               <UPageLinks
-                title="Links"
+                title="链接"
                 :links="links"
               />
             </div>

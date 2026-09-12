@@ -79,7 +79,7 @@ const images = computed(() => template.value
         <template #links>
           <div class="flex gap-3">
             <UButton
-              label="Preview"
+              label="预览"
               color="neutral"
               trailing
               icon="i-lucide-external-link"
@@ -87,7 +87,7 @@ const images = computed(() => template.value
               target="_blank"
             />
             <UButton
-              label="Clone on GitHub"
+              label="在 GitHub 上克隆"
               color="primary"
               variant="solid"
               :to="`https://github.com/${template.owner}/${template.name}/tree/${template.branch}`"

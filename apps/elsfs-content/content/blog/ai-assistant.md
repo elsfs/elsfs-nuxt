@@ -1,5 +1,5 @@
 ---
-title: Meet the AI Assistant for Docus
+title: 认识 Docus 的 AI 助手
 authors:
   - name: Hugo Richard
     avatar:
@@ -14,67 +14,67 @@ authors:
 categories: []
 category: docus
 date: 2026-02-04T00:00:00.000Z
-description: Setup your assistant in seconds with a single environment variable. Fast and real-time search. Make it yours with custom tools.
+description: 只需一个环境变量，几秒内就能配置好你的助手。快速、实时的搜索。再用自定义工具把它变成你自己的助手。
 draft: false
 image:
   src: /blog/docus-assistant.png
-  alt: Docus AI Assistant Interface
+  alt: Docus AI 助手界面
 seo:
-  title: Meet the AI Assistant for Docus | Add AI to Your Documentation
-  description: AI-powered documentation search that actually works. Generate code, extend with custom tools. Zero infrastructure, just add your API key.
+  title: 认识 Docus 的 AI 助手 | 为你的文档加入 AI
+  description: 真正好用的 AI 文档搜索。生成代码，用自定义工具扩展。零基础设施，只需填入你的 API 密钥。
 ---
 
-Documentation is only as valuable as the answers users can extract from it. We're introducing the Docus AI Assistant, a native, embedded chat experience that transforms how developers interact with your documentation.
+文档的价值，取决于用户能从中获得多少答案。我们推出 Docus AI 助手——一种原生、内嵌的对话体验，彻底改变开发者与你的文档互动的方式。
 
-The AI Assistant searches your content and generates code examples users can copy directly. The best part? **It activates with a single environment variable.**
+AI 助手会检索你的内容，并生成用户可直接复制的代码示例。最棒的是：**只需一个环境变量即可启用。**
 
 :video{.w-full.h-auto.rounded-md autoplay controls loop muted playsinline src="https://res.cloudinary.com/nuxt/video/upload/v1770204403/studio/docus-assistant_e8xmxu.mp4"}
 
-## The Documentation Discovery Problem
+## 文档的发现难题
 
-Users arrive at your docs with questions, not keywords. They scroll through navigation, guess search terms, and scan pages hoping to find what they need. Even well-organized documentation creates friction between the question in their mind and the answer on the page.
+用户是带着问题来的，而不是带着关键词。他们翻遍导航、猜测搜索词、逐页扫读，只求找到所需内容。即便是组织良好的文档，也会在用户心中的问题与页面上的答案之间制造摩擦。
 
-AI changes this dynamic. Instead of adapting their question to your navigation structure, users ask naturally and receive answers grounded in your actual documentation.
+AI 改变了这种局面。用户不必再迁就你的导航结构去调整问题，而是可以用自然语言提问，并获得以你的真实文档为依据的回答。
 
-## Activation With One Environment Variable
+## 一个环境变量即可启用
 
-Docus abstracts the AI setup complexity and enables your own AI assistant chat with one environment variable.
+Docus 把 AI 配置的复杂性抽象掉，只需一个环境变量，就能启用属于你自己的 AI 助手对话。
 
 ```bash [.env]
 AI_GATEWAY_API_KEY=your-api-key
 ```
 
 ::note
-A **Vercel AI Gateway API key** is required unless you deploy to Vercel, in which case no API key or configuration is needed. Test it for free with $5 credits offer!
+需要 **Vercel AI Gateway API 密钥**，除非你部署在 Vercel 上——那样就无需 API 密钥或任何配置。用 5 美元额度的免费试用体验一下吧！
 ::
 
-That's it. Deploy your docs and the AI Assistant activates automatically. No configuration files, no API setup, no infrastructure changes.
+就这样。部署你的文档，AI 助手便会自动启用。无需配置文件，无需配置 API，无需改动基础设施。
 
-The assistant works through [Vercel AI Gateway](https://vercel.com/docs/ai-gateway), supporting OpenAI, Anthropic, Google, and other providers. Choose your preferred model and budget, the integration remains the same.
+助手通过 [Vercel AI Gateway](https://vercel.com/docs/ai-gateway) 工作，支持 OpenAI、Anthropic、Google 等提供商。你可以自由选择模型和预算，集成方式始终不变。
 
 ::prose-tip{to="https://docus.dev/en/ai/assistant#quick-start"}
-Read the full setup guide in the Docus documentation.
+在 Docus 文档中阅读完整的配置指南。
 ::
 
-## How It Works
+## 工作原理
 
-### MCP Integration
+### MCP 集成
 
-The AI Assistant leverages the **Model Context Protocol (MCP)** to give AI models direct access to your documentation. Here's the simple architecture:
+AI 助手借助 **Model Context Protocol（MCP）**，让 AI 模型直接访问你的文档。架构很简单：
 
-1. Docus automatically exposes an **MCP server** at `/mcp` that provides tools to search and retrieve your documentation
-2. When you provide an `AI_GATEWAY_API_KEY`, AI models connect to your MCP server
-3. The AI uses MCP tools to search your docs in real-time and provide accurate answers
+1. Docus 会自动在 `/mcp` 暴露一个 **MCP 服务器**，提供搜索和获取文档的工具
+2. 当你提供 `AI_GATEWAY_API_KEY` 后，AI 模型便会连接到你的 MCP 服务器
+3. AI 使用 MCP 工具实时检索你的文档，给出准确的回答
 
-This approach prevents hallucination by grounding every response in actual content. The AI can only answer based on what's in your documentation.
+这种方式让每个回答都以真实内容为依据，从而避免幻觉。AI 只能基于你文档中的内容作答。
 
-The MCP protocol is an open standard that allows AI models to interact with external data sources through well-defined tools. Docus implements this automatically, you just provide the API key.
+MCP 协议是一个开放标准，让 AI 模型能通过定义良好的工具与外部数据源交互。Docus 已自动实现这一切，你只需提供 API 密钥。
 
-### AI Customization
+### AI 定制
 
-The real power of the MCP integration is **extensibility**. Docus uses `@nuxtjs/mcp-toolkit` under the hood. It allows to add custom tools that expand what the AI assistant can do beyond just searching documentation.
+MCP 集成的真正威力在于**可扩展性**。Docus 底层使用 `@nuxtjs/mcp-toolkit`，它允许你添加自定义工具，让 AI 助手的能力不止于搜索文档。
 
-Want your AI to check API status, fetch live data, run code examples, or interact with your own services? Add custom MCP tools in your project:
+想让你的 AI 检查 API 状态、获取实时数据、运行代码示例，或者与自己的服务交互？在你的项目中添加自定义 MCP 工具即可：
 
 ```typescript [server/mcp/tools/check-api-status.ts]
 export default defineMcpTool({
@@ -94,26 +94,26 @@ export default defineMcpTool({
 })
 ```
 
-The AI assistant automatically discovers and uses your custom tools. Users can now ask **"Is the API down?"** and get real-time answers, not just documentation.
+AI 助手会自动发现并使用你的自定义工具。用户现在可以问 **“API 是不是挂了？”**，并得到实时回答，而不只是文档内容。
 
 ::note
-You can override different aspects of your AI assistant with:
+你可以通过以下方式定制 AI 助手的各个方面：
 
-- **Custom Tools**: add any capability in `server/mcp/tools/` using `defineMcpTool`
-- **Resources**: expose files or data through `server/mcp/resources/`
-- **Prompts**: create reusable prompt templates in `server/mcp/prompts/`
-- **Custom Handlers**: build separate MCP endpoints for specialized use cases
+- **自定义工具**：用 `defineMcpTool` 在 `server/mcp/tools/` 中添加任意能力
+- **资源（Resources）**：通过 `server/mcp/resources/` 暴露文件或数据
+- **提示词（Prompts）**：在 `server/mcp/prompts/` 中创建可复用的提示词模板
+- **自定义处理器**：为特定用例构建独立的 MCP 端点
 ::
 
 ::prose-tip{to="https://docus.dev/ai/mcp#customization"}
-Learn more about MCP customization in the Docus documentation.
+在 Docus 文档中进一步了解 MCP 定制。
 ::
 
-### Questions Configuration
+### 问题配置
 
-Users can ask questions without leaving the page they're reading. The assistant understands the current context and can reference the page you're viewing.
+用户无需离开正在阅读的页面就能提问。助手理解当前上下文，并能引用你正在浏览的页面。
 
-Configuration is optional but powerful. Pre-populate common questions, adjust UI visibility, customize keyboard shortcuts, or disable features you don't need in the `app.config.ts` file.
+配置是可选的，但很有用。你可以在 `app.config.ts` 文件中预置常见问题、调整 UI 可见性、自定义键盘快捷键，或关闭不需要的功能。
 
 ```typescript [app.config.ts]
 export default defineAppConfig({
@@ -136,62 +136,62 @@ export default defineAppConfig({
 })
 ```
 
-### Internationalization
+### 国际化
 
-The AI Assistant automatically adapts to your documentation's language settings. All UI text translates based on user locale, and the assistant responds in the user's language.
+AI 助手会自动适配文档的语言设置。所有 UI 文案都会根据用户的语言环境翻译，助手也会用用户的语言作答。
 
-If your docs support multiple languages, the assistant works across all of them without additional configuration. The same environment variable enables AI for every locale.
+如果你的文档支持多种语言，助手无需额外配置即可覆盖所有语言。同一个环境变量就能为每种语言环境启用 AI。
 
-## Key Benefits
+## 核心优势
 
-### Built for Developers
+### 为开发者打造
 
-The AI Assistant integrates with how developers browse documentation:
+AI 助手融入开发者浏览文档的方式：
 
-- **Floating Input** (`Cmd/Ctrl+I`): Bottom-of-screen chat accessible via keyboard shortcut
-- **Explain with AI Button**: Sidebar button that opens the assistant with current page context
-- **Slideover Panel**: Persistent conversation history for continued interaction
+- **浮动输入框**（`Cmd/Ctrl+I`）：位于屏幕底部的对话窗口，可通过快捷键唤起
+- **用 AI 解释按钮**：侧边栏按钮，带着当前页面上下文打开助手
+- **侧滑面板**：保留对话历史，便于持续交流
 
-### Code Generation
+### 代码生成
 
-Beyond answering questions, the assistant generates code examples based on your documentation patterns. Users can copy implementations directly from the chat without hunting through example repositories.
+除了回答问题，助手还会根据你的文档范式生成代码示例。用户可以直接从对话中复制实现，不必再去示例仓库里翻找。
 
-The assistant understands your API structure, knows your conventions, and generates examples that match your documentation style.
+助手理解你的 API 结构，熟悉你的约定，生成的示例与你的文档风格保持一致。
 
-### Privacy and Control
+### 隐私与掌控
 
-Your documentation content stays within your control. The AI Assistant queries your published docs, the same content publicly available on your site. No separate indexing, no data collection, no external databases.
+你的文档内容始终由你掌控。AI 助手查询的是你已发布的文档，也就是站点上公开可见的同一份内容。没有单独的索引，没有数据收集，也没有外部数据库。
 
-You control the AI provider through Vercel AI Gateway, allowing you to choose models based on privacy requirements, latency needs, or cost constraints. Switch providers without changing your documentation code.
+你可以通过 Vercel AI Gateway 掌控 AI 提供商，根据隐私要求、延迟需求或成本限制来选择模型。更换提供商无需改动任何文档代码。
 
-## Get Started Today
+## 立即开始
 
 ::prose-tip
-**New to Docus?** Create a complete documentation site with AI assistant built-in:
+**刚接触 Docus？** 创建一个内置 AI 助手的完整文档站点：
 
 ```bash
 npx skills add nuxt-content/docus
 ```
 
-Then run `/create-docs` in your AI agent (Claude, Cursor, or any agent supporting skills) to generate everything automatically.
+然后在你的 AI agent（Claude、Cursor 或任何支持 skills 的 agent）中运行 `/create-docs`，自动生成全部内容。
 ::
 
-Already have a Docus site? Add the AI Assistant with one environment variable:
+已经有 Docus 站点了？用一个环境变量即可加入 AI 助手：
 
 ```bash [.env]
 AI_GATEWAY_API_KEY=your-api-key
 ```
 
-Deploy and the assistant activates automatically.
+部署后助手会自动启用。
 
-The AI Assistant represents a shift in how developers interact with documentation. Instead of searching for answers, they have a conversation. Instead of parsing examples, they generate code.
+AI 助手代表着开发者与文档互动方式的转变。他们不再搜索答案，而是展开对话；不再逐行解读示例，而是直接生成代码。
 
 ::prose-tip{to="https://docus.dev/ai/assistant"}
-Read the complete AI Assistant documentation.
+阅读完整的 AI 助手文档。
 ::
 
-## What's Next
+## 下一步
 
-We're constantly exploring new ways to make documentation more interactive and helpful. The AI Assistant is just the beginning of what's possible when you combine great documentation with intelligent tooling.
+我们一直在探索让文档更具交互性、更有帮助的新方式。当优秀的文档遇上智能工具，AI 助手只是一个开始。
 
-Documentation is evolving from static reference material into an interactive learning environment, and we're excited to see where this journey takes us.
+文档正在从静态的参考资料演变为可交互的学习环境，我们很期待看到这段旅程会通向何方。

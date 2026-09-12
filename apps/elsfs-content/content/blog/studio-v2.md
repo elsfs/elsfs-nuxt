@@ -1,7 +1,7 @@
 ---
-title: Introducing Nuxt Studio v2
-description: We are excited to announce the v2 release of Nuxt Studio, the new
-  editing experience for your Nuxt Content website
+title: Nuxt Studio v2 发布
+description: 我们很高兴地宣布 Nuxt Studio v2 发布，为你的 Nuxt Content
+  网站带来全新的编辑体验
 image:
   src: /blog/nuxt-studio-v2.png
 authors:
@@ -15,69 +15,69 @@ category: studio
 ---
 
 ::warning
-This article was published before the merge of the [Content](https://github.com/nuxt/content) and [Studio](https://github.com/nuxtlabs/studio-module) modules on January 6, 2025. As a result, it may contain some inconsistencies. The Studio module is now deprecated and available as an opt-in feature of the Content module. Learn how to enable it in [this guide](/docs/getting-started).
+本文发表于 2025 年 1 月 6 日 [Content](https://github.com/nuxt/content) 与 [Studio](https://github.com/nuxtlabs/studio-module) 模块合并之前，因此可能包含一些不一致的内容。Studio 模块现已弃用，改为 Content 模块中一个需手动启用的功能。启用方法见[本指南](/docs/getting-started)。
 ::
 
-We are excited to announce the release of Nuxt Studio v2, a major update bringing a brand new interface designed specifically for our users, based on their feedback.
+我们很高兴地宣布 Nuxt Studio v2 发布。这是一次重大更新，基于用户反馈，打造了专为我们的用户设计的全新界面。
 
 ::tip
-Studio is optimized for **Nuxt Content** project but the only real requirement is to have a *content* folder with Markdown files. This simple setup is enough to start editing and publishing your files with the platform.
+Studio 针对 **Nuxt Content** 项目做了优化，但真正的要求只有一个：有一个包含 Markdown 文件的 *content* 文件夹。仅凭这样简单的配置，就能开始用平台编辑和发布你的文件。
 ::
 
-## **A more intuitive interface**
+## **更直观的界面**
 
-![Nuxt studio v2 interface](/blog/v2-interface.webp)
+![Nuxt Studio v2 界面](/blog/v2-interface.webp)
 
-The main improvement in Version 2 is a **complete rework of the interface**. We have designed it to be more intuitive and user-friendly, especially for non-technical users. Our goal was to simplify the user experience, making it easier to create and set up projects with minimal hassle. The new interface is light, straightforward, and designed to streamline your workflow.
+v2 的主要改进是**界面完全重做**。我们把它设计得更直观、更易用，尤其面向非技术用户。我们的目标是简化使用体验，让创建和配置项目更轻松、少折腾。新界面轻量、直接，旨在让你的工作流程更顺畅。
 
-## **Google authentication**
+## **Google 认证**
 
-![Google and GitHub authentication](/blog/google-github.webp)
+![Google 与 GitHub 认证](/blog/google-github.webp)
 
-We now have two different authentication methods. You can either login with **GitHub** or with **Google**. Both methods give you the same edition rights but since Studio is synchronized with GitHub, some features are specific to GitHub users, especially project creation.
+现在我们有两种不同的认证方式。你可以用 **GitHub** 或 **Google** 登录。两种方式的编辑权限相同，但由于 Studio 与 GitHub 同步，部分功能仅适用于 GitHub 用户，尤其是创建项目。
 
 ::warning
-Since a Google user can not create a project, he has to **join a team** with existing projects to edit them.
+由于 Google 用户无法创建项目，他必须**加入一个已有项目的团队**才能编辑这些项目。
 ::
 
-## **Minimal setup to edit your files**
+## **几乎零配置即可编辑文件**
 
-You can now edit your content **without any setup**, just import your repository and this is it. You can navigate through your files and medias, edit your content and publish on GitHub.
+现在你**无需任何配置**就能编辑内容，只需导入仓库即可。你可以浏览文件和媒体、编辑内容并发布到 GitHub。
 
-Collaboration is available for teams.
+团队还支持协作。
 
-![Notion-like editor with collaboration](/blog/collaborate.webp)
+![支持协作的类 Notion 编辑器](/blog/collaborate.webp)
 
 ::warning
-Medias in the editor are not displayed until you set up the live preview (see section below).
+在你配置好实时预览之前，编辑器中的媒体不会显示（见下文）。
 ::
 
-## Simplified setup for live preview
+## 更简单的实时预览配置
 
-![preview enable between notion like editor and website](/blog/preview.webp)
+![在类 Notion 编辑器与网站之间启用实时预览](/blog/preview.webp)
 
-As the live preview feature requires a deployed URL, we made it as simple as possible to set it up.
+由于实时预览功能需要一个已部署的 URL，我们尽可能简化了它的配置。
 
-While GitHub pages deployment remains available and still does not require any configuration on your end, requirements have been simplified for self-hosted project as we removed the token verification. [Enabling the Studio module](https://nuxt.studio/docs/get-started/setup#enable-the-live-preview) is the **only remaining requirement.**
+GitHub Pages 部署依然可用，也依然不需要你做任何配置；同时我们简化了自托管项目的要求，去掉了 token 校验。现在**唯一的要求**是[启用 Studio 模块](https://nuxt.studio/docs/get-started/setup#enable-the-live-preview)。
 
 ::warning{to="https://github.com/nuxtlabs/studio-module"}
-It's crucial to use the latest version of the **Studio module** to ensure compatibility and access to new features.
+为确保兼容性并能用上新功能，务必使用最新版本的 **Studio 模块**。
 ::
 
-## New documentation
+## 全新文档
 
-With a revamped platform comes a [new documentation](https://nuxt.studio/docs/get-started/introduction). Don't hesitate to check it out to learn everything about the new Studio.
+平台焕然一新，[文档](https://nuxt.studio/docs/get-started/introduction)也随之更新。欢迎随时查阅，全面了解新版 Studio。
 
-Whether you are an [editor](https://nuxt.studio/docs/editors/introduction) or a [developer](https://nuxt.studio/docs/developers/introduction) you now have your dedicated section in the docs.
+无论你是[编辑者](https://nuxt.studio/docs/editors/introduction)还是[开发者](https://nuxt.studio/docs/developers/introduction)，文档中现在都有专门的章节为你准备。
 
-## A new direction for Studio
+## Studio 的新方向
 
-Most available CMS solutions have to choose between being very customizable for developers or highly user friendly for content editors, with Studio we want to do both.
+现有的大多数 CMS 方案都不得不在“对开发者高度可定制”与“对内容编辑者高度易用”之间二选一，而在 Studio，我们想两者兼得。
 
-**The developer provides the tools for the editors to focus on content, without requiring any technical knowledge**.
+**由开发者提供工具，让编辑者专注于内容，无需任何技术知识**。
 
 ::tip
-Our Notion-like editor has a bright future ahead, and we want to develop it collaboratively with the community.
+我们的类 Notion 编辑器前途光明，我们希望能与社区共同开发它。
 ::
 
 ##

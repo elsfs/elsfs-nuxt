@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="text-lg font-semibold mt-5">
-      Features
+      功能特性
     </h2>
     <UAccordion
       :items="features"

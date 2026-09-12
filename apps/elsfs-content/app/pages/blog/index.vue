@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { titleCase } from 'scule'
-
 const siteConfig = useSiteConfig()
 
 const { data: page } = await useAsyncData('blog-landing', () => queryCollection('landing').path('/blog').first())
@@ -40,7 +38,7 @@ useSeoMeta({
             :key="index"
             v-bind="post"
             :to="post.path"
-            :badge="titleCase(post.category!)"
+            :badge="formatCategory(post.category)"
             variant="naked"
             :ui="{ header: 'aspect-auto' }"
           />

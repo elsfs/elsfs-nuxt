@@ -1,15 +1,15 @@
 ---
-title: 你好
-description: 关于
+title: 关于
+description: 关于本站
 navigation:
-  title: 你好
-  description: 搜索
+  title: 关于
+  description: 关于本站
   icon: ""
 seo:
-  title: 你好seo
-  description: 关于
+  title: 关于
+  description: 关于本站
 ---
 
 # 关于
 
-[Back home](/)
+[返回首页](/)

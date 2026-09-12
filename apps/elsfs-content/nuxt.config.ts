@@ -93,14 +93,14 @@ export default defineNuxtConfig({
   llms: {
     domain: 'https://content.nuxt.com',
     title: 'Nuxt Content',
-    description: 'Nuxt Content is a git-based CMS for Nuxt projects.',
+    description: 'Nuxt Content 是面向 Nuxt 项目的基于 Git 的 CMS。',
     notes: [
-      'The documentation only includes Nuxt Content v3 docs.',
-      'The content is automatically generated from the same source as the official documentation.',
+      '本文档仅包含 Nuxt Content v3 的文档。',
+      '内容与官方文档同源，自动生成。',
     ],
     full: {
-      title: 'Complete Documentation',
-      description: 'The complete documentation including all content',
+      title: '完整文档',
+      description: '包含全部内容的完整文档',
     },
     contentRawMarkdown: {
       excludeCollections: ['landing'],
