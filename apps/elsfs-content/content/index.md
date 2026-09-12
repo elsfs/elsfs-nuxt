@@ -1,9 +1,9 @@
 ---
-prose: true
 seo:
   title: 面向 Nuxt 项目的基于 Git 的 CMS
   description: Nuxt Content 是 Nuxt 的一个模块，让你可以在 Git 仓库中轻松管理应用的内容。开发者可以用 Markdown、YAML 或 JSON 文件编写内容，然后在应用中查询并展示这些内容。
   ogImage: https://content.nuxt.com/social.png
+prose: true
 ---
 
 ::u-page-hero
@@ -233,12 +233,7 @@ orientation: horizontal
     ```
     ::::
 
-    ::::tabs-item
-    ---
-    icon: i-simple-icons-vuedotjs
-    label: components/LandingHero.vue
-    ---
-
+    ::::tabs-item{icon="i-simple-icons-vuedotjs" label="components/LandingHero.vue"}
     ```vue [components/LandingHero.vue]
       <script setup lang="ts">
       defineProps<{
@@ -356,7 +351,7 @@ orientation: horizontal
   :::
 
 #title
-带[类型安全]{.text-(--ui-secondary)}的查询
+带 [类型安全]{.text-(--ui-secondary)} 的查询
 
 #description
 用集合定义内容结构，并在查询时获得模式校验与完整的类型安全。
@@ -406,7 +401,7 @@ orientation: horizontal
 :video{autoplay controls loop src="https://res.cloudinary.com/nuxt/video/upload/v1767647099/studio/studio-demo_eiofld.mp4"}
 
 #title{unwrap="p"}
-让[任何人都能编辑]{.text-(--ui-primary)}你的网站
+让 [任何人都能编辑]{.text-(--ui-primary)} 你的网站
 
 #description
   :::u-button

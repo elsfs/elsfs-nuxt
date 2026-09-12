@@ -5,9 +5,6 @@ navigation:
   title: 关于
   description: 关于本站
   icon: ""
-seo:
-  title: 关于
-  description: 关于本站
 ---
 
 # 关于

@@ -11,9 +11,8 @@ authors:
       src: https://avatars.githubusercontent.com/u/7290030?v=4
     to: https://x.com/_larbish
     username: larbish
-categories: []
 category: docus
-date: 2026-02-04T00:00:00.000Z
+date: 2026-02-04
 description: 只需一个环境变量，几秒内就能配置好你的助手。快速、实时的搜索。再用自定义工具把它变成你自己的助手。
 draft: false
 image:
@@ -28,7 +27,7 @@ seo:
 
 AI 助手会检索你的内容，并生成用户可直接复制的代码示例。最棒的是：**只需一个环境变量即可启用。**
 
-:video{.w-full.h-auto.rounded-md autoplay controls loop muted playsinline src="https://res.cloudinary.com/nuxt/video/upload/v1770204403/studio/docus-assistant_e8xmxu.mp4"}
+:video{.w-full.h-auto.rounded-md autoplay controls loop muted src="https://res.cloudinary.com/nuxt/video/upload/v1770204403/studio/docus-assistant_e8xmxu.mp4"}
 
 ## 文档的发现难题
 
