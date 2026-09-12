@@ -108,6 +108,7 @@ export default defineNuxtConfig({
   },
   studio: {
     route: '/admin',
+    // @ts-ignore
     repository: {
       owner: 'nuxt',
       repo: 'content',
