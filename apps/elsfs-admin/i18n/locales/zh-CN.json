@@ -139,5 +139,33 @@
       "rose": "玫瑰",
       "cyan": "青色"
     }
+  },
+  "admin": {
+    "title": "后台管理",
+    "allMenus": "全部菜单",
+    "menuList": "菜单列表",
+    "myFavorites": "我的收藏",
+    "all": "全部",
+    "searchPlaceholder": "搜索菜单",
+    "clearSearch": "清空搜索",
+    "searchEmpty": "没有找到匹配的菜单",
+    "emptyFavorites": "还没有收藏菜单",
+    "emptyFavoritesHint": "点击左上角「全部菜单」，把常用功能收进收藏栏",
+    "favoriteCount": "已收藏 {count} 项",
+    "addFavorite": "加入收藏",
+    "removeFavorite": "取消收藏",
+    "openFavorites": "展开收藏菜单",
+    "welcomeTitle": "欢迎来到你的仪表盘",
+    "currentUser": "当前登录用户",
+    "favoritesHint": "左侧是收藏的菜单，点击顶栏左上角的「全部菜单」可以随时增删。",
+    "comingSoon": "该功能正在建设中",
+    "comingSoonHint": "菜单已经接好路由，替换成真实页面即可。",
+    "menuNotFound": "菜单不存在",
+    "stats": {
+      "visits": "今日访问",
+      "newUsers": "新增用户",
+      "tickets": "待办工单",
+      "revenue": "今日销售额"
+    }
   }
 }

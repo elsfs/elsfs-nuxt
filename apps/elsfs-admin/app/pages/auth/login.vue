@@ -48,11 +48,6 @@ withDefaults(defineProps<Props>(), {
 
 definePageMeta({ layout: 'auth', middleware: 'guest' })
 
-const emit = defineEmits<{
-  submit: [values: LoginFormValues]
-  social: [provider: string]
-}>()
-
 const { t } = useI18n()
 const auth = useAuthStore()
 const router = useRouter()
@@ -73,7 +68,7 @@ const showPassword = ref(false)
 
 const errorMessage = computed(() => (auth.errorCode ? t(`errors.${auth.errorCode}`) : ''))
 
-const onSubmit = handleSubmit((values) => {
+const onSubmit = handleSubmit(async (values) => {
   // 记住账号（仅浏览器环境）
   if (values.remember) {
     localStorage.setItem('elsfs_remember_email', values.email)
@@ -81,11 +76,11 @@ const onSubmit = handleSubmit((values) => {
   else {
     localStorage.removeItem('elsfs_remember_email')
   }
-  emit('submit', values)
+  await onLogin(values)
 })
 
-function handleSocial(provider: string): void {
-  emit('social', provider)
+async function handleSocial(provider: string): Promise<void> {
+  await onSocial(provider)
 }
 
 function goTo(path: string): void {

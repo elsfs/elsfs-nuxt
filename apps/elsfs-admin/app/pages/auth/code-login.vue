@@ -4,6 +4,7 @@ import { onBeforeUnmount } from 'vue'
 import type { CodeLoginFormValues } from './useAuthValidation'
 import { useAuthValidation } from './useAuthValidation'
 import AuthTitle from './-auth-title.vue'
+
 definePageMeta({ layout: 'auth', middleware: 'guest' })
 
 defineOptions({ name: 'AuthCodeLogin' })

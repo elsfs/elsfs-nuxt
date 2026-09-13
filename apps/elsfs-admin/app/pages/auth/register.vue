@@ -3,6 +3,7 @@ import { useField, useForm } from 'vee-validate'
 
 import type { RegisterFormValues } from './useAuthValidation.ts'
 import { useAuthValidation } from './useAuthValidation.ts'
+import { usePasswordStrength } from './usePasswordStrength.ts'
 import AuthTitle from './-auth-title.vue'
 
 definePageMeta({ layout: 'auth', middleware: 'guest' })

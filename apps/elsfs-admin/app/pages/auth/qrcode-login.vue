@@ -1,6 +1,7 @@
 <script setup lang="ts">
-definePageMeta({ layout: 'auth', middleware: 'guest' })
 import AuthTitle from './-auth-title.vue'
+
+definePageMeta({ layout: 'auth', middleware: 'guest' })
 
 interface Props {
   /** 是否处于加载处理状态 */

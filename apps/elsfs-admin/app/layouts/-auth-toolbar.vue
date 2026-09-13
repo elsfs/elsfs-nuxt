@@ -100,9 +100,19 @@ function toggleTheme(): void {
   colorMode.preference = isDark.value ? 'light' : 'dark'
 }
 
+/**
+ * 服务端拿不到系统主题偏好（color-mode 默认存 localStorage），
+ * 直接按 isDark 渲染图标会造成 hydration 不一致，挂载完成后再切换。
+ */
+const mounted = ref(false)
+const showDarkIcon = computed(() => mounted.value && isDark.value)
+
 watch(colorKey, applyColor)
 watch(isDark, applyColor)
-onMounted(applyColor)
+onMounted(() => {
+  mounted.value = true
+  applyColor()
+})
 
 /* ---------- 布局 ---------- */
 function switchPanel(mode: AuthPanelMode): void {
@@ -238,7 +248,7 @@ function switchPanel(mode: AuthPanelMode): void {
       @click="toggleTheme"
     >
       <AppIcon
-        :name="isDark ? 'sun' : 'moon'"
+        :name="showDarkIcon ? 'sun' : 'moon'"
         class="size-4"
       />
     </ElButton>

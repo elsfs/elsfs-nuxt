@@ -26,6 +26,13 @@ export default defineNuxtConfig({
   nitro: {
     logLevel: 'info', // 或 'warn' 减少输出
   },
+  elementPlus: {
+    // 引入 Element Plus 官方暗色变量（选择器是 html.dark），
+    // 否则 el-drawer / el-dropdown 等组件在暗色主题下仍是浅色。
+    themes: ['dark'],
+    // 组件内置文案跟随应用默认语言（zh-CN）
+    defaultLocale: 'zh-cn',
+  },
   eslint: {
     checker: true,
     config: {
@@ -45,5 +52,5 @@ export default defineNuxtConfig({
       cookieKey: 'i18n_redirected',
       redirectOn: 'root',
     },
-  }
+  },
 })

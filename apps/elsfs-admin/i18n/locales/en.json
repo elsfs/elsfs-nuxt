@@ -139,5 +139,33 @@
       "rose": "Rose",
       "cyan": "Cyan"
     }
+  },
+  "admin": {
+    "title": "Admin",
+    "allMenus": "All menus",
+    "menuList": "Menu list",
+    "myFavorites": "My favorites",
+    "all": "All",
+    "searchPlaceholder": "Search menus",
+    "clearSearch": "Clear search",
+    "searchEmpty": "No matching menu",
+    "emptyFavorites": "No favorite menus yet",
+    "emptyFavoritesHint": "Click \"All menus\" at the top left to add your frequently used pages",
+    "favoriteCount": "{count} favorited",
+    "addFavorite": "Add to favorites",
+    "removeFavorite": "Remove from favorites",
+    "openFavorites": "Open favorite menus",
+    "welcomeTitle": "Welcome to your dashboard",
+    "currentUser": "Signed in as",
+    "favoritesHint": "Favorites live in the left sidebar. Use \"All menus\" at the top left to add or remove them.",
+    "comingSoon": "This feature is under construction",
+    "comingSoonHint": "The route is already wired up — just replace it with the real page.",
+    "menuNotFound": "Menu not found",
+    "stats": {
+      "visits": "Visits today",
+      "newUsers": "New users",
+      "tickets": "Open tickets",
+      "revenue": "Revenue today"
+    }
   }
 }

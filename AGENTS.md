@@ -35,7 +35,7 @@ layer 自带 playground，可脱离应用单独调试样式：在 `packages/tail
 
 坑：
 
-- `apps/elsfs-admin/tsconfig.json` 只继承 `./.nuxt/tsconfig.json`，该文件由 `postinstall`（`nuxt prepare`）生成；类型检查报「找不到类型」时先 `pnpm install` 或重跑 `nuxt prepare`
+- `apps/elsfs-admin/tsconfig.json` 只继承 `./.nuxt/tsconfig.json`，该文件由 `postinstall`（`nuxt prepare`）生成；类型检查报「找不到类型」时先 `pnpm install` 或重跑 `nuxt prepare`。**别把它改回 `references` 引用 `.nuxt/tsconfig.{app,server,shared,node}.json`**：那些文件是 `noEmit` 且没开 `composite`，`vue-tsc --noEmit` 会直接刷一屏 TS6305/TS6306
 - lint 输出管道给 `tail`/`head` 会吞掉 ESLint 的退出码（拿到的是管道最后一条命令的状态）；要判断成败就别接管道
 - 仓库没有 turbo/nx 之类的任务编排器，根目录没有聚合的 `lint`/`typecheck`/`build`
 - 根 `.npmrc`：`legacy-peer-deps=true`、项目本地 store `.pnpm-store`；`packages/tailwind-config/.npmrc` 另有一份（`shamefully-hoist=true`、`strict-peer-dependencies=false`；后者的键名在当前 pnpm 版本已不生效）
@@ -64,11 +64,11 @@ Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 
 
 ## 路由、布局与守卫
 
-现有页面：`/`(index)、`/login`、`/register`、`/code-login`、`/qrcode-login`、`/forget-password`、`/datshboard`、`/about`、`/posts/[id]`。
+现有页面：`/`(index)、`/auth/login`、`/auth/register`、`/auth/code-login`、`/auth/qrcode-login`、`/auth/forget-password`、`/datshboard`、`/about`、`/posts/[id]`、`/menu/[id]`（后台菜单占位页）。
 
 - 认证类页面统一用 `definePageMeta({ layout: 'auth', middleware: 'guest' })`；受保护页面用 `middleware: 'auth'`
-- `app/middleware/auth.ts`：未登录跳 `/login?redirect=<原地址>`；`guest.ts`：已登录访问登录/注册页时跳回 `redirect` 或 `/`
-- 三个布局：`auth`（认证页双栏外壳，支持左/中/右三种面板形态与明暗切换）、`default`（占位）、`orange`（演示用，`/about` 使用）
+- `app/middleware/auth.ts`：未登录跳 `/auth/login?redirect=<原地址>`（认证页在 `app/pages/auth/` 下，路由带 `/auth` 前缀，**没有** `/login` 这个路径）；`guest.ts`：已登录访问登录/注册页时跳回 `redirect` 或 `/`
+- 四个布局：`auth`（认证页双栏外壳，支持左/中/右三种面板形态与明暗切换）、`admin`（后台外壳：左上角「全部菜单」抽屉 + 左侧收藏菜单栏，`/datshboard`、`/menu/[id]` 使用）、`default`（占位）、`orange`（演示用，`/about` 使用）
 - `auth` 布局把表单包在 `AuthenticationFormView` 里，并全局覆盖 `.auth-form` 下的 Element Plus 输入框/按钮样式
 - `app/plugins/loading.client.ts` 负责首屏 loading（`#__app-loading__`）的隐藏与兜底移除，配合 `LoadingHide` 组件
 - `app.vue` 显式 `import LoadingHide from '~/components/loadingHide.vue'`，别删这行或改成自动导入
@@ -147,4 +147,4 @@ Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 
 - 提交信息用 Conventional Commits + 中文描述，如 `feat(auth): 添加完整的认证功能模块`
 - 没有测试框架、没有 husky/lint-staged；提交前手动跑 lint + typecheck
 - Element Plus 通过 `@element-plus/nuxt` 自动引入组件与样式，不要在业务代码里手写 `import { ElButton } from 'element-plus'`
-- 现阶段 `pnpm lint` 并非全绿（`loadingHide.vue`、`nuxt.config.ts` 有格式错误，`app/middleware/auth.ts` 等工作区改动也会报），修完再提交
+- 现阶段 `pnpm lint` 与 `pnpm typecheck` 都是全绿，改完记得都跑一遍再提交
