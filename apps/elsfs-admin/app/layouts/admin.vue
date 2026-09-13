@@ -114,10 +114,6 @@ function browseFromMobile(): void {
       </div>
 
       <div class="ml-auto flex items-center gap-1 sm:gap-2">
-        <span class="hidden text-xs text-muted-foreground lg:inline">
-          {{ t('admin.favoriteCount', { count: menuStore.favoriteCount }) }}
-        </span>
-
         <!-- 主题 -->
         <button
           type="button"
@@ -126,7 +122,7 @@ function browseFromMobile(): void {
           @click="toggleTheme"
         >
           <AppIcon
-            :name="showDarkIcon ? 'sun' : 'moon'"
+            :name="showDarkIcon ? 'lucide--sun' : 'lucide--moon'"
             class="size-4"
           />
         </button>
@@ -153,7 +149,7 @@ function browseFromMobile(): void {
                 :key="item.value"
                 :command="item.value"
               >
-                <span :class="{ 'text-primary': locale === item.value }">{{ item.label}}</span>
+                <span :class="{ 'text-primary': locale === item.value }">{{ item.label }}</span>
               </ElDropdownItem>
             </ElDropdownMenu>
           </template>
