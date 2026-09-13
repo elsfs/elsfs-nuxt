@@ -2,5 +2,21 @@
   // https://nuxt.com/docs/guide/concepts/typescript
   // 只继承 Nuxt 生成的配置：`.nuxt/tsconfig.*.json` 是 noEmit 且未开 composite，
   // 根配置一旦用 project references 引用它们，`pnpm typecheck` 必然报 TS6305/TS6306。
-  "extends": "./.nuxt/tsconfig.json"
+  "extends": "./.nuxt/tsconfig.json",
+  // https://nuxt.com/docs/guide/concepts/typescript
+  "files": [],
+  "references": [
+    {
+      "path": "./.nuxt/tsconfig.app.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.server.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.shared.json"
+    },
+    {
+      "path": "./.nuxt/tsconfig.node.json"
+    }
+  ]
 }
