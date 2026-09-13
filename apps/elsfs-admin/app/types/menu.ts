@@ -17,17 +17,9 @@ export interface AppMenuItem {
   children?: AppMenuItem[]
 }
 
-/** 展平的叶子菜单（真正可点击 / 可收藏的项），附带父级信息用于分组 */
+/** 展平的叶子菜单（真正可点击 / 可收藏的项），附带父级信息（用于取图标块配色） */
 export interface AppMenuLeaf extends AppMenuItem {
   parentId: string
   parentName: string
   parentIcon?: string
-}
-
-/** 收藏分组：按一级菜单归类 */
-export interface AppMenuGroup {
-  id: string
-  name: string
-  icon?: string
-  items: AppMenuLeaf[]
 }

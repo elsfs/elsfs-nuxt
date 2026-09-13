@@ -161,6 +161,27 @@ export function flattenMenuTree(list: AppMenuItem[] = ADMIN_MENU): AppMenuLeaf[]
   )
 }
 
+/**
+ * 菜单图标方块配色：按一级菜单 id 稳定分配（换页 / 重新收藏都保持同色）。
+ * 类名必须写成字面量，Tailwind 才能扫描到；亮度分开写，暗色下用 400/20 底 + 300 前景。
+ */
+const MENU_TILE_CLASSES: Record<string, string> = {
+  dashboard: 'bg-sky-500/15 text-sky-600 dark:bg-sky-400/20 dark:text-sky-300',
+  system: 'bg-violet-500/15 text-violet-600 dark:bg-violet-400/20 dark:text-violet-300',
+  content: 'bg-emerald-500/15 text-emerald-600 dark:bg-emerald-400/20 dark:text-emerald-300',
+  goods: 'bg-amber-500/15 text-amber-600 dark:bg-amber-400/20 dark:text-amber-300',
+  order: 'bg-rose-500/15 text-rose-600 dark:bg-rose-400/20 dark:text-rose-300',
+  marketing: 'bg-cyan-500/15 text-cyan-600 dark:bg-cyan-400/20 dark:text-cyan-300',
+  finance: 'bg-indigo-500/15 text-indigo-600 dark:bg-indigo-400/20 dark:text-indigo-300',
+  report: 'bg-teal-500/15 text-teal-600 dark:bg-teal-400/20 dark:text-teal-300',
+  dev: 'bg-orange-500/15 text-orange-600 dark:bg-orange-400/20 dark:text-orange-300',
+}
+
+/** 方形图标块的底色：分类没登记时回落到中性色 */
+export function menuTileClass(categoryId?: string): string {
+  return (categoryId ? MENU_TILE_CLASSES[categoryId] : undefined) ?? 'bg-muted text-muted-foreground'
+}
+
 /** 菜单地址：没有真实页面的菜单统一落到占位页 */
 export function resolveMenuPath(item: AppMenuItem): string {
   return item.path ?? `/menu/${item.id}`

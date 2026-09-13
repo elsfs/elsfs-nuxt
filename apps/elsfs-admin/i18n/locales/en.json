@@ -20,7 +20,8 @@
     "welcome": "Welcome back, {name}",
     "back": "Back",
     "login": "Sign in",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "cancel": "Cancel"
   },
   "login": {
     "title": "Welcome back",
@@ -145,6 +146,7 @@
     "allMenus": "All menus",
     "menuList": "Menu list",
     "myFavorites": "My favorites",
+    "collapse": "Collapse",
     "all": "All",
     "searchPlaceholder": "Search menus",
     "clearSearch": "Clear search",
@@ -154,6 +156,7 @@
     "favoriteCount": "{count} favorited",
     "addFavorite": "Add to favorites",
     "removeFavorite": "Remove from favorites",
+    "confirmRemoveFavorite": "Remove this favorite?",
     "openFavorites": "Open favorite menus",
     "welcomeTitle": "Welcome to your dashboard",
     "currentUser": "Signed in as",

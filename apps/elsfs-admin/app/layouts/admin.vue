@@ -16,6 +16,13 @@ const showMenuDrawer = ref(false)
 /** 移动端收藏菜单抽屉 */
 const showMobileFavorites = ref(false)
 
+/** 收藏夹是否收起（窄栏 -> 只留一条竖排文字），记 cookie 里 */
+const favoritesCollapsed = useCookie<boolean>('elsfs_menu_rail_collapsed', {
+  default: () => false,
+  maxAge: 60 * 60 * 24 * 30,
+  sameSite: 'lax',
+})
+
 /* ---------- 主题 ---------- */
 const colorMode = useColorMode()
 const isDark = computed(() => colorMode.value === 'dark')
@@ -190,9 +197,40 @@ function browseFromMobile(): void {
     </header>
 
     <div class="flex min-h-0 flex-1">
-      <!-- 左侧：用户收藏的菜单 -->
-      <aside class="hidden w-60 shrink-0 flex-col border-r border-border bg-card/30 md:flex">
-        <AdminFavoriteMenus @browse="showMenuDrawer = true" />
+      <!-- 左侧：收藏夹（参考 xjx-onehip-frontend，窄栏 + 可收起） -->
+      <aside
+        class="hidden shrink-0 flex-col border-r border-border bg-card/30 transition-[width] duration-200 md:flex"
+        :class="favoritesCollapsed ? 'w-9' : 'w-[76px]'"
+      >
+        <button
+          type="button"
+          class="flex shrink-0 cursor-pointer items-center justify-center gap-0.5 py-2 text-[11px] text-muted-foreground transition-colors hover:text-primary"
+          :class="favoritesCollapsed ? 'flex-col gap-2' : 'flex-row'"
+          :aria-label="favoritesCollapsed ? t('admin.myFavorites') : t('admin.collapse')"
+          @click="favoritesCollapsed = !favoritesCollapsed"
+        >
+          <span
+            v-if="!favoritesCollapsed"
+            class="leading-none"
+          >{{ t('admin.collapse') }}</span>
+          <AppIcon
+            :name="favoritesCollapsed ? 'd-arrow-right' : 'd-arrow-left'"
+            class="size-3.5 shrink-0"
+          />
+          <span
+            v-if="favoritesCollapsed"
+            class="text-[11px] leading-none tracking-widest [writing-mode:vertical-rl]"
+          >{{ t('admin.myFavorites') }}</span>
+        </button>
+        <div
+          v-if="!favoritesCollapsed"
+          class="h-px shrink-0 bg-gradient-to-r from-transparent via-border to-transparent"
+        />
+
+        <AdminFavoriteMenus
+          v-if="!favoritesCollapsed"
+          @browse="showMenuDrawer = true"
+        />
       </aside>
 
       <!-- 内容区 -->
@@ -214,6 +252,7 @@ function browseFromMobile(): void {
         <span class="text-base font-semibold text-foreground">{{ t('admin.title') }}</span>
       </template>
       <AdminFavoriteMenus
+        wide
         @select="showMobileFavorites = false"
         @browse="browseFromMobile"
       />

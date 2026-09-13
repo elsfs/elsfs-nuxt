@@ -1,4 +1,4 @@
-import type { AppMenuGroup, AppMenuLeaf } from '~/types/menu'
+import type { AppMenuLeaf } from '~/types/menu'
 import { ADMIN_MENU, flattenMenuTree } from '~/utils/admin-menu'
 
 /**
@@ -48,25 +48,6 @@ export const useMenuStore = defineStore('menu', () => {
 
   const favoriteCount = computed(() => favorites.value.length)
 
-  /** 收藏按一级菜单分组，左侧栏展示更清晰 */
-  const favoriteGroups = computed<AppMenuGroup[]>(() => {
-    const groups: AppMenuGroup[] = []
-    for (const leaf of favorites.value) {
-      const group = groups.find(item => item.id === leaf.parentId)
-      if (group) {
-        group.items.push(leaf)
-        continue
-      }
-      groups.push({
-        id: leaf.parentId,
-        name: leaf.parentName,
-        icon: leaf.parentIcon,
-        items: [leaf],
-      })
-    }
-    return groups
-  })
-
   function isFavorite(id: string): boolean {
     return favoriteIds.value.includes(id)
   }
@@ -81,6 +62,20 @@ export const useMenuStore = defineStore('menu', () => {
     setFavoriteIds(favoriteIds.value.filter(item => item !== id))
   }
 
+  /** 拖拽排序：把 from 位置的收藏移到 to 位置（收藏顺序即数组顺序，直接落 cookie） */
+  function moveFavorite(from: number, to: number): void {
+    const ids = [...favoriteIds.value]
+    if (from < 0 || from >= ids.length || to < 0 || to >= ids.length || from === to) {
+      return
+    }
+    const [moved] = ids.splice(from, 1)
+    if (!moved) {
+      return
+    }
+    ids.splice(to, 0, moved)
+    setFavoriteIds(ids)
+  }
+
   function clearFavorites(): void {
     setFavoriteIds([])
   }
@@ -91,11 +86,11 @@ export const useMenuStore = defineStore('menu', () => {
     leaves,
     leafMap,
     favorites,
-    favoriteGroups,
     favoriteCount,
     isFavorite,
     toggleFavorite,
     removeFavorite,
+    moveFavorite,
     clearFavorites,
   }
 })
