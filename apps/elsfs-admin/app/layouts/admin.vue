@@ -25,6 +25,7 @@ const favoritesCollapsed = useCookie<boolean>('elsfs_menu_rail_collapsed', {
 
 /* ---------- 主题 ---------- */
 const colorMode = useColorMode()
+// 是否黑暗模式
 const isDark = computed(() => colorMode.value === 'dark')
 
 /**
@@ -40,6 +41,7 @@ onMounted(() => {
   void auth.fetchUser()
 })
 
+// 切换主题
 function toggleTheme(): void {
   colorMode.preference = isDark.value ? 'light' : 'dark'
 }
@@ -80,13 +82,12 @@ function browseFromMobile(): void {
       <button
         type="button"
         class="flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-        @click="showMenuDrawer = true"
+        @click="showMenuDrawer = !showMenuDrawer"
       >
         <AppIcon
           name="grid"
           class="size-4"
         />
-        <span class="hidden sm:inline">{{ t('admin.allMenus') }}</span>
       </button>
 
       <!-- 移动端：打开收藏菜单 -->
@@ -152,7 +153,7 @@ function browseFromMobile(): void {
                 :key="item.value"
                 :command="item.value"
               >
-                <span :class="{ 'text-primary': locale === item.value }">{{ item.label }}</span>
+                <span :class="{ 'text-primary': locale === item.value }">{{ item.label}}</span>
               </ElDropdownItem>
             </ElDropdownMenu>
           </template>

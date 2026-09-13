@@ -50,7 +50,16 @@ async function handleSelect(item: AppMenuItem): Promise<void> {
   >
     <template #header>
       <div class="flex items-center gap-2">
-        <span class="text-base font-semibold text-foreground">{{ t('admin.menuList') }}</span>
+        <button
+          type="button"
+          class="flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          @click="show = !show"
+        >
+          <AppIcon
+            name="grid"
+            class="size-4"
+          />
+        </button>
         <span class="rounded-full bg-accent px-2 py-0.5 text-xs text-muted-foreground">
           {{ t('admin.favoriteCount', { count: menuStore.favoriteCount }) }}
         </span>
