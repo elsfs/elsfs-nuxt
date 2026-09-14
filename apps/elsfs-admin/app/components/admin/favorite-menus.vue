@@ -3,7 +3,7 @@ import type { AppMenuLeaf } from '~/types/menu'
 import { menuTileClass, resolveMenuPath } from '~/utils/admin-menu'
 
 /**
- * 收藏菜单列表（参考 onehip-frontend 的收藏夹）。
+ * 收藏菜单列表
  *
  * 桌面端是窄栏：图标在上、名称在下，支持拖拽排序，hover 出现 × 二次确认删除；
  * 移动端抽屉里用 `wide`，改成横向一行一项。
