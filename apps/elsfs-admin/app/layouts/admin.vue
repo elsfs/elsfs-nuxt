@@ -1,15 +1,17 @@
 <script setup lang="ts">
 /**
- * 后台外壳布局。
+ * 后台外壳布局（顶栏参考 onehip-frontend 的 navbar）。
  *
- * 结构：顶栏（左上角是「全部菜单」入口）+ 左侧收藏菜单栏 + 右侧内容区。
- * 收藏数据来自 `useMenuStore`，抽屉组件见 `AdminMenuDrawer`。
+ * 顶栏：左「主页 + 全部菜单 + 平台名」、中「多页签」、右「消息 + 设置 + 用户」；
+ * 下面再分左侧收藏夹窄栏与内容区。
  */
 const { t, locale, locales, setLocale } = useI18n()
 
 const menuStore = useMenuStore()
+const tabsStore = useTabsStore()
 const auth = useAuthStore()
 const router = useRouter()
+const route = useRoute()
 
 /** 全部菜单抽屉（桌面端 / 移动端共用） */
 const showMenuDrawer = ref(false)
@@ -23,14 +25,25 @@ const favoritesCollapsed = useCookie<boolean>('elsfs_menu_rail_collapsed', {
   sameSite: 'lax',
 })
 
+/* ---------- 多页签：进一个页面就记一个标签 ---------- */
+watch(() => route.path, (path) => {
+  const menu = menuStore.leafByPath(path)
+  tabsStore.openTab({
+    path,
+    title: menu?.title ?? path,
+    menuId: menu?.id,
+    icon: menu?.icon,
+    affix: menu?.meta.affixTab,
+  })
+}, { immediate: true })
+
 /* ---------- 主题 ---------- */
 const colorMode = useColorMode()
-// 是否黑暗模式
 const isDark = computed(() => colorMode.value === 'dark')
 
 /**
  * 服务端拿不到系统主题偏好（color-mode 默认存 localStorage），
- * 直接按 isDark 渲染图标会造成 hydration 不一致，挂载完成后再切换。
+ * 直接按 isDark 渲染文字会造成 hydration 不一致，挂载完成后再切换。
  */
 const mounted = ref(false)
 const showDarkIcon = computed(() => mounted.value && isDark.value)
@@ -41,7 +54,6 @@ onMounted(() => {
   void auth.fetchUser()
 })
 
-// 切换主题
 function toggleTheme(): void {
   colorMode.preference = isDark.value ? 'light' : 'dark'
 }
@@ -58,14 +70,46 @@ async function switchLocale(code: string): Promise<void> {
 }
 
 /* ---------- 用户 ---------- */
-const userInitial = computed(() => (auth.user?.email?.[0] ?? 'U').toUpperCase())
+const userName = computed(() => auth.user?.name || auth.user?.email?.split('@')[0] || 'user')
+const userInitial = computed(() => userName.value[0]?.toUpperCase() ?? 'U')
 
-async function handleUserCommand(command: string): Promise<void> {
-  if (command !== 'logout') {
+function handleComingSoon(): void {
+  ElMessage.info(t('admin.comingSoon'))
+}
+
+function clearCache(): void {
+  if (!import.meta.client) {
     return
   }
-  await auth.logout()
-  await router.push('/auth/login')
+  localStorage.clear()
+  sessionStorage.clear()
+  ElMessage.success(t('admin.cacheCleared'))
+}
+
+async function handleUserCommand(command: string): Promise<void> {
+  if (command === 'logout') {
+    await auth.logout()
+    await router.push('/auth/login')
+    return
+  }
+  if (command === 'theme') {
+    toggleTheme()
+    return
+  }
+  if (command === 'clearCache') {
+    clearCache()
+    return
+  }
+  if (command.startsWith('locale:')) {
+    await switchLocale(command.slice('locale:'.length))
+    return
+  }
+  // 个人信息 / 修改密码等暂未实现
+  handleComingSoon()
+}
+
+function goHome(): void {
+  void router.push('/datshboard')
 }
 
 function browseFromMobile(): void {
@@ -77,124 +121,178 @@ function browseFromMobile(): void {
 <template>
   <div class="flex h-screen w-full flex-col overflow-hidden bg-background text-foreground">
     <!-- 顶栏 -->
-    <header class="flex h-14 shrink-0 items-center gap-2 border-b border-border bg-card/60 px-3 sm:px-4">
-      <!-- 左上角：打开全部菜单 -->
-      <button
-        type="button"
-        class="flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-        @click="showMenuDrawer = !showMenuDrawer"
-      >
-        <AppIcon
-          name="grid"
-          class="size-4"
-        />
-      </button>
-
-      <!-- 移动端：打开收藏菜单 -->
-      <button
-        type="button"
-        class="flex size-9 items-center justify-center rounded-lg border border-border text-foreground transition-colors hover:bg-accent md:hidden"
-        :aria-label="t('admin.openFavorites')"
-        @click="showMobileFavorites = true"
-      >
-        <AppIcon
-          name="star-filled"
-          class="size-4"
-        />
-      </button>
-
-      <div class="ml-1 flex min-w-0 items-center gap-2">
-        <span class="flex size-7 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-          <AppIcon
-            name="medal"
-            class="size-4"
-          />
-        </span>
-        <span class="truncate text-sm font-semibold">{{ t('admin.title') }}</span>
-      </div>
-
-      <div class="ml-auto flex items-center gap-1 sm:gap-2">
-        <!-- 主题 -->
-        <button
-          type="button"
-          class="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-          :aria-label="t('common.theme')"
-          @click="toggleTheme"
-        >
-          <AppIcon
-            :name="showDarkIcon ? 'lucide--sun' : 'lucide--moon'"
-            class="size-4"
-          />
-        </button>
-
-        <!-- 语言 -->
-        <ElDropdown
-          trigger="click"
-          @command="switchLocale"
-        >
+    <header class="flex h-14 shrink-0 items-center gap-2 border-b border-border bg-card/60 pr-3 pl-2 sm:pr-4">
+      <!-- 左：主页 / 全部菜单 / 平台名 -->
+      <ul class="flex shrink-0 items-center gap-1">
+        <li>
+          <ElTooltip
+            :content="t('admin.home')"
+            placement="bottom"
+            :show-after="500"
+          >
+            <button
+              type="button"
+              class="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              :aria-label="t('admin.home')"
+              @click="goHome"
+            >
+              <AppIcon
+                name="house"
+                class="size-4"
+              />
+            </button>
+          </ElTooltip>
+        </li>
+        <li>
+          <ElTooltip
+            :content="t('admin.allMenus')"
+            placement="bottom"
+            :show-after="500"
+          >
+            <button
+              type="button"
+              class="flex size-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-foreground"
+              :class="showMenuDrawer ? 'bg-accent text-primary' : 'text-muted-foreground'"
+              :aria-label="t('admin.allMenus')"
+              @click="showMenuDrawer = !showMenuDrawer"
+            >
+              <AppIcon
+                :name="showMenuDrawer ? 'expand' : 'menu'"
+                class="size-4"
+              />
+            </button>
+          </ElTooltip>
+        </li>
+        <li class="md:hidden">
           <button
             type="button"
             class="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-            :aria-label="t('common.language')"
+            :aria-label="t('admin.openFavorites')"
+            @click="showMobileFavorites = true"
           >
             <AppIcon
-              name="message"
+              name="star-filled"
               class="size-4"
             />
           </button>
-          <template #dropdown>
-            <ElDropdownMenu>
-              <ElDropdownItem
-                v-for="item in localeItems"
-                :key="item.value"
-                :command="item.value"
-              >
-                <span :class="{ 'text-primary': locale === item.value }">{{ item.label }}</span>
-              </ElDropdownItem>
-            </ElDropdownMenu>
-          </template>
-        </ElDropdown>
-
-        <!-- 用户 -->
-        <ElDropdown
-          trigger="click"
-          @command="handleUserCommand"
-        >
+        </li>
+        <li>
           <button
             type="button"
-            class="flex items-center gap-2 rounded-lg py-1.5 pr-2 pl-1.5 transition-colors hover:bg-accent"
+            class="max-w-40 cursor-pointer truncate px-1 text-base text-foreground"
+            @click="showMenuDrawer = true"
           >
-            <span class="flex size-6 items-center justify-center rounded-full bg-accent text-xs font-medium text-accent-foreground">
-              {{ userInitial }}
-            </span>
-            <span
-              v-if="auth.user"
-              class="hidden max-w-32 truncate text-xs text-muted-foreground sm:inline"
-            >{{ auth.user.email }}</span>
-            <AppIcon
-              name="arrow-down"
-              class="size-3 text-muted-foreground"
-            />
+            {{ t('common.appName') }}
           </button>
-          <template #dropdown>
-            <ElDropdownMenu>
-              <ElDropdownItem command="logout">
-                <span class="flex items-center gap-2">
-                  <AppIcon
-                    name="switch-button"
-                    class="size-4"
-                  />
-                  {{ t('common.logout') }}
+        </li>
+      </ul>
+
+      <!-- 中：多页签 -->
+      <AdminTabsView class="hidden min-w-0 flex-1 md:flex" />
+
+      <!-- 右：消息 / 设置 / 用户 -->
+      <ul class="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
+        <li>
+          <AdminNoticeBell />
+        </li>
+        <li>
+          <ElTooltip
+            :content="t('admin.settings')"
+            placement="bottom"
+            :show-after="500"
+          >
+            <button
+              type="button"
+              class="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              :aria-label="t('admin.settings')"
+              @click="handleComingSoon"
+            >
+              <AppIcon
+                name="setting"
+                class="size-4"
+              />
+            </button>
+          </ElTooltip>
+        </li>
+        <li>
+          <ElDropdown
+            trigger="click"
+            @command="handleUserCommand"
+          >
+            <div class="flex cursor-pointer items-center gap-2 rounded-lg px-1.5 py-1 transition-colors hover:bg-accent">
+              <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-medium text-primary">
+                {{ userInitial }}
+              </span>
+              <span class="hidden flex-col leading-tight sm:flex">
+                <span class="flex items-center gap-1 text-xs text-foreground">
+                  {{ userName }}
+                  <span class="text-muted-foreground">{{ t('admin.roleAdmin') }}</span>
                 </span>
-              </ElDropdownItem>
-            </ElDropdownMenu>
-          </template>
-        </ElDropdown>
-      </div>
+                <span class="max-w-40 truncate text-[11px] text-muted-foreground">{{ auth.user?.email }}</span>
+              </span>
+              <AppIcon
+                name="arrow-down"
+                class="size-3 shrink-0 text-muted-foreground"
+              />
+            </div>
+            <template #dropdown>
+              <ElDropdownMenu>
+                <ElDropdownItem command="profile">
+                  {{ t('admin.profile') }}
+                </ElDropdownItem>
+                <ElDropdownItem command="password">
+                  {{ t('admin.changePassword') }}
+                </ElDropdownItem>
+                <ElDropdownItem command="clearCache">
+                  {{ t('admin.clearCache') }}
+                </ElDropdownItem>
+                <ElDropdownItem
+                  divided
+                  command="theme"
+                >
+                  <span class="flex items-center gap-2">
+                    <AppIcon
+                      :name="showDarkIcon ? 'sun' : 'moon'"
+                      class="size-4"
+                    />
+                    {{ t('common.theme') }}：{{ showDarkIcon ? t('admin.themeDark') : t('admin.themeLight') }}
+                  </span>
+                </ElDropdownItem>
+                <ElDropdownItem
+                  v-for="item in localeItems"
+                  :key="item.value"
+                  :command="`locale:${item.value}`"
+                >
+                  <span class="flex items-center gap-2">
+                    <AppIcon
+                      v-if="locale === item.value"
+                      name="check"
+                      class="size-4 text-primary"
+                    />
+                    <span :class="locale === item.value ? 'text-primary' : ''">{{ item.label }}</span>
+                  </span>
+                </ElDropdownItem>
+                <ElDropdownItem
+                  divided
+                  command="logout"
+                >
+                  <span class="flex items-center gap-2">
+                    <AppIcon
+                      name="switch-button"
+                      class="size-4"
+                    />
+                    {{ t('common.logout') }}
+                  </span>
+                </ElDropdownItem>
+              </ElDropdownMenu>
+            </template>
+          </ElDropdown>
+        </li>
+      </ul>
     </header>
 
     <div class="flex min-h-0 flex-1">
-      <!-- 左侧：收藏夹（参考 xjx-onehip-frontend，窄栏 + 可收起） -->
+      <!-- 左侧：收藏夹（参考 onehip-frontend，窄栏 + 可收起） -->
       <aside
         class="hidden shrink-0 flex-col border-r border-border bg-card/30 transition-[width] duration-200 md:flex"
         :class="favoritesCollapsed ? 'w-9' : 'w-[76px]'"

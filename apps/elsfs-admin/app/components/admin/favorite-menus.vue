@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { AppMenuLeaf } from '~/types/menu'
-import { menuTileClass, resolveMenuPath } from '~/utils/admin-menu'
+import type { AdminMenuLeaf } from '~/types/menu'
+import { menuTileClass } from '~/utils/admin-menu'
 
 /**
  * 收藏菜单列表
@@ -18,13 +18,15 @@ const emit = defineEmits<{
 const { t } = useI18n()
 const route = useRoute()
 const menuStore = useMenuStore()
+const menuTitle = useMenuTitle()
+const menuPath = useMenuPath()
 
-function isActive(item: AppMenuLeaf): boolean {
-  return route.path === resolveMenuPath(item)
+function isActive(item: AdminMenuLeaf): boolean {
+  return route.path === menuPath(item)
 }
 
-function pathOf(item: AppMenuLeaf): string {
-  return resolveMenuPath(item)
+function pathOf(item: AdminMenuLeaf): string {
+  return menuPath(item)
 }
 
 /* ---------- 拖拽排序：原生 HTML5 DnD，不额外引依赖 ---------- */
@@ -78,7 +80,7 @@ function resetDrag(): void {
         v-if="menuStore.favoriteCount"
         class="rounded-full bg-accent px-1.5 py-0.5 text-[11px] text-muted-foreground"
       >
-        {{ menuStore.favoriteCount }}
+        {{ t('admin.favoriteCount', { count: menuStore.favoriteCount }) }}
       </span>
     </div>
 
@@ -119,11 +121,12 @@ function resetDrag(): void {
               wide ? 'size-7' : 'size-9',
               isActive(item)
                 ? 'bg-primary text-primary-foreground shadow-sm shadow-primary/30'
-                : menuTileClass(item.parentId),
+                : menuTileClass(item.rootId),
             ]"
           >
             <AppIcon
               :name="item.icon ?? 'document'"
+              fallback="document"
               :class="wide ? 'size-4' : 'size-5'"
             />
           </span>
@@ -132,7 +135,7 @@ function resetDrag(): void {
             :class="wide
               ? 'min-w-0 flex-1 truncate text-sm'
               : 'line-clamp-2 w-full text-center text-[11px] leading-tight break-all'"
-          >{{ item.name }}</span>
+          >{{ menuTitle(item.title) }}</span>
 
           <!-- hover 出现：取消收藏（二次确认，避免误删） -->
           <ElPopconfirm

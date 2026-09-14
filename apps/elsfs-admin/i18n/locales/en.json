@@ -141,14 +141,23 @@
       "cyan": "Cyan"
     }
   },
+  "demos": {
+    "title": "Demos",
+    "access": {
+      "backendPermissions": "Backend permissions",
+      "pageAccess": "Page access",
+      "buttonControl": "Button control",
+      "menuVisible403": "Menu visible (403)",
+      "superVisible": "Super visible"
+    }
+  },
   "admin": {
     "title": "Admin",
     "allMenus": "All menus",
-    "menuList": "Menu list",
     "myFavorites": "My favorites",
     "collapse": "Collapse",
-    "all": "All",
-    "searchPlaceholder": "Search menus",
+    "searchPlaceholder": "Search by menu name",
+    "closeMenuList": "Close menu list",
     "clearSearch": "Clear search",
     "searchEmpty": "No matching menu",
     "emptyFavorites": "No favorite menus yet",
@@ -164,6 +173,24 @@
     "comingSoon": "This feature is under construction",
     "comingSoonHint": "The route is already wired up — just replace it with the real page.",
     "menuNotFound": "Menu not found",
+    "home": "Home",
+    "settings": "Settings",
+    "notice": "Notifications",
+    "announcement": "Announcements",
+    "noData": "No data",
+    "publishTime": "Published",
+    "reload": "Reload",
+    "closeTab": "Close tab",
+    "closeOthers": "Close others",
+    "closeAll": "Close all",
+    "moreTabs": "Tab actions",
+    "profile": "Profile",
+    "changePassword": "Change password",
+    "clearCache": "Clear cache",
+    "cacheCleared": "Cache cleared",
+    "roleAdmin": "Administrator",
+    "themeLight": "Light",
+    "themeDark": "Dark",
     "stats": {
       "visits": "Visits today",
       "newUsers": "New users",

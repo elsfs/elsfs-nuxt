@@ -141,14 +141,23 @@
       "cyan": "青色"
     }
   },
+  "demos": {
+    "title": "示例页面",
+    "access": {
+      "backendPermissions": "后端权限",
+      "pageAccess": "页面权限",
+      "buttonControl": "按钮权限",
+      "menuVisible403": "菜单可见（403）",
+      "superVisible": "超级可见"
+    }
+  },
   "admin": {
     "title": "后台管理",
     "allMenus": "全部菜单",
-    "menuList": "菜单列表",
     "myFavorites": "我的收藏",
     "collapse": "收起",
-    "all": "全部",
-    "searchPlaceholder": "搜索菜单",
+    "searchPlaceholder": "请输入要搜索的菜单名称",
+    "closeMenuList": "关闭菜单",
     "clearSearch": "清空搜索",
     "searchEmpty": "没有找到匹配的菜单",
     "emptyFavorites": "还没有收藏菜单",
@@ -164,6 +173,24 @@
     "comingSoon": "该功能正在建设中",
     "comingSoonHint": "菜单已经接好路由，替换成真实页面即可。",
     "menuNotFound": "菜单不存在",
+    "home": "主页",
+    "settings": "系统设置",
+    "notice": "通知",
+    "announcement": "公告",
+    "noData": "暂无相关数据",
+    "publishTime": "发布时间",
+    "reload": "重新加载",
+    "closeTab": "关闭标签",
+    "closeOthers": "关闭其他",
+    "closeAll": "关闭全部",
+    "moreTabs": "标签操作",
+    "profile": "个人信息",
+    "changePassword": "修改密码",
+    "clearCache": "清除缓存",
+    "cacheCleared": "缓存已清除",
+    "roleAdmin": "管理员",
+    "themeLight": "浅色",
+    "themeDark": "深色",
     "stats": {
       "visits": "今日访问",
       "newUsers": "新增用户",

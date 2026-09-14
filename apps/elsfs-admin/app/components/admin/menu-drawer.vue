@@ -1,43 +1,49 @@
 <script setup lang="ts">
-import type { AppMenuItem } from '~/types/menu'
-import { filterMenuTree, menuTileClass, resolveMenuPath } from '~/utils/admin-menu'
+import type { AdminMenuItem } from '~/types/menu'
+import { countMenuLeaves, filterMenuTree } from '~/utils/admin-menu'
 
 /**
- * 全部菜单抽屉。
+ * 全部菜单抽屉（参考 onehip-frontend 的 navbar 菜单抽屉）。
  *
- * 左侧是「全部 + 一级菜单」导航，右侧是搜索框 + 按一级菜单分组的三列菜单网格；
- * 每项右侧的星标用于加入 / 移出左侧收藏栏。
+ * 三层结构：左侧一级菜单（子系统）列表 188px，选中项底色高亮；
+ * 右侧是「搜索框 + 关闭按钮」，下面按 一级菜单名（h4）→ 二级分组名（h6）
+ * → 四列叶子菜单网格 展示，菜单项 hover 出现星标。
+ * 抽屉本身没有 header，关闭按钮和参考项目一样放在搜索框右侧。
  */
 const show = defineModel<boolean>({ required: true })
 
 const { t } = useI18n()
 const menuStore = useMenuStore()
 const router = useRouter()
+const menuTitle = useMenuTitle()
+const menuPath = useMenuPath()
 
-/** 当前选中的一级菜单下标，-1 表示「全部」 */
-const activeCategory = ref(-1)
+/** 当前选中的一级菜单下标 */
+const activeCategory = ref(0)
 const keyword = ref('')
 
-const visibleMenus = computed(() => {
-  const source = activeCategory.value === -1
-    ? menuStore.menus
-    : menuStore.menus.filter((_, index) => index === activeCategory.value)
-
-  return filterMenuTree(source, keyword.value)
+/** 搜索时跨一级菜单展示命中结果，未搜索时只展示当前一级菜单（和参考项目一致） */
+const visibleMenus = computed<AdminMenuItem[]>(() => {
+  const kw = keyword.value.trim()
+  if (kw) {
+    return filterMenuTree(menuStore.menus, kw, menuTitle)
+  }
+  const current = menuStore.menus[activeCategory.value]
+  return current ? [current] : []
 })
 
-/** 过滤后剩下的可点击菜单数量，用于空状态判断 */
-const visibleCount = computed(() =>
-  visibleMenus.value.reduce((total, item) => total + (item.children?.length ?? 0), 0),
-)
+/** 过滤后剩下的叶子菜单数量，用于空状态判断 */
+const visibleCount = computed(() => countMenuLeaves(visibleMenus.value))
 
 function selectCategory(index: number): void {
   activeCategory.value = index
+  // 和参考项目一致：点一级菜单清空搜索
+  keyword.value = ''
 }
 
-async function handleSelect(item: AppMenuItem): Promise<void> {
+async function handleSelect(item: AdminMenuItem): Promise<void> {
   show.value = false
-  await router.push(resolveMenuPath(item))
+  await router.push(menuPath(item))
 }
 </script>
 
@@ -46,158 +52,134 @@ async function handleSelect(item: AppMenuItem): Promise<void> {
     v-model="show"
     direction="ltr"
     size="min(1148px, 92%)"
+    :show-close="false"
+    :with-header="false"
     class="admin-menu-drawer"
   >
-    <template #header>
-      <div class="flex items-center gap-2">
-        <button
-          type="button"
-          class="flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          @click="show = !show"
-        >
-          <AppIcon
-            name="grid"
-            class="size-4"
-          />
-        </button>
-        <span class="rounded-full bg-accent px-2 py-0.5 text-xs text-muted-foreground">
-          {{ t('admin.favoriteCount', { count: menuStore.favoriteCount }) }}
-        </span>
-      </div>
-    </template>
-
-    <div class="flex h-full min-h-0 gap-3 sm:gap-4">
-      <!-- 一级菜单导航 -->
-      <nav class="flex w-32 shrink-0 flex-col gap-0.5 overflow-y-auto border-r border-border pr-2 sm:w-44">
-        <button
-          type="button"
-          class="flex items-center gap-2.5 rounded-lg py-1.5 pr-2 pl-1.5 text-left text-sm transition-colors"
-          :class="activeCategory === -1
-            ? 'bg-accent font-medium text-primary'
-            : 'text-foreground hover:bg-accent/60'"
-          @click="selectCategory(-1)"
-        >
-          <span
-            class="flex size-7 shrink-0 items-center justify-center rounded-lg transition-colors"
-            :class="activeCategory === -1 ? 'bg-primary text-primary-foreground' : menuTileClass()"
-          >
-            <AppIcon
-              name="grid"
-              class="size-4"
-            />
-          </span>
-          <span class="truncate">{{ t('admin.all') }}</span>
-        </button>
-
+    <div class="flex h-full min-h-0 flex-nowrap">
+      <!-- 左：一级菜单 -->
+      <nav class="flex w-[188px] shrink-0 flex-col overflow-y-auto bg-muted/50 py-2">
         <button
           v-for="(item, index) in menuStore.menus"
           :key="item.id"
           type="button"
-          class="flex items-center gap-2.5 rounded-lg py-1.5 pr-2 pl-1.5 text-left text-sm transition-colors"
-          :class="activeCategory === index
-            ? 'bg-accent font-medium text-primary'
-            : 'text-foreground hover:bg-accent/60'"
+          class="flex h-11 shrink-0 cursor-pointer items-center gap-2 pl-3 text-left text-sm transition-colors"
+          :class="activeCategory === index && !keyword
+            ? 'bg-background font-bold text-primary dark:bg-foreground/10'
+            : 'text-foreground hover:bg-background/60 dark:hover:bg-foreground/5'"
           @click="selectCategory(index)"
         >
-          <span
-            class="flex size-7 shrink-0 items-center justify-center rounded-lg transition-colors"
-            :class="activeCategory === index ? 'bg-primary text-primary-foreground' : menuTileClass(item.id)"
-          >
-            <AppIcon
-              :name="item.icon ?? 'menu'"
-              class="size-4"
-            />
-          </span>
-          <span class="truncate">{{ item.name }}</span>
+          <AppIcon
+            :name="item.icon ?? 'menu'"
+            fallback="menu"
+            class="size-4 shrink-0"
+          />
+          <span class="truncate">{{ menuTitle(item.title) }}</span>
         </button>
       </nav>
 
-      <!-- 搜索 + 菜单网格 -->
+      <!-- 右：搜索 + 菜单 -->
       <div class="flex min-w-0 flex-1 flex-col">
-        <div class="relative mb-3">
-          <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-muted-foreground">
-            <AppIcon
-              name="search"
-              class="size-4"
-            />
-          </span>
-          <input
-            v-model="keyword"
-            type="text"
-            :placeholder="t('admin.searchPlaceholder')"
-            class="h-10 w-full rounded-lg border border-border bg-background pr-9 pl-9 text-sm text-foreground transition-colors outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
-          >
+        <!-- 搜索框 + 关闭按钮 -->
+        <div class="flex h-15 shrink-0 items-center gap-5 px-5 py-2.5">
+          <div class="relative min-w-0 flex-1">
+            <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-muted-foreground">
+              <AppIcon
+                name="search"
+                class="size-4"
+              />
+            </span>
+            <input
+              v-model="keyword"
+              type="text"
+              :placeholder="t('admin.searchPlaceholder')"
+              class="h-10 w-full rounded-lg border border-border bg-background pr-9 pl-9 text-sm text-foreground transition-colors outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
+            >
+            <button
+              v-if="keyword"
+              type="button"
+              class="absolute inset-y-0 right-2 my-auto flex size-6 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              :aria-label="t('admin.clearSearch')"
+              @click="keyword = ''"
+            >
+              <AppIcon
+                name="close"
+                class="size-3.5"
+              />
+            </button>
+          </div>
+
           <button
-            v-if="keyword"
             type="button"
-            class="absolute inset-y-0 right-2 my-auto flex size-6 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-            :aria-label="t('admin.clearSearch')"
-            @click="keyword = ''"
+            class="flex size-6 shrink-0 cursor-pointer items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
+            :aria-label="t('admin.closeMenuList')"
+            @click="show = false"
           >
             <AppIcon
               name="close"
-              class="size-3.5"
+              class="size-5"
             />
           </button>
         </div>
 
-        <div class="min-h-0 flex-1 overflow-y-auto">
+        <div class="min-h-0 flex-1 overflow-y-auto px-5 pb-6">
           <template v-if="visibleCount">
             <section
               v-for="item in visibleMenus"
               :key="item.id"
               class="mb-5"
             >
-              <h3 class="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
-                <span class="h-3.5 w-1 rounded-full bg-primary" />
-                {{ item.name }}
-                <span class="text-xs font-normal text-muted-foreground">{{ item.children?.length ?? 0 }}</span>
-              </h3>
+              <!-- 一级：子系统 / 分类（参考项目用主色加粗） -->
+              <h4 class="mb-2 text-sm font-bold text-primary">
+                {{ menuTitle(item.title) }}
+              </h4>
 
-              <!-- 一批四列：方形图标 + 菜单名，hover 出现星标收藏（参考 xjx-onehip-frontend） -->
-              <div class="grid grid-cols-2 gap-x-3 gap-y-1 md:grid-cols-3 lg:grid-cols-4">
-                <div
-                  v-for="child in item.children"
-                  :key="child.id"
-                  class="group/row flex items-center rounded-lg transition-colors hover:bg-accent"
-                >
-                  <button
-                    type="button"
-                    class="flex min-w-0 flex-1 items-center gap-2.5 py-1.5 pr-1 pl-1.5 text-left"
-                    @click="handleSelect(child)"
-                  >
-                    <span
-                      class="flex size-7 shrink-0 items-center justify-center rounded-lg"
-                      :class="menuTileClass(item.id)"
-                    >
-                      <AppIcon
-                        :name="child.icon ?? 'document'"
-                        class="size-4"
-                      />
-                    </span>
-                    <span class="min-w-0 flex-1 truncate text-sm text-foreground transition-colors group-hover/row:text-primary">{{ child.name }}</span>
-                  </button>
+              <!-- 二级：分组 -->
+              <div
+                v-for="group in item.children"
+                :key="group.id"
+                class="mb-3 last:mb-0"
+              >
+                <h6 class="mb-1 text-xs font-semibold text-muted-foreground">
+                  {{ menuTitle(group.title) }}
+                </h6>
 
-                  <ElTooltip
-                    :content="menuStore.isFavorite(child.id) ? t('admin.removeFavorite') : t('admin.addFavorite')"
-                    placement="bottom-start"
-                    :show-after="0"
+                <!-- 三级：叶子菜单，四列 -->
+                <div class="grid grid-cols-2 gap-x-4 md:grid-cols-3 lg:grid-cols-4">
+                  <div
+                    v-for="child in group.children"
+                    :key="child.id"
+                    class="group/row relative flex h-8 items-center rounded transition-colors hover:bg-accent"
                   >
                     <button
                       type="button"
-                      class="flex size-6 shrink-0 items-center justify-center rounded-md transition-opacity"
-                      :class="menuStore.isFavorite(child.id)
-                        ? 'text-primary opacity-100'
-                        : 'text-muted-foreground/70 opacity-0 hover:text-primary group-hover/row:opacity-100 focus-visible:opacity-100'"
-                      :aria-label="menuStore.isFavorite(child.id) ? t('admin.removeFavorite') : t('admin.addFavorite')"
-                      @click="menuStore.toggleFavorite(child.id)"
+                      class="flex h-full min-w-0 flex-1 cursor-pointer items-center pl-3 text-left text-sm text-foreground"
+                      @click="handleSelect(child)"
                     >
-                      <AppIcon
-                        name="star-filled"
-                        class="size-4"
-                      />
+                      <span class="truncate">{{ menuTitle(child.title) }}</span>
                     </button>
-                  </ElTooltip>
+
+                    <ElTooltip
+                      :content="menuStore.isFavorite(child.id) ? t('admin.removeFavorite') : t('admin.addFavorite')"
+                      placement="bottom-start"
+                      :show-after="0"
+                    >
+                      <button
+                        type="button"
+                        class="absolute top-1/2 right-2.5 flex size-5 -translate-y-1/2 cursor-pointer items-center justify-center rounded transition-opacity"
+                        :class="menuStore.isFavorite(child.id)
+                          ? 'text-primary opacity-100'
+                          : 'text-muted-foreground/70 opacity-0 hover:text-primary group-hover/row:opacity-100 focus-visible:opacity-100'"
+                        :aria-label="menuStore.isFavorite(child.id) ? t('admin.removeFavorite') : t('admin.addFavorite')"
+                        @click="menuStore.toggleFavorite(child.id)"
+                      >
+                        <AppIcon
+                          name="star-filled"
+                          class="size-4"
+                        />
+                      </button>
+                    </ElTooltip>
+                  </div>
                 </div>
               </div>
             </section>

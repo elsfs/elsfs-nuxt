@@ -1,5 +1,5 @@
-import type { AppMenuLeaf } from '~/types/menu'
-import { ADMIN_MENU, flattenMenuTree } from '~/utils/admin-menu'
+import type { AdminMenuLeaf } from '~/types/menu'
+import { ADMIN_MENU_RAW, flattenMenuTree, normalizeAdminMenus } from '~/utils/admin-menu'
 
 /**
  * 默认收藏：只在 cookie 不存在时生效。
@@ -10,11 +10,11 @@ const DEFAULT_FAVORITES = ['dashboard-workbench', 'system-user', 'order-list']
 /**
  * 后台菜单状态：菜单树 + 用户收藏。
  *
- * 收藏用 cookie 持久化（SSR 安全，刷新 / 换标签页都不丢），
- * 只存 id，菜单名称等展示信息始终从菜单树解析。
+ * 菜单来自后端结构（`ADMIN_MENU_RAW`，接真实接口时换成 `$fetch`），
+ * 这里只做一次规范化；收藏用 cookie 持久化（SSR 安全），只存 id。
  */
 export const useMenuStore = defineStore('menu', () => {
-  const menus = ref(ADMIN_MENU)
+  const menus = ref(normalizeAdminMenus(ADMIN_MENU_RAW))
 
   const favoriteCookie = useCookie<string[] | null>('elsfs_menu_favorites', {
     default: () => [...DEFAULT_FAVORITES],
@@ -39,11 +39,22 @@ export const useMenuStore = defineStore('menu', () => {
   const leaves = computed(() => flattenMenuTree(menus.value))
   const leafMap = computed(() => new Map(leaves.value.map(leaf => [leaf.id, leaf])))
 
+  /**
+   * 按当前路由地址找叶子菜单：
+   * 真实页面按后端 path 匹配，占位页从 `/menu/<id>` 里取 id。
+   */
+  function leafByPath(path: string): AdminMenuLeaf | undefined {
+    if (path.startsWith('/menu/')) {
+      return leafMap.value.get(path.slice('/menu/'.length))
+    }
+    return leaves.value.find(leaf => leaf.path === path)
+  }
+
   /** 收藏项，顺序与收藏时间一致 */
-  const favorites = computed<AppMenuLeaf[]>(() =>
+  const favorites = computed<AdminMenuLeaf[]>(() =>
     favoriteIds.value
       .map(id => leafMap.value.get(id))
-      .filter((leaf): leaf is AppMenuLeaf => Boolean(leaf)),
+      .filter((leaf): leaf is AdminMenuLeaf => Boolean(leaf)),
   )
 
   const favoriteCount = computed(() => favorites.value.length)
@@ -85,6 +96,7 @@ export const useMenuStore = defineStore('menu', () => {
     favoriteIds,
     leaves,
     leafMap,
+    leafByPath,
     favorites,
     favoriteCount,
     isFavorite,
