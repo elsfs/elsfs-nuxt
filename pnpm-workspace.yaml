@@ -38,3 +38,4 @@ catalog:
   typescript: ^6.0.3
   axios: ^1.18.1
   qs: ^6.15.3
+  '@types/qs': ^6.15.1

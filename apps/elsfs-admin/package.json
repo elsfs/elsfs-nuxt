@@ -17,6 +17,7 @@
     "@nuxtjs/tailwindcss": "catalog:",
     "@pinia/nuxt": "catalog:",
     "tailwind-config": "workspace:*",
+    "nuxt-request": "workspace:*",
     "tailwindcss": "^4.3.3",
     "vee-validate": "catalog:",
     "vue": "catalog:",

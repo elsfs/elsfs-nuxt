@@ -37,9 +37,14 @@
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
-    "@nuxt/kit": "^4.5.2"
+    "@nuxt/kit": "^4.5.2",
+    "qs": "catalog:",
+    "defu": "^6.1.4",
+    "vue-i18n": "^11.4.8"
   },
   "devDependencies": {
+    "@nuxtjs/i18n": "catalog:",
+    "@types/qs": "catalog:",
     "@nuxt/devtools": "^3.4.2",
     "@nuxt/eslint-config": "^1.17.0",
     "@nuxt/module-builder": "^1.0.3",
@@ -51,6 +56,8 @@
     "nuxt": "catalog:",
     "typescript": "catalog:",
     "vitest": "^4.1.11",
-    "vue-tsc": "catalog:"
+    "vue-tsc": "catalog:",
+    "axios": "catalog:",
+    "axios-mock-adapter": "^2.1.0"
   }
 }
