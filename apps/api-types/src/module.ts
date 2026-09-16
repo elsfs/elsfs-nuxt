@@ -1,13 +1,12 @@
-import {defineNuxtModule, addPlugin, createResolver, addImportsDir} from '@nuxt/kit'
+import {defineNuxtModule, addPlugin, createResolver, addImports} from '@nuxt/kit'
 
 // Module options TypeScript interface definition
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ModuleOptions {}
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: 'nuxt-request',
-    configKey: 'nuxtRequest',
+    name: 'my-module',
+    configKey: 'myModule',
   },
   // Default configuration options of the Nuxt module
   defaults: {},
@@ -16,6 +15,6 @@ export default defineNuxtModule<ModuleOptions>({
 
     // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
     addPlugin(resolver.resolve('./runtime/plugin'))
-    addImportsDir(resolver.resolve('./runtime/utils'))
+    addImports(resolver.resolve('./api'))
   },
 })

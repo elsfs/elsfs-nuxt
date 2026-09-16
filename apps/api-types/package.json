@@ -1,8 +1,8 @@
 {
-  "name": "nuxt-request",
+  "name": "api-types",
   "version": "1.0.0",
   "description": "My new Nuxt module",
-  "repository": "elsfs/elsfs-nuxt",
+  "repository": "your-org/my-module",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -25,10 +25,6 @@
   "workspaces": [
     "playground"
   ],
-  "sideEffects": [
-    "**/*.css"
-  ],
-
   "scripts": {
     "prepack": "nuxt-module-build build",
     "dev": "npm run dev:prepare && nuxt dev playground",
@@ -42,26 +38,20 @@
   },
   "dependencies": {
     "@nuxt/kit": "^4.5.2",
-    "qs": "catalog:",
-    "defu": "^6.1.4",
-    "vue-i18n": "^11.4.8"
+    "nuxt-request": "workspace:*"
   },
   "devDependencies": {
-    "@nuxtjs/i18n": "catalog:",
-    "@types/qs": "catalog:",
     "@nuxt/devtools": "^3.4.2",
     "@nuxt/eslint-config": "^1.17.0",
     "@nuxt/module-builder": "^1.0.3",
     "@nuxt/schema": "^4.5.2",
     "@nuxt/test-utils": "^4.3.2",
-    "@types/node": "catalog:",
+    "@types/node": "latest",
     "changelogen": "^0.6.2",
-    "eslint": "catalog:",
-    "nuxt": "catalog:",
-    "typescript": "catalog:",
+    "eslint": "^10.10.0",
+    "nuxt": "^4.5.2",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.11",
-    "vue-tsc": "catalog:",
-    "axios": "catalog:",
-    "axios-mock-adapter": "^2.1.0"
+    "vue-tsc": "^3.3.11"
   }
 }
