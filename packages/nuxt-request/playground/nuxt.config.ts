@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
-  modules: ['my-module'],
+  modules: ['nuxt-request'],
   devtools: { enabled: true },
   compatibilityDate: 'latest',
-  myModule: {},
+  nuxtRequest: {},
 })
