@@ -68,7 +68,6 @@ function resolveErrorCode(error: unknown, scene?: 'login'): string {
 export const useAuthStore = defineStore('auth', () => {
   const nuxtApp = useNuxtApp()
   const { public: publicConfig } = useRuntimeConfig()
-
   const api = useApi()
   const token = nuxtApp.$authToken
 
