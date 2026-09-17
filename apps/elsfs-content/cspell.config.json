@@ -1,0 +1,10 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "import": ["../../packages/code-quality/cspell.json"],
+  "ignorePaths": [
+    // content/ 下是上游 docus 示例文档（含贡献者用户名、代码片段），非本仓库维护的代码
+    "content/**"
+  ],
+  "words": []
+}

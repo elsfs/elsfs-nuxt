@@ -1,0 +1,9 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "import": ["../code-quality/cspell.json"],
+  "words": [
+    // 测试用例里刻意使用的非法 HTTP 方法
+    "postt"
+  ]
+}

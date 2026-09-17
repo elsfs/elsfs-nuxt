@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
+  "version": "0.2",
+  "import": ["../../packages/code-quality/cspell.json"],
+  "words": [
+    // 后端接口字段名 / 枚举值里的业务与厂商专有词
+    "wubi",
+    "fileblob",
+    "zeng",
+    "highgo",
+    "fullchain",
+    "reloadcmd",
+    "licence"
+  ]
+}

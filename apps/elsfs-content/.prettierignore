@@ -1,0 +1,11 @@
+# oxfmt / prettier 忽略清单（oxfmt 会自动读取本文件）
+# content/ 下是上游 docus 示例文档，保持原样，避免产生无意义 diff
+content/
+
+# 构建产物与本地数据
+.nuxt
+.output
+.data
+.nitro
+node_modules
+dist

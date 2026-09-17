@@ -1,0 +1,56 @@
+{
+  "name": "code-quality",
+  "version": "0.1.0",
+  "description": "Nuxt 4 monorepo 共享的代码质量工具链配置：ESLint / Oxlint / Oxfmt / Stylelint / CSpell / Publint",
+  "keywords": [
+    "cspell",
+    "eslint",
+    "nuxt",
+    "oxfmt",
+    "oxlint",
+    "publint",
+    "stylelint"
+  ],
+  "license": "MIT",
+  "files": [
+    "eslint.config.mjs",
+    "stylelint.config.mjs",
+    "oxlint.config.ts",
+    "oxfmt.json",
+    "cspell.json",
+    "README.md"
+  ],
+  "type": "module",
+  "exports": {
+    ".": "./eslint.config.mjs",
+    "./eslint": "./eslint.config.mjs",
+    "./stylelint": "./stylelint.config.mjs",
+    "./oxlint": "./oxlint.config.ts"
+  },
+  "scripts": {
+    "lint": "pnpm lint:eslint && pnpm lint:oxlint && pnpm lint:style && pnpm lint:spell",
+    "lint:eslint": "eslint .",
+    "lint:oxlint": "oxlint",
+    "lint:style": "stylelint --allow-empty-input \"**/*.{css,vue}\"",
+    "lint:spell": "cspell lint \"**/*.{ts,mjs,md,json}\"",
+    "lint:package": "publint",
+    "typecheck": "tsc --noEmit",
+    "fmt": "oxfmt -c ./oxfmt.json",
+    "fmt:check": "oxfmt --check -c ./oxfmt.json"
+  },
+  "dependencies": {
+    "@nuxt/eslint-config": "catalog:",
+    "@types/node": "catalog:",
+    "postcss-html": "catalog:",
+    "stylelint-config-standard": "catalog:"
+  },
+  "devDependencies": {
+    "cspell": "catalog:",
+    "eslint": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "publint": "catalog:",
+    "stylelint": "catalog:",
+    "typescript": "catalog:"
+  }
+}
