@@ -1,6 +1,7 @@
-export declare const isString: (val: unknown) => val is string
+export const isString = (val: unknown): val is string => typeof val === 'string'
 // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
-export declare const isFunction: (val: unknown) => val is Function
+export const isFunction = (val: unknown): val is Function => typeof val === 'function'
+export const isUndefined = (val: unknown): val is undefined => val === undefined
 
 export function bindMethods<T extends object>(instance: T): void {
   const prototype = Object.getPrototypeOf(instance)

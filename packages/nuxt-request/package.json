@@ -8,7 +8,12 @@
   "exports": {
     ".": {
       "types": "./dist/types.d.mts",
-      "import": "./dist/module.mjs"
+      "import": "./dist/module.mjs",
+      "default": "./dist/module.mjs"
+    },
+    "./runtime": {
+      "types": "./dist/runtime/utils/index.d.ts",
+      "import": "./dist/runtime/utils/index.js"
     }
   },
   "main": "./dist/module.mjs",
@@ -42,8 +47,9 @@
   },
   "dependencies": {
     "@nuxt/kit": "^4.5.2",
-    "qs": "catalog:",
+    "axios": "catalog:",
     "defu": "^6.1.4",
+    "qs": "catalog:",
     "vue-i18n": "^11.4.8"
   },
   "devDependencies": {
@@ -61,7 +67,6 @@
     "typescript": "catalog:",
     "vitest": "^4.1.11",
     "vue-tsc": "catalog:",
-    "axios": "catalog:",
     "axios-mock-adapter": "^2.1.0"
   }
 }

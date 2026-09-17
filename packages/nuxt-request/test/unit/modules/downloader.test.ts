@@ -2,7 +2,7 @@ import type { AxiosRequestConfig } from 'axios'
 
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { FileDownloader } from './downloader'
+import { FileDownloader } from '../../../src/runtime/utils/modules/downloader'
 
 describe('fileDownloader', () => {
   let fileDownloader: FileDownloader

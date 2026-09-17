@@ -1,34 +1,34 @@
-import { useRequest } from '../core/api';
+import { useRequest } from '../core/api'
 
-export const { useRequestHandle, requestPath } =
-  useRequest('/aiEmbeddingStore');
+export const { useRequestHandle, requestPath }
+  = useRequest('/aiEmbeddingStore')
 
 /**
  * 向量配置
  */
 export interface AiEmbeddingStore {
   /**  配置id */
-  storeId: string;
+  storeId: string
   /**  配置类型（0 主机形式 | 1 url形式） */
-  confType: string;
+  confType: string
   /**  名称 */
-  name: string;
+  name: string
   /**  类型 */
-  storeType: string;
+  storeType: string
   /**  密钥 */
-  apiKey: string;
+  apiKey: string
   /**  url */
-  url: string;
+  url: string
   /**  host */
-  host: string;
+  host: string
   /**  端口 */
-  port: string;
+  port: string
   /**  数据库 */
-  extData: string;
+  extData: string
   /**  状态（0正常 1停用） */
-  status: string;
+  status: string
   /**  拼音码 */
-  pinyinCode: string;
+  pinyinCode: string
   /**  五笔码 */
-  wubiCode: string;
+  wubiCode: string
 }

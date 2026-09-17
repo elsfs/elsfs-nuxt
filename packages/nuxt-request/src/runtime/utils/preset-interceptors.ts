@@ -1,11 +1,24 @@
 import type { RequestClient } from './request-client'
 import type { MakeErrorMessageFn, ResponseInterceptorConfig } from './types'
-import { isFunction } from './util.ts'
+import { isFunction } from './util'
 import { useI18n } from 'vue-i18n'
 
 import axios from 'axios'
 
-const { t } = useI18n()
+/**
+ * 获取 vue-i18n 的翻译函数。
+ * `useI18n()` 只能在 Vue setup（或已安装 i18n 实例）的上下文调用，若在纯 TS 环境
+ * （如 api-types）于模块顶层直接调用会抛 MUST_BE_CALL_SETUP_TOP，导致整个
+ * `import 'nuxt-request'` 崩溃。这里延迟到实际使用时再取，取不到就回退为原样返回 key。
+ */
+function getT(): (key: string) => string {
+  try {
+    return useI18n().t
+  }
+  catch {
+    return (key: string) => key
+  }
+}
 
 export const defaultResponseInterceptor = ({
   codeField = 'code',
@@ -125,10 +138,10 @@ export const errorMessageResponseInterceptor = (
       const err: string = error?.toString?.() ?? ''
       let errMsg = ''
       if (err?.includes('Network Error')) {
-        errMsg = t('ui.fallback.http.networkError')
+        errMsg = getT()('ui.fallback.http.networkError')
       }
       else if (error?.message?.includes?.('timeout')) {
-        errMsg = t('ui.fallback.http.requestTimeout')
+        errMsg = getT()('ui.fallback.http.requestTimeout')
       }
       if (errMsg) {
         makeErrorMessage?.(errMsg, error)
@@ -140,27 +153,27 @@ export const errorMessageResponseInterceptor = (
 
       switch (status) {
         case 400: {
-          errorMessage = t('ui.fallback.http.badRequest')
+          errorMessage = getT()('ui.fallback.http.badRequest')
           break
         }
         case 401: {
-          errorMessage = t('ui.fallback.http.unauthorized')
+          errorMessage = getT()('ui.fallback.http.unauthorized')
           break
         }
         case 403: {
-          errorMessage = t('ui.fallback.http.forbidden')
+          errorMessage = getT()('ui.fallback.http.forbidden')
           break
         }
         case 404: {
-          errorMessage = t('ui.fallback.http.notFound')
+          errorMessage = getT()('ui.fallback.http.notFound')
           break
         }
         case 408: {
-          errorMessage = t('ui.fallback.http.requestTimeout')
+          errorMessage = getT()('ui.fallback.http.requestTimeout')
           break
         }
         default: {
-          errorMessage = t('ui.fallback.http.internalServerError')
+          errorMessage = getT()('ui.fallback.http.internalServerError')
         }
       }
       makeErrorMessage?.(errorMessage, error)
