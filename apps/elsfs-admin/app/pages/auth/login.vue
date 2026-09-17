@@ -57,10 +57,10 @@ const { loginSchema } = useAuthValidation()
 
 const { handleSubmit, isSubmitting } = useForm<LoginFormValues>({
   validationSchema: loginSchema,
-  initialValues: { email: '', password: '', remember: false },
+  initialValues: { username: '', password: '', remember: false },
 })
 
-const { value: email, errorMessage: emailError } = useField<string>('email')
+const { value: username, errorMessage: usernameError } = useField<string>('username')
 const { value: password, errorMessage: passwordError } = useField<string>('password')
 const { value: remember } = useField<boolean>('remember')
 
@@ -71,9 +71,9 @@ const errorMessage = computed(() => (auth.errorCode ? t(`errors.${auth.errorCode
 const onSubmit = handleSubmit(async (values) => {
   // 记住账号（仅浏览器环境）
   if (values.remember) {
-    localStorage.setItem('elsfs_remember_email', values.email)
+    localStorage.setItem('elsfs_remember_username', values.username)
   } else {
-    localStorage.removeItem('elsfs_remember_email')
+    localStorage.removeItem('elsfs_remember_username')
   }
   await onLogin(values)
 })
@@ -89,7 +89,7 @@ function goTo(path: string): void {
 async function onLogin(values: LoginFormValues) {
   try {
     await auth.login({
-      email: values.email,
+      username: values.username,
       password: values.password,
       remember: values.remember,
     })
@@ -126,16 +126,16 @@ async function onSocial(provider: string) {
     <ElAlert v-if="errorMessage" type="error" show-icon class="mb-6" :title="errorMessage" />
 
     <ElForm label-position="top" novalidate class="auth-form" @submit="onSubmit">
-      <ElFormItem :label="t('login.email')" :error="emailError">
+      <ElFormItem :label="t('login.username')" :error="usernameError">
         <ElInput
-          v-model="email"
-          type="email"
+          v-model="username"
+          type="text"
           size="large"
-          :placeholder="t('login.emailPlaceholder')"
-          autocomplete="email"
+          :placeholder="t('login.usernamePlaceholder')"
+          autocomplete="username"
         >
           <template #prefix>
-            <AppIcon name="message" class="text-dimmed size-4" />
+            <AppIcon name="user" class="text-dimmed size-4" />
           </template>
         </ElInput>
       </ElFormItem>

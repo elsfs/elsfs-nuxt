@@ -1,11 +1,12 @@
 import { createMockToken } from './_mock'
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody<{ email?: string; password?: string }>(event)
-  const email = (body.email || '').trim()
+  const body = await readBody<{ email?: string; password?: string; username?: string }>(event)
+  // 账号密码登录用 username；兼容旧的 email 字段（注册 / 验证码登录复用本端点）
+  const username = (body.username || body.email || '').trim()
   const password = body.password || ''
 
-  if (!email || !password) {
+  if (!username || !password) {
     throw createError({
       statusCode: 422,
       statusMessage: 'Unprocessable Entity',
@@ -17,11 +18,12 @@ export default defineEventHandler(async (event) => {
   await new Promise((resolve) => setTimeout(resolve, 600))
 
   return {
-    token: createMockToken(email),
+    token: createMockToken(username),
     user: {
       id: '1',
-      name: email.split('@')[0] || 'user',
-      email,
+      name: username,
+      username,
+      email: username.includes('@') ? username : '',
     },
   }
 })

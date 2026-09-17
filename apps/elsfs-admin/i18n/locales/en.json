@@ -26,6 +26,8 @@
   "login": {
     "title": "Welcome back",
     "subtitle": "Sign in to your account to continue",
+    "username": "Username",
+    "usernamePlaceholder": "Enter your username",
     "email": "Email",
     "emailPlaceholder": "you{'@'}example.com",
     "password": "Password",
@@ -88,10 +90,12 @@
   },
   "errors": {
     "VALIDATION_ERROR": "Invalid request, please check and retry",
-    "INVALID_CREDENTIALS": "Incorrect email or password",
+    "INVALID_CREDENTIALS": "Incorrect username or password",
     "EMAIL_TAKEN": "This email is already registered",
     "UNAUTHORIZED": "Your session has expired, please sign in again",
-    "NETWORK_ERROR": "Network error, please try again later"
+    "REQUEST_FAILED": "Request failed, please try again later",
+    "NETWORK_ERROR": "Network error, please try again later",
+    "NOT_SUPPORTED": "This feature is not connected to the backend yet; enable mock mode to use it"
   },
   "codeLogin": {
     "title": "Code login",

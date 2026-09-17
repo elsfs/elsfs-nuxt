@@ -706,7 +706,8 @@ export const ADMIN_MENU_RAW: BackendMenu[] = ADMIN_MENU_RESPONSE.data
 function normalizeNode(node: BackendMenu): AdminMenuItem {
   const meta = node.meta ?? {}
   const title = meta.title ?? node.name ?? node.path ?? ''
-  const id = meta.id ?? node.name ?? node.path ?? title
+  // 真实接口的 id 在顶层，mock 里放在 meta.id
+  const id = node.id ?? meta.id ?? node.name ?? node.path ?? title
 
   return {
     id,

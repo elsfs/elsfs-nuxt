@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export interface LoginFormValues {
-  email: string
+  username: string
   password: string
   remember: boolean
 }
@@ -34,10 +34,7 @@ type Translate = (key: string, params?: Record<string, unknown>) => string
  */
 export function createLoginSchema(t: Translate) {
   return z.object({
-    email: z
-      .string()
-      .min(1, { message: t('validation.required') })
-      .email({ message: t('validation.emailInvalid') }),
+    username: z.string().min(1, { message: t('validation.required') }),
     password: z
       .string()
       .min(1, { message: t('validation.required') })

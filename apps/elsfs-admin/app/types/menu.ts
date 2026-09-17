@@ -30,6 +30,10 @@ export interface BackendMenuMeta {
 
 /** 后端菜单节点 */
 export interface BackendMenu {
+  /** 后端菜单 id（真实接口是顶层字段，收藏 / 匹配依赖它） */
+  id?: string
+  /** 父级 id（顶层为 "0"） */
+  parentId?: string
   name?: string
   path?: string
   redirect?: string

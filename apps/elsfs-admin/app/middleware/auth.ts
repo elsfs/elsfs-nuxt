@@ -2,9 +2,12 @@
  * 认证守卫：未登录用户重定向到登录页，并携带原始目标地址。
  * 用法：definePageMeta({ middleware: 'auth' })
  *
+ * 通过校验后加载当前用户菜单（`GET /user/getMenuVue3`），这样布局 setup 时菜单已就绪，
+ * 多页签能拿到正确的标题；拉取失败时 menu store 会回落到本地 mock，不阻塞导航。
+ *
  * 注意：认证页在 `app/pages/auth/` 下，真实路径是 `/auth/login`。
  */
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   const auth = useAuthStore()
 
   if (!auth.isAuthenticated) {
@@ -13,4 +16,6 @@ export default defineNuxtRouteMiddleware((to) => {
       query: { redirect: to.fullPath },
     })
   }
+
+  await useMenuStore().loadMenus()
 })

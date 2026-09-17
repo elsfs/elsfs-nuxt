@@ -61,23 +61,33 @@ export const authenticateResponseInterceptor = ({
   doRefreshToken,
   enableRefreshToken,
   formatToken,
+  isTokenExpired,
 }: {
   client: RequestClient
   doReAuthenticate: () => Promise<void>
   doRefreshToken: () => Promise<string>
   enableRefreshToken: boolean
   formatToken: (token: string) => null | string
+  /**
+   * 判断错误是否表示「登录态失效」。
+   *
+   * 默认只看 HTTP 401；但不少后端把业务错误（含 token 过期）包在 HTTP 200 的
+   * 响应体里（如 `{ code: -1, type: 'invalid_token' }`），此时需要配合
+   * `defaultResponseInterceptor` 的 rejected 流程，由该回调识别。
+   */
+  isTokenExpired?: (error: any) => boolean
 }): ResponseInterceptorConfig => {
   return {
     rejected: async (error) => {
       const { config, response } = error
-      // 如果不是 401 错误，直接抛出异常
-      if (response?.status !== 401) {
+      // 不是登录态失效的错误，直接抛出异常
+      const expired = isTokenExpired ? isTokenExpired(error) : response?.status === 401
+      if (!expired) {
         throw error
       }
       // 判断是否启用了 refreshToken 功能
       // 如果没有启用或者已经是重试请求了，直接跳转到重新登录
-      if (!enableRefreshToken || config.__isRetryRequest) {
+      if (!config || !enableRefreshToken || config.__isRetryRequest) {
         await doReAuthenticate()
         throw error
       }

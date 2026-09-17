@@ -30,6 +30,13 @@ export default defineNuxtConfig({
     viewTransition: true,
   },
   compatibilityDate: 'latest',
+  // 后端地址与 mock 开关（可用 NUXT_PUBLIC_API_BASE / NUXT_PUBLIC_USE_MOCK 覆盖，见 .env.example）
+  runtimeConfig: {
+    public: {
+      apiBase: 'http://192.168.0.102:6002',
+      useMock: false,
+    },
+  },
   nitro: {
     logLevel: 'info', // 或 'warn' 减少输出
   },

@@ -1,4 +1,6 @@
-import type { AdminMenuLeaf } from '~/types/menu'
+import { fetchUserMenusApi } from '~/api/auth'
+import { useApi } from '~/composables/useApi'
+import type { AdminMenuLeaf, AdminMenuItem } from '~/types/menu'
 import { ADMIN_MENU_RAW, flattenMenuTree, normalizeAdminMenus } from '~/utils/admin-menu'
 
 /**
@@ -10,11 +12,41 @@ const DEFAULT_FAVORITES = ['dashboard-workbench', 'system-user', 'order-list']
 /**
  * 后台菜单状态：菜单树 + 用户收藏。
  *
- * 菜单来自后端结构（`ADMIN_MENU_RAW`，接真实接口时换成 `$fetch`），
- * 这里只做一次规范化；收藏用 cookie 持久化（SSR 安全），只存 id。
+ * 真实接口是 `GET /user/getMenuVue3`（vben 结构），由 `loadMenus()` 拉取后规范化；
+ * `NUXT_PUBLIC_USE_MOCK=true` 时直接用本地 `ADMIN_MENU_RAW`。
+ * 收藏用 cookie 持久化（SSR 安全），只存 id。
  */
 export const useMenuStore = defineStore('menu', () => {
-  const menus = ref(normalizeAdminMenus(ADMIN_MENU_RAW))
+  const { public: publicConfig } = useRuntimeConfig()
+  const api = useApi()
+
+  const menus = ref<AdminMenuItem[]>(
+    publicConfig.useMock ? normalizeAdminMenus(ADMIN_MENU_RAW) : [],
+  )
+  const loaded = ref(Boolean(publicConfig.useMock))
+  const loading = ref(false)
+
+  /**
+   * 拉取当前用户菜单。
+   * 真实接口失败时回落到本地 mock，保证后台外壳可用（不阻塞导航）。
+   */
+  async function loadMenus(force = false): Promise<void> {
+    if (loading.value || (loaded.value && !force)) {
+      return
+    }
+    loading.value = true
+    try {
+      const raw = publicConfig.useMock ? ADMIN_MENU_RAW : await fetchUserMenusApi(api)
+      menus.value = normalizeAdminMenus(raw)
+      loaded.value = true
+    } catch {
+      if (!menus.value.length) {
+        menus.value = normalizeAdminMenus(ADMIN_MENU_RAW)
+      }
+    } finally {
+      loading.value = false
+    }
+  }
 
   const favoriteCookie = useCookie<string[] | null>('elsfs_menu_favorites', {
     default: () => [...DEFAULT_FAVORITES],
@@ -93,6 +125,9 @@ export const useMenuStore = defineStore('menu', () => {
 
   return {
     menus,
+    loaded,
+    loading,
+    loadMenus,
     favoriteIds,
     leaves,
     leafMap,
