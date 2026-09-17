@@ -1,3 +1,3 @@
-import { useRequest } from '../core/api';
+import { useRequest } from '../core/api'
 
-export const { useRequestHandle, requestPath } = useRequest('/carousel');
+export const { useRequestHandle, requestPath } = useRequest('/carousel')

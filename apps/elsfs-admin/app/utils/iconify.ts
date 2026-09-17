@@ -61,7 +61,7 @@ function resolveAlias(
 /** 解析 `mdi:home` / `mdi--home` / `icon-[mdi--home]`，命中本地图标集时返回 SVG */
 export function resolveIconifyIcon(raw: string): ResolvedIconifyIcon | undefined {
   const name = raw.trim().replace(/^icon-\[(.+)\]$/, '$1')
-  const separator = name.includes('--') ? '--' : (name.includes(':') ? ':' : '')
+  const separator = name.includes('--') ? '--' : name.includes(':') ? ':' : ''
   if (!separator) {
     return undefined
   }

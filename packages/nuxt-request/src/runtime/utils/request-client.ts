@@ -1,33 +1,26 @@
 import type { AxiosInstance, AxiosResponse } from 'axios'
-
-import type { RequestClientConfig, RequestClientOptions } from './types'
-
-import { bindMethods, isString } from './util'
-import { defu } from 'defu'
-
 import axios from 'axios'
+import { defu } from 'defu'
 import qs from 'qs'
 
 import { FileDownloader } from './modules/downloader'
 import { InterceptorManager } from './modules/interceptor'
 import { SSE } from './modules/sse'
 import { FileUploader } from './modules/uploader'
+import type { RequestClientConfig, RequestClientOptions } from './types'
+import { bindMethods, isString } from './util'
 
-function getParamsSerializer(
-  paramsSerializer: RequestClientOptions['paramsSerializer'],
-) {
+function getParamsSerializer(paramsSerializer: RequestClientOptions['paramsSerializer']) {
   if (isString(paramsSerializer)) {
     switch (paramsSerializer) {
       case 'brackets': {
-        return (params: any) =>
-          qs.stringify(params, { arrayFormat: 'brackets' })
+        return (params: any) => qs.stringify(params, { arrayFormat: 'brackets' })
       }
       case 'comma': {
         return (params: any) => qs.stringify(params, { arrayFormat: 'comma' })
       }
       case 'indices': {
-        return (params: any) =>
-          qs.stringify(params, { arrayFormat: 'indices' })
+        return (params: any) => qs.stringify(params, { arrayFormat: 'indices' })
       }
       case 'repeat': {
         return (params: any) => qs.stringify(params, { arrayFormat: 'repeat' })
@@ -68,19 +61,15 @@ class RequestClient {
     }
     const { ...axiosConfig } = options
     const requestConfig = defu(axiosConfig, defaultConfig)
-    requestConfig.paramsSerializer = getParamsSerializer(
-      requestConfig.paramsSerializer,
-    )
+    requestConfig.paramsSerializer = getParamsSerializer(requestConfig.paramsSerializer)
     this.instance = axios.create(requestConfig)
 
     bindMethods(this)
 
     // 实例化拦截器管理器
     const interceptorManager = new InterceptorManager(this.instance)
-    this.addRequestInterceptor
-      = interceptorManager.addRequestInterceptor.bind(interceptorManager)
-    this.addResponseInterceptor
-      = interceptorManager.addResponseInterceptor.bind(interceptorManager)
+    this.addRequestInterceptor = interceptorManager.addRequestInterceptor.bind(interceptorManager)
+    this.addResponseInterceptor = interceptorManager.addResponseInterceptor.bind(interceptorManager)
 
     // 实例化文件上传器
     const fileUploader = new FileUploader(this)
@@ -97,10 +86,7 @@ class RequestClient {
   /**
    * DELETE请求方法
    */
-  public delete<T = any>(
-    url: string,
-    config?: RequestClientConfig,
-  ): Promise<T> {
+  public delete<T = any>(url: string, config?: RequestClientConfig): Promise<T> {
     return this.request<T>(url, { ...config, method: 'DELETE' })
   }
 
@@ -121,32 +107,21 @@ class RequestClient {
   /**
    * POST请求方法
    */
-  public post<T = any>(
-    url: string,
-    data?: any,
-    config?: RequestClientConfig,
-  ): Promise<T> {
+  public post<T = any>(url: string, data?: any, config?: RequestClientConfig): Promise<T> {
     return this.request<T>(url, { ...config, data, method: 'POST' })
   }
 
   /**
    * PUT请求方法
    */
-  public put<T = any>(
-    url: string,
-    data?: any,
-    config?: RequestClientConfig,
-  ): Promise<T> {
+  public put<T = any>(url: string, data?: any, config?: RequestClientConfig): Promise<T> {
     return this.request<T>(url, { ...config, data, method: 'PUT' })
   }
 
   /**
    * 通用的请求方法
    */
-  public async request<T>(
-    url: string,
-    config: RequestClientConfig,
-  ): Promise<T> {
+  public async request<T>(url: string, config: RequestClientConfig): Promise<T> {
     try {
       const response: AxiosResponse<T> = await this.instance({
         url,
@@ -156,8 +131,7 @@ class RequestClient {
           : {}),
       })
       return response as T
-    }
-    catch (error: any) {
+    } catch (error: any) {
       throw error.response ? error.response.data : error
     }
   }

@@ -22,10 +22,7 @@ const stats = [
       {{ t('admin.welcomeTitle') }}
     </h1>
 
-    <p
-      v-if="auth.user"
-      class="mt-2 text-sm text-muted-foreground"
-    >
+    <p v-if="auth.user" class="text-muted-foreground mt-2 text-sm">
       {{ t('admin.currentUser') }}：{{ auth.user.email }}
     </p>
 
@@ -33,14 +30,11 @@ const stats = [
       <div
         v-for="item in stats"
         :key="item.key"
-        class="rounded-xl border border-border bg-card p-4"
+        class="border-border bg-card rounded-xl border p-4"
       >
-        <div class="flex items-center justify-between text-muted-foreground">
+        <div class="text-muted-foreground flex items-center justify-between">
           <span class="text-xs">{{ t(`admin.stats.${item.key}`) }}</span>
-          <AppIcon
-            :name="item.icon"
-            class="size-4"
-          />
+          <AppIcon :name="item.icon" class="size-4" />
         </div>
         <div class="mt-3 text-xl font-semibold">
           {{ item.value }}
@@ -48,7 +42,9 @@ const stats = [
       </div>
     </div>
 
-    <p class="mt-6 rounded-xl border border-dashed border-border p-5 text-sm leading-relaxed text-muted-foreground">
+    <p
+      class="border-border text-muted-foreground mt-6 rounded-xl border border-dashed p-5 text-sm leading-relaxed"
+    >
       {{ t('admin.favoritesHint') }}
     </p>
   </div>

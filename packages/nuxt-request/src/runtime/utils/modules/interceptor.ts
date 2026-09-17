@@ -1,18 +1,15 @@
 import type { AxiosInstance, AxiosResponse } from 'axios'
 
-import type {
-  RequestInterceptorConfig,
-  ResponseInterceptorConfig,
-} from '../types'
+import type { RequestInterceptorConfig, ResponseInterceptorConfig } from '../types'
 
 const defaultRequestInterceptorConfig: RequestInterceptorConfig = {
-  fulfilled: response => response,
-  rejected: error => Promise.reject(error),
+  fulfilled: (response) => response,
+  rejected: (error) => Promise.reject(error),
 }
 
 const defaultResponseInterceptorConfig: ResponseInterceptorConfig = {
   fulfilled: (response: AxiosResponse) => response,
-  rejected: error => Promise.reject(error),
+  rejected: (error) => Promise.reject(error),
 }
 
 class InterceptorManager {

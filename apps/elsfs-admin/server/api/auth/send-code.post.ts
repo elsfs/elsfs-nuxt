@@ -1,13 +1,17 @@
 export default defineEventHandler(async (event) => {
-  const body = await readBody<{ email?: string, scene?: string }>(event)
+  const body = await readBody<{ email?: string; scene?: string }>(event)
   const email = (body.email || '').trim()
 
   if (!email) {
-    throw createError({ statusCode: 422, statusMessage: 'Unprocessable Entity', message: 'VALIDATION_ERROR' })
+    throw createError({
+      statusCode: 422,
+      statusMessage: 'Unprocessable Entity',
+      message: 'VALIDATION_ERROR',
+    })
   }
 
   // 演示环境：不真实发送，模拟延迟后成功
-  await new Promise(resolve => setTimeout(resolve, 500))
+  await new Promise((resolve) => setTimeout(resolve, 500))
 
   return {
     ok: true,

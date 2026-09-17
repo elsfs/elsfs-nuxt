@@ -63,8 +63,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = data.user
       status.value = 'success'
       return data
-    }
-    catch (e: unknown) {
+    } catch (e: unknown) {
       status.value = 'error'
       errorCode.value = (e as { data?: { message?: string } })?.data?.message || 'NETWORK_ERROR'
       throw e
@@ -72,10 +71,12 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function login(payload: LoginPayload): Promise<AuthResponse> {
-    return handleRequest($fetch<AuthResponse>('/api/auth/login', {
-      method: 'POST',
-      body: payload,
-    }))
+    return handleRequest(
+      $fetch<AuthResponse>('/api/auth/login', {
+        method: 'POST',
+        body: payload,
+      }),
+    )
   }
 
   /**
@@ -84,10 +85,12 @@ export const useAuthStore = defineStore('auth', () => {
    * code 仅用于前端演示，不参与服务端真实校验。
    */
   async function codeLogin(payload: CodeLoginPayload): Promise<AuthResponse> {
-    return handleRequest($fetch<AuthResponse>('/api/auth/login', {
-      method: 'POST',
-      body: { email: payload.email, password: payload.code, remember: false },
-    }))
+    return handleRequest(
+      $fetch<AuthResponse>('/api/auth/login', {
+        method: 'POST',
+        body: { email: payload.email, password: payload.code, remember: false },
+      }),
+    )
   }
 
   /**
@@ -105,8 +108,7 @@ export const useAuthStore = defineStore('auth', () => {
       })
       status.value = 'success'
       return '123456'
-    }
-    catch (e: unknown) {
+    } catch (e: unknown) {
       status.value = 'error'
       errorCode.value = (e as { data?: { message?: string } })?.data?.message || 'NETWORK_ERROR'
       throw e
@@ -123,8 +125,7 @@ export const useAuthStore = defineStore('auth', () => {
         body: { email },
       })
       status.value = 'success'
-    }
-    catch (e: unknown) {
+    } catch (e: unknown) {
       status.value = 'error'
       errorCode.value = (e as { data?: { message?: string } })?.data?.message || 'NETWORK_ERROR'
       throw e
@@ -132,17 +133,21 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function register(payload: RegisterPayload): Promise<AuthResponse> {
-    return handleRequest($fetch<AuthResponse>('/api/auth/register', {
-      method: 'POST',
-      body: payload,
-    }))
+    return handleRequest(
+      $fetch<AuthResponse>('/api/auth/register', {
+        method: 'POST',
+        body: payload,
+      }),
+    )
   }
 
   async function socialLogin(provider: string): Promise<AuthResponse> {
-    return handleRequest($fetch<AuthResponse>('/api/auth/social', {
-      method: 'POST',
-      body: { provider },
-    }))
+    return handleRequest(
+      $fetch<AuthResponse>('/api/auth/social', {
+        method: 'POST',
+        body: { provider },
+      }),
+    )
   }
 
   /** 拉取当前用户信息（刷新页面后恢复登录态） */
@@ -150,8 +155,7 @@ export const useAuthStore = defineStore('auth', () => {
     if (!token.value || user.value) return
     try {
       user.value = await $fetch<AuthUser>('/api/auth/me')
-    }
-    catch {
+    } catch {
       logout()
     }
   }

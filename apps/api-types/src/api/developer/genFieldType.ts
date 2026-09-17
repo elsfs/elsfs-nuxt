@@ -1,19 +1,19 @@
-import { useRequest } from '../core/api';
+import { useRequest } from '../core/api'
 
-export const { useRequestHandle, requestPath } = useRequest('/genFieldType');
+export const { useRequestHandle, requestPath } = useRequest('/genFieldType')
 /**
  * 列属性类型
  */
 export interface GenFieldType {
   /** id */
-  id?: string;
+  id?: string
 
   /** 字段类型 */
-  columnType: string;
+  columnType: string
 
   /** 属性类型 */
-  attrType: string;
+  attrType: string
 
   /** 属性包名 */
-  packageName: string;
+  packageName: string
 }

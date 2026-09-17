@@ -1,5 +1,5 @@
 <template>
-  <div class="hidden lg:block space-y-6">
+  <div class="hidden space-y-6 lg:block">
     <USeparator type="dashed" />
     <AdsCarbon />
   </div>

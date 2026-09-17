@@ -1,6 +1,4 @@
-import {useRequest} from "../core/api";
-
-
+import { useRequest } from '../core/api'
 
 /**
  * 操作日志实体
@@ -8,49 +6,49 @@ import {useRequest} from "../core/api";
  */
 export interface OperationLog extends BaseEntity {
   /** ID */
-  operationLogId: string;
+  operationLogId: string
 
   /** 操作用户ID */
-  userId: string;
+  userId: string
 
   /** 操作用户名 */
-  username: string;
+  username: string
 
   /** 操作模块 */
-  module: string;
+  module: string
 
   /** 操作类型：CREATE、UPDATE、DELETE、QUERY、LOGIN、LOGOUT、OTHER */
-  operationType: string;
+  operationType: string
 
   /** 操作描述 */
-  description: string;
+  description: string
 
   /** 请求方法（GET、POST、PUT、DELETE） */
-  requestMethod: string;
+  requestMethod: string
 
   /** 请求URL */
-  requestUrl: string;
+  requestUrl: string
 
   /** 请求参数 */
-  requestParams: string;
+  requestParams: string
 
   /** 响应数据 */
-  responseData: string;
+  responseData: string
 
   /** IP地址 */
-  ip: string;
+  ip: string
 
   /** 设备信息 */
-  deviceInfo: string;
+  deviceInfo: string
 
   /** 执行时长（毫秒） */
-  executeTime: number;
+  executeTime: number
 
   /** 操作状态：success、fail */
-  status: string;
+  status: string
 
   /** 错误信息 */
-  errorMsg: string;
+  errorMsg: string
 }
 
 /**
@@ -58,16 +56,13 @@ export interface OperationLog extends BaseEntity {
  */
 export interface BaseEntity {
   /** 创建时间 */
-  createTime?: Date | string;
+  createTime?: Date | string
   /** 更新时间 */
-  updateTime?: Date | string;
+  updateTime?: Date | string
   /** 创建人 */
-  createBy?: string;
+  createBy?: string
   /** 更新人 */
-  updateBy?: string;
-
+  updateBy?: string
 }
 
-
-
-export const { useRequestHandle, requestPath } = useRequest('/operationLog');
+export const { useRequestHandle, requestPath } = useRequest('/operationLog')

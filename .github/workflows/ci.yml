@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  lint:
+  quality:
     runs-on: ubuntu-latest
 
     steps:
@@ -24,11 +24,14 @@ jobs:
       - name: Install dependencies
         run: npx nypm@latest i
 
-      - name: Lint
-        run: npm run lint
+      - name: Lint (eslint / oxlint / stylelint / cspell / publint)
+        run: pnpm lint
+
+      - name: Format check (oxfmt)
+        run: pnpm fmt:check
 
       - name: Typecheck
-        run: npm run typecheck
+        run: pnpm typecheck
 
   build:
     runs-on: ubuntu-latest
@@ -45,5 +48,8 @@ jobs:
       - name: Install dependencies
         run: npx nypm@latest i
 
-      - name: Build
-        run: npm run build
+      - name: Build (elsfs-admin)
+        run: pnpm --filter elsfs-nuxt build
+
+      - name: Build (elsfs-content)
+        run: pnpm --filter elsfs-content build

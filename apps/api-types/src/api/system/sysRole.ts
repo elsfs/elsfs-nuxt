@@ -1,6 +1,6 @@
-import { useRequest } from '../core/api';
+import { useRequest } from '../core/api'
 
-export const { useRequestHandle, requestPath } = useRequest('/role');
+export const { useRequestHandle, requestPath } = useRequest('/role')
 
 /**
  * 角色数据库实体
@@ -9,25 +9,25 @@ export interface SysRole {
   /**
    * 角色ID
    */
-  roleId: string;
+  roleId: string
   /**
    * 角色名称
    */
-  roleName: string;
+  roleName: string
   /**
    * 角色编码
    */
-  roleCode: string;
+  roleCode: string
   /**
    * 角色描述
    */
-  roleDesc?: string;
+  roleDesc?: string
   /**
    * 排序
    */
-  orderNo: number;
+  orderNo: number
   /**
    * 状态
    */
-  status?: string;
+  status?: string
 }

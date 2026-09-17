@@ -37,7 +37,7 @@ export const useMenuStore = defineStore('menu', () => {
 
   /** 所有叶子菜单（可收藏项） */
   const leaves = computed(() => flattenMenuTree(menus.value))
-  const leafMap = computed(() => new Map(leaves.value.map(leaf => [leaf.id, leaf])))
+  const leafMap = computed(() => new Map(leaves.value.map((leaf) => [leaf.id, leaf])))
 
   /**
    * 按当前路由地址找叶子菜单：
@@ -47,13 +47,13 @@ export const useMenuStore = defineStore('menu', () => {
     if (path.startsWith('/menu/')) {
       return leafMap.value.get(path.slice('/menu/'.length))
     }
-    return leaves.value.find(leaf => leaf.path === path)
+    return leaves.value.find((leaf) => leaf.path === path)
   }
 
   /** 收藏项，顺序与收藏时间一致 */
   const favorites = computed<AdminMenuLeaf[]>(() =>
     favoriteIds.value
-      .map(id => leafMap.value.get(id))
+      .map((id) => leafMap.value.get(id))
       .filter((leaf): leaf is AdminMenuLeaf => Boolean(leaf)),
   )
 
@@ -64,13 +64,13 @@ export const useMenuStore = defineStore('menu', () => {
   }
 
   function toggleFavorite(id: string): void {
-    setFavoriteIds(isFavorite(id)
-      ? favoriteIds.value.filter(item => item !== id)
-      : [...favoriteIds.value, id])
+    setFavoriteIds(
+      isFavorite(id) ? favoriteIds.value.filter((item) => item !== id) : [...favoriteIds.value, id],
+    )
   }
 
   function removeFavorite(id: string): void {
-    setFavoriteIds(favoriteIds.value.filter(item => item !== id))
+    setFavoriteIds(favoriteIds.value.filter((item) => item !== id))
   }
 
   /** 拖拽排序：把 from 位置的收藏移到 to 位置（收藏顺序即数组顺序，直接落 cookie） */

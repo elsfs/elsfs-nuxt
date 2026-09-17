@@ -1,16 +1,19 @@
 <script setup lang="ts">
 const siteConfig = useSiteConfig()
 
-const { data: page } = await useAsyncData('blog-landing', () => queryCollection('landing').path('/blog').first())
+const { data: page } = await useAsyncData('blog-landing', () =>
+  queryCollection('landing').path('/blog').first(),
+)
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
-const { data: posts } = await useAsyncData('blog-posts', () => queryCollection('posts')
-  .where('path', 'LIKE', '/blog%')
-  .where('draft', '=', 0)
-  .order('date', 'DESC')
-  .all(),
+const { data: posts } = await useAsyncData('blog-posts', () =>
+  queryCollection('posts')
+    .where('path', 'LIKE', '/blog%')
+    .where('draft', '=', 0)
+    .order('date', 'DESC')
+    .all(),
 )
 
 useSeoMeta({
@@ -25,10 +28,7 @@ useSeoMeta({
 
 <template>
   <UPage>
-    <UPageHero
-      :title="page?.title"
-      :description="page?.description"
-    />
+    <UPageHero :title="page?.title" :description="page?.description" />
 
     <UPageBody>
       <UContainer>

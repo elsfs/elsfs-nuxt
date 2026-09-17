@@ -39,3 +39,12 @@ catalog:
   axios: ^1.18.1
   qs: ^6.15.3
   '@types/qs': ^6.15.1
+  # ---------代码质量工具（code-quality 包共享）----------
+  '@nuxt/eslint-config': ^1.17.0
+  oxlint: ^1.83.0
+  oxfmt: ^0.68.0
+  stylelint: ^17.15.0
+  stylelint-config-standard: ^40.0.0
+  postcss-html: ^2.0.0
+  cspell: ^10.3.3
+  publint: ^0.3.24

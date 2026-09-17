@@ -9,21 +9,34 @@
     "build": "nuxt build .playground",
     "generate": "nuxt generate .playground",
     "preview": "nuxt preview .playground",
-    "lint": "eslint ."
+    "lint": "pnpm lint:eslint && pnpm lint:oxlint && pnpm lint:style && pnpm lint:spell",
+    "lint:eslint": "eslint .",
+    "lint:oxlint": "oxlint",
+    "lint:style": "stylelint --allow-empty-input \"**/*.{css,vue}\"",
+    "lint:spell": "cspell lint \"**/*.{ts,vue,js,mjs,cjs,json,jsonc,md,mdx,css,yaml,yml}\"",
+    "fmt": "oxfmt -c ../code-quality/oxfmt.json",
+    "fmt:check": "oxfmt --check -c ../code-quality/oxfmt.json"
   },
   "dependencies": {
     "@iconify-json/mdi": "^1.2.0",
     "@iconify/tailwind4": "catalog:",
-    "@tailwindcss/typography": "catalog:",
-    "tailwindcss": "catalog:",
-    "tw-animate-css": "catalog:",
     "@nuxtjs/tailwindcss": "catalog:",
-    "nuxt": "catalog:"
+    "@tailwindcss/typography": "catalog:",
+    "nuxt": "catalog:",
+    "tailwindcss": "catalog:",
+    "tw-animate-css": "catalog:"
   },
   "devDependencies": {
     "@nuxt/eslint": "catalog:",
     "@types/node": "catalog:",
+    "code-quality": "workspace:*",
+    "cspell": "catalog:",
     "eslint": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "postcss-html": "catalog:",
+    "stylelint": "catalog:",
+    "stylelint-config-standard": "catalog:",
     "typescript": "catalog:",
     "vue": "catalog:"
   }

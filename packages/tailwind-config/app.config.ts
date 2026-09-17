@@ -1,7 +1,7 @@
 export default defineAppConfig({
   elsfsComponents: {
-    name: 'Hello from Nuxt layer'
-  }
+    name: 'Hello from Nuxt layer',
+  },
 })
 
 declare module '@nuxt/schema' {

@@ -1,5 +1,1 @@
-export default eventHandler(
-  () => {
-
-  },
-)
+export default eventHandler(() => {})

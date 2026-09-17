@@ -1,9 +1,12 @@
-export const formatDateByLocale = (d: string | number | Date, options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' }) => {
+export const formatDateByLocale = (
+  d: string | number | Date,
+  options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' },
+) => {
   return new Date(d).toLocaleDateString('zh-CN', options)
 }
 
 export const TEMPLATE_BADGES = {
-  'free': {
+  free: {
     color: 'secondary' as const,
     label: '免费',
   },
@@ -28,4 +31,5 @@ export const POST_CATEGORY_LABELS: Record<string, string> = {
 
 export const formatPostType = (type?: string) => (type ? (POST_TYPE_LABELS[type] ?? type) : '')
 
-export const formatCategory = (category?: string) => (category ? (POST_CATEGORY_LABELS[category.toLowerCase()] ?? category) : '')
+export const formatCategory = (category?: string) =>
+  category ? (POST_CATEGORY_LABELS[category.toLowerCase()] ?? category) : ''

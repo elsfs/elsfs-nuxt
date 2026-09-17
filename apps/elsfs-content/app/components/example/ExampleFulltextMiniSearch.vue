@@ -21,25 +21,13 @@ const result = computed(() => miniSearch.search(toValue(query)).slice(0, 10))
 <template>
   <UContainer class="p-4">
     <UCard>
-      <UInput
-        v-model="query"
-        placeholder="搜索..."
-        class="w-full"
-      />
+      <UInput v-model="query" placeholder="搜索..." class="w-full" />
       <ul>
-        <li
-          v-for="link of result"
-          :key="link.id"
-          class="mt-2"
-        >
-          <UButton
-            variant="ghost"
-            class="w-full"
-            :to="link.id"
-          >
+        <li v-for="link of result" :key="link.id" class="mt-2">
+          <UButton variant="ghost" class="w-full" :to="link.id">
             <div class="flex flex-col">
-              <span class="text-black dark:text-white font-semibold">{{ link.title }}</span>
-              <span class="text-gray-500 text-xs truncate">
+              <span class="font-semibold text-black dark:text-white">{{ link.title }}</span>
+              <span class="truncate text-xs text-gray-500">
                 {{ link.content?.slice(0, 100) }}...
               </span>
             </div>

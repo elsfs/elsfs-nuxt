@@ -1,12 +1,16 @@
 <script setup lang="ts">
 const siteConfig = useSiteConfig()
 
-const { data: page } = await useAsyncData('templates-landing', () => queryCollection('landing').path('/templates').first())
+const { data: page } = await useAsyncData('templates-landing', () =>
+  queryCollection('landing').path('/templates').first(),
+)
 if (!page.value) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
 
-const { data: templates } = await useAsyncData('templates', () => queryCollection('templates').where('draft', '=', 0).all())
+const { data: templates } = await useAsyncData('templates', () =>
+  queryCollection('templates').where('draft', '=', 0).all(),
+)
 
 useSeoMeta({
   title: page.value.seo?.title,
@@ -20,10 +24,7 @@ useSeoMeta({
 
 <template>
   <UPage>
-    <UPageHero
-      :title="page?.title"
-      :description="page?.description"
-    />
+    <UPageHero :title="page?.title" :description="page?.description" />
 
     <UPageBody>
       <UContainer>

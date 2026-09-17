@@ -4,9 +4,9 @@ const route = useRoute()
 // 访问 /posts/1 时，route.params.id 的值为 1
 console.log(route.params.id)
 definePageMeta({
-  validate: async (route) => {
+  validate: async (to) => {
     // 检查 id 是否由数字组成
-    return typeof route.params.id === 'string' && /^\d+$/.test(route.params.id)
+    return typeof to.params.id === 'string' && /^\d+$/.test(to.params.id)
   },
 })
 </script>

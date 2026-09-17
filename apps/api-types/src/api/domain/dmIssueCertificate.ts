@@ -1,9 +1,7 @@
-import { useRequest } from '../core/api';
-import { requestClient } from '../request';
+import { useRequest } from '../core/api'
+import { requestClient } from '../request'
 
-export const { useRequestHandle, requestPath } = useRequest(
-  '/dmIssueCertificate',
-);
+export const { useRequestHandle, requestPath } = useRequest('/dmIssueCertificate')
 
 /**
  * 生成检测
@@ -15,7 +13,7 @@ export function generateVerification(issueCertificateId: string) {
     {
       timeout: 1000 * 60,
     },
-  );
+  )
 }
 
 /**
@@ -28,26 +26,26 @@ export function getCertificateChallenges(issueCertificateId: string) {
     {
       timeout: 1000 * 60,
     },
-  );
+  )
 }
 
 /**
  * 挑战方式
  */
-type ChallengeType = 'dns-01' | 'http-01';
+type ChallengeType = 'dns-01' | 'http-01'
 
 /**
  * 验证证书
  */
 export interface VerifyCertificateCO {
-  issueCertificateId: string;
-  challengeType: ChallengeType;
+  issueCertificateId: string
+  challengeType: ChallengeType
 }
 
 export function verifyCertificate(data: VerifyCertificateCO) {
   return requestClient().post(`/dmIssueCertificate/verifyCertificate`, data, {
     timeout: 1000 * 60,
-  });
+  })
 }
 
 /**
@@ -59,116 +57,116 @@ export function verifyCertificate(data: VerifyCertificateCO) {
  */
 export interface DmIssueCertificate {
   /** 主键ID */
-  issueCertificateId: string;
+  issueCertificateId: string
 
   /** 域名列表（JSON字符串） */
-  domainRaw?: string;
+  domainRaw?: string
 
   /** SSL证书 */
-  sslCertificate?: string;
+  sslCertificate?: string
 
   /** SSL证书私钥 */
-  sslCertificateKey?: string;
+  sslCertificateKey?: string
 
   /** SSL签发时间 */
-  startTime?: string; // 格式: "yyyy-MM-dd HH:mm:ss"
+  startTime?: string // 格式: "yyyy-MM-dd HH:mm:ss"
 
   /** SSL过期时间 */
-  expireTime?: string; // 格式: "yyyy-MM-dd HH:mm:ss"
+  expireTime?: string // 格式: "yyyy-MM-dd HH:mm:ss"
 
   /** 证书提供商 */
-  directoryType?: string;
+  directoryType?: string
 
   /** 加密方式 (RSA等) */
-  keyType?: string;
+  keyType?: string
 
   /** 域名验证类型 http dns */
-  challengeType?: string;
+  challengeType?: string
 
   /** 验证文件部署方式 ssh dns */
-  challengeDeployTypeId?: number;
+  challengeDeployTypeId?: number
 
   /** 验证文件部署账号 */
-  challengeDeployId?: string;
+  challengeDeployId?: string
 
   /** 验证文件部署状态 */
-  challengeDeployStatus?: number;
+  challengeDeployStatus?: number
 
   /** 验证文件部署目录 */
-  deployVerifyPath?: string;
+  deployVerifyPath?: string
 
   /** 域名验证token */
-  token?: string;
+  token?: string
 
   /** 域名验证数据 */
-  validation?: string;
+  validation?: string
 
   /** 验证状态url */
-  statusUrl?: string;
+  statusUrl?: string
 
   /** 验证状态 valid pending */
-  validationStatus?: string;
+  validationStatus?: string
 
   /** 部署方式 ssh api oss */
-  deployTypeId?: string;
+  deployTypeId?: string
 
   /** 部署机器 */
-  deployHostId?: string;
+  deployHostId?: string
 
   /** key部署路径 */
-  deployKeyFile?: string;
+  deployKeyFile?: string
 
   /** pem部署路径 */
-  deployFullchainFile?: string;
+  deployFullchainFile?: string
 
   /** 部署重启命令 */
-  deployReloadcmd?: string;
+  deployReloadcmd?: string
 
   /** 部署请求url */
-  deployUrl?: string;
+  deployUrl?: string
 
   /** 部署请求头（JSON字符串） */
-  deployHeaderRaw?: string;
+  deployHeaderRaw?: string
 
   /** 部署参数（JSON字符串） */
-  deployParamsRaw?: string;
+  deployParamsRaw?: string
 
   /** ssl证书文件部署状态 */
-  sslDeployStatus?: number;
+  sslDeployStatus?: number
 
   /** 自动续期 */
-  isAutoRenew?: boolean;
+  isAutoRenew?: boolean
 
   /** 数据版本号 */
-  version?: number;
+  version?: number
 
   /** 挑战URL - 只读属性，由token计算得出 */
-  challengeUrl?: string;
+  challengeUrl?: string
 
   /** 是否有SSL证书 - 只读属性，由sslCertificate计算得出 */
-  hasSslCertificate?: boolean;
-  createAt?: string;
-  updateAt?: string;
-  deleted?: number;
+  hasSslCertificate?: boolean
+  createAt?: string
+  updateAt?: string
+  deleted?: number
 }
 
 export interface CertificateChallenge {
-  type: string;
+  type: string
 }
 
 // DmChallengeInfo.ts
 
 export interface DmChallengeInfo {
-  domain: string;
-  type: string;
-  challengeEntity: ChallengeEntity;
-  token: string;
-  validation: string;
+  domain: string
+  type: string
+  challengeEntity: ChallengeEntity
+  token: string
+  validation: string
 }
 
 export interface ChallengeEntity {
-  status: string;
-  token: string;
-  type: string;
-  url: string;
+  status: string
+  token: string
+  type: string
+  url: string
 }

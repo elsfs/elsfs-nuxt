@@ -1,67 +1,64 @@
-import { requestClient } from '../request';
+import { requestClient } from '../request'
 
 /**
  * 表信息 --列信息
  */
 export interface TableColumnVO {
   /** 目录 */
-  tableCatalog: string;
+  tableCatalog: string
   /** 模式 库名 */
-  tableSchema: string;
+  tableSchema: string
   /** 表名 */
-  tableName: string;
+  tableName: string
   /** 字段名 */
-  columnName: string;
+  columnName: string
   /** 字段位置 排序 */
-  ordinalPosition: string;
+  ordinalPosition: string
   /** 默认值 */
-  columnDefault: string;
+  columnDefault: string
   /** 是否为空 */
-  isNullable: string;
+  isNullable: string
   /** 字段类型 */
-  dataType: string;
+  dataType: string
   /** 最大长度 */
-  characterMaximumLength: string;
+  characterMaximumLength: string
   /** 字节长度 */
-  characterOctetLength: string;
+  characterOctetLength: string
   /** 精度 */
-  numericPrecision: string;
+  numericPrecision: string
   /** 小数位数 */
-  numericScale: string;
+  numericScale: string
   /** 日期精度 */
-  datetimePrecision: string;
+  datetimePrecision: string
   /** 字符集 */
-  characterSetName: string;
+  characterSetName: string
   /** 排序规则 */
-  collationName: string;
+  collationName: string
   /** 字段类型 */
-  columnType: string;
+  columnType: string
   /** 字段键值 pri 主键 mul 多重索引 */
-  columnKey: string;
+  columnKey: string
   /** 额外信息 自增 */
-  extra: string;
+  extra: string
   /** 权限 */
-  privileges: string;
+  privileges: string
   /** 字段描述 */
-  columnComment: string;
+  columnComment: string
   /** 表达式 */
-  generationExpression: string;
+  generationExpression: string
   /** 空间 id */
-  srsId: string;
+  srsId: string
 }
 
 /**
  * 分页查询
  */
 export async function tablePage(params) {
-  return requestClient().get(`/table/page`, { params });
+  return requestClient().get(`/table/page`, { params })
 }
 /**
  * 查询表属性列表
  */
-export async function tableColumnList(
-  dsName: string,
-  tableName: string,
-): Promise<TableColumnVO[]> {
-  return requestClient().get(`/table/tableColumnList/${dsName}/${tableName}`);
+export async function tableColumnList(dsName: string, tableName: string): Promise<TableColumnVO[]> {
+  return requestClient().get(`/table/tableColumnList/${dsName}/${tableName}`)
 }

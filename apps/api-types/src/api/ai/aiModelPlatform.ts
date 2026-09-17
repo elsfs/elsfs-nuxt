@@ -1,27 +1,27 @@
-import { useRequest } from '../core/api';
+import { useRequest } from '../core/api'
 
-export const { useRequestHandle, requestPath } = useRequest('/aiModelPlatform');
+export const { useRequestHandle, requestPath } = useRequest('/aiModelPlatform')
 
 /**
  * 模型平台
  */
 export interface AiModelPlatform {
   /**  平台id */
-  platformId: string;
+  platformId: string
   /**  平台名称 */
-  name: string;
+  name: string
   /**  平台描述 */
-  description: string;
+  description: string
   /**  平台类型 */
-  type: string;
+  type: string
   /**  地址 */
-  baseUrl: string;
+  baseUrl: string
   /**  apiKey */
-  apiKey: string;
+  apiKey: string
   /**  状态（0正常 1停用） */
-  status: string;
+  status: string
   /**  拼音码 */
-  pinyinCode: string;
+  pinyinCode: string
   /**  五笔码 */
-  wubiCode: string;
+  wubiCode: string
 }

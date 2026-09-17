@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate'
 
-import type { ForgetPasswordFormValues } from './useAuthValidation.ts'
-
-import { useAuthValidation } from './useAuthValidation.ts'
 import AuthTitle from './-auth-title.vue'
+import type { ForgetPasswordFormValues } from './useAuthValidation.ts'
+import { useAuthValidation } from './useAuthValidation.ts'
 
 defineOptions({ name: 'AuthForgetPassword' })
 
@@ -27,8 +26,7 @@ async function onSubmit(values: ForgetPasswordFormValues) {
   try {
     await auth.forgetPassword(values.email)
     ElMessage.success(t('forgetPassword.successTitle'))
-  }
-  catch {
+  } catch {
     // 错误码已写入 store，由组件内 Alert 展示
   }
 }
@@ -59,16 +57,8 @@ function goToLogin(): void {
       :title="t(`errors.${auth.errorCode}`)"
     />
 
-    <ElForm
-      label-position="top"
-      novalidate
-      class="auth-form"
-      @submit="submitHandler"
-    >
-      <ElFormItem
-        :label="t('forgetPassword.email')"
-        :error="emailError"
-      >
+    <ElForm label-position="top" novalidate class="auth-form" @submit="submitHandler">
+      <ElFormItem :label="t('forgetPassword.email')" :error="emailError">
         <ElInput
           v-model="email"
           type="email"
@@ -77,10 +67,7 @@ function goToLogin(): void {
           autocomplete="email"
         >
           <template #prefix>
-            <AppIcon
-              name="message"
-              class="size-4 text-dimmed"
-            />
+            <AppIcon name="message" class="text-dimmed size-4" />
           </template>
         </ElInput>
       </ElFormItem>
@@ -95,12 +82,7 @@ function goToLogin(): void {
       </ElButton>
     </ElForm>
 
-    <ElButton
-      type="default"
-      plain
-      class="mt-4 w-full"
-      @click="goToLogin()"
-    >
+    <ElButton type="default" plain class="mt-4 w-full" @click="goToLogin()">
       {{ t('common.back') }}
     </ElButton>
   </div>

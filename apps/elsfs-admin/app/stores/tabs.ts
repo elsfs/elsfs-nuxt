@@ -33,11 +33,10 @@ export const useTabsStore = defineStore('tabs', () => {
   /** 记录一个已打开的页面：按 path 去重，已存在则刷新标题 */
   function openTab(tab: AppTab): void {
     const list = [...tabs.value]
-    const index = list.findIndex(item => item.path === tab.path)
+    const index = list.findIndex((item) => item.path === tab.path)
     if (index > -1) {
       list[index] = { ...list[index], ...tab }
-    }
-    else {
+    } else {
       list.push(tab)
     }
     persist(list)
@@ -45,15 +44,15 @@ export const useTabsStore = defineStore('tabs', () => {
 
   /** 固定标签（affixTab）不允许关闭 */
   function closeTab(path: string): void {
-    persist(tabs.value.filter(item => item.path !== path || item.affix))
+    persist(tabs.value.filter((item) => item.path !== path || item.affix))
   }
 
   function closeOthers(path: string): void {
-    persist(tabs.value.filter(item => item.path === path || item.affix))
+    persist(tabs.value.filter((item) => item.path === path || item.affix))
   }
 
   function closeAll(): void {
-    persist(tabs.value.filter(item => item.affix))
+    persist(tabs.value.filter((item) => item.affix))
   }
 
   /** 拖拽排序 */

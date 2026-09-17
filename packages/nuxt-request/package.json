@@ -2,9 +2,26 @@
   "name": "nuxt-request",
   "version": "1.0.0",
   "description": "My new Nuxt module",
-  "repository": "elsfs/elsfs-nuxt",
   "license": "MIT",
+  "repository": "elsfs/elsfs-nuxt",
+  "workspaces": [
+    "playground"
+  ],
+  "files": [
+    "dist"
+  ],
   "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "main": "./dist/module.mjs",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/types.d.mts"
+      ]
+    }
+  },
   "exports": {
     ".": {
       "types": "./dist/types.d.mts",
@@ -16,31 +33,20 @@
       "import": "./dist/runtime/utils/index.js"
     }
   },
-  "main": "./dist/module.mjs",
-  "typesVersions": {
-    "*": {
-      ".": [
-        "./dist/types.d.mts"
-      ]
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "workspaces": [
-    "playground"
-  ],
-  "sideEffects": [
-    "**/*.css"
-  ],
-
   "scripts": {
     "prepack": "nuxt-module-build build",
     "dev": "npm run dev:prepare && nuxt dev playground",
     "dev:build": "nuxt build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxt prepare playground",
     "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
-    "lint": "eslint .",
+    "lint": "pnpm lint:eslint && pnpm lint:oxlint && pnpm lint:style && pnpm lint:spell && pnpm lint:package",
+    "lint:eslint": "eslint .",
+    "lint:oxlint": "oxlint",
+    "lint:style": "stylelint --allow-empty-input \"**/*.{css,vue}\"",
+    "lint:spell": "cspell lint \"**/*.{ts,vue,js,mjs,cjs,json,jsonc,md,mdx,css,yaml,yml}\"",
+    "lint:package": "publint",
+    "fmt": "oxfmt -c ../code-quality/oxfmt.json",
+    "fmt:check": "oxfmt --check -c ../code-quality/oxfmt.json",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
@@ -53,20 +59,28 @@
     "vue-i18n": "^11.4.8"
   },
   "devDependencies": {
-    "@nuxtjs/i18n": "catalog:",
-    "@types/qs": "catalog:",
     "@nuxt/devtools": "^3.4.2",
-    "@nuxt/eslint-config": "^1.17.0",
+    "@nuxt/eslint-config": "catalog:",
     "@nuxt/module-builder": "^1.0.3",
     "@nuxt/schema": "^4.5.2",
     "@nuxt/test-utils": "^4.3.2",
+    "@nuxtjs/i18n": "catalog:",
     "@types/node": "catalog:",
+    "@types/qs": "catalog:",
+    "axios-mock-adapter": "^2.1.0",
     "changelogen": "^0.6.2",
+    "code-quality": "workspace:*",
+    "cspell": "catalog:",
     "eslint": "catalog:",
     "nuxt": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "postcss-html": "catalog:",
+    "publint": "catalog:",
+    "stylelint": "catalog:",
+    "stylelint-config-standard": "catalog:",
     "typescript": "catalog:",
     "vitest": "^4.1.11",
-    "vue-tsc": "catalog:",
-    "axios-mock-adapter": "^2.1.0"
+    "vue-tsc": "catalog:"
   }
 }

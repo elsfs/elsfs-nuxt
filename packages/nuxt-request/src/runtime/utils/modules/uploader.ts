@@ -1,6 +1,5 @@
 import type { RequestClient } from '../request-client'
 import type { RequestClientConfig } from '../types'
-
 import { isUndefined } from '../util'
 
 class FileUploader {
@@ -20,11 +19,12 @@ class FileUploader {
     Object.entries(data).forEach(([key, value]) => {
       if (Array.isArray(value)) {
         value.forEach((item, index) => {
-          !isUndefined(item) && formData.append(`${key}[${index}]`, item)
+          if (!isUndefined(item)) {
+            formData.append(`${key}[${index}]`, item)
+          }
         })
-      }
-      else {
-        !isUndefined(value) && formData.append(key, value)
+      } else if (!isUndefined(value)) {
+        formData.append(key, value)
       }
     })
 

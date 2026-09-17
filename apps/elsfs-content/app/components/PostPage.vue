@@ -9,15 +9,20 @@ const { type } = defineProps({
 const route = useRoute()
 const siteConfig = useSiteConfig()
 
-const { data } = await useAsyncData(route.path, () => Promise.all([
-  queryCollection('posts').path(route.path).first(),
-  queryCollectionItemSurroundings('posts', route.path, { fields: ['title', 'description'] })
-    .where('path', 'LIKE', `/${type}%`)
-    .where('draft', '=', 0)
-    .order('date', 'DESC'),
-]), {
-  transform: ([page, surround]) => ({ page, surround }),
-})
+const { data } = await useAsyncData(
+  route.path,
+  () =>
+    Promise.all([
+      queryCollection('posts').path(route.path).first(),
+      queryCollectionItemSurroundings('posts', route.path, { fields: ['title', 'description'] })
+        .where('path', 'LIKE', `/${type}%`)
+        .where('draft', '=', 0)
+        .order('date', 'DESC'),
+    ]),
+  {
+    transform: ([page, surround]) => ({ page, surround }),
+  },
+)
 if (!data.value || !data.value.page) {
   throw createError({ statusCode: 404, statusMessage: 'Page not found', fatal: true })
 }
@@ -30,8 +35,12 @@ useSeoMeta({
   description: post.value?.seo.description,
   ogTitle: post.value?.seo.title,
   ogDescription: post.value?.seo.description,
-  ogImage: post.value?.image ? `${siteConfig.url}/${post.value?.image?.src}` : `${siteConfig.url}/social.png`,
-  twitterImage: post.value?.image ? `${siteConfig.url}/${post.value?.image?.src}` : `${siteConfig.url}/social.png`,
+  ogImage: post.value?.image
+    ? `${siteConfig.url}/${post.value?.image?.src}`
+    : `${siteConfig.url}/social.png`,
+  twitterImage: post.value?.image
+    ? `${siteConfig.url}/${post.value?.image?.src}`
+    : `${siteConfig.url}/social.png`,
 })
 
 const links = [
@@ -69,17 +78,12 @@ function copyLink() {
 <template>
   <UContainer>
     <UPage v-if="post">
-      <UPageHeader
-        :title="post.title"
-        :description="post.description"
-      >
+      <UPageHeader :title="post.title" :description="post.description">
         <template #headline>
           <div class="flex flex-col gap-6">
             <UBreadcrumb
               :items="[
-                { label: formatPostType(type),
-                  icon: 'i-lucide-newspaper',
-                  to: `/${type}` },
+                { label: formatPostType(type), icon: 'i-lucide-newspaper', to: `/${type}` },
                 { label: post.title },
               ]"
             />
@@ -95,7 +99,7 @@ function copyLink() {
           </div>
         </template>
 
-        <div class="flex gap-4 mt-6">
+        <div class="mt-6 flex gap-4">
           <UUser
             v-for="author in post.authors"
             :key="author.name"
@@ -108,12 +112,9 @@ function copyLink() {
       </UPageHeader>
 
       <UPageBody>
-        <ContentRenderer
-          v-if="post.body"
-          :value="post"
-        />
+        <ContentRenderer v-if="post.body" :value="post" />
 
-        <div class="flex items-center justify-between mt-12">
+        <div class="mt-12 flex items-center justify-between">
           <UButton
             :to="`/${type}`"
             variant="link"
@@ -123,7 +124,7 @@ function copyLink() {
           >
             ← 返回{{ formatPostType(type) }}
           </UButton>
-          <div class="flex justify-end items-center gap-1.5">
+          <div class="flex items-center justify-end gap-1.5">
             <UTooltip text="复制到剪贴板">
               <UButton
                 :color="copied ? 'success' : 'neutral'"
@@ -138,28 +139,16 @@ function copyLink() {
           </div>
         </div>
 
-        <hr
-          v-if="surround?.length"
-          class="text-gray-200 dark:text-gray-800"
-        >
+        <hr v-if="surround?.length" class="text-gray-200 dark:text-gray-800" />
 
-        <UContentSurround
-          :surround="surround"
-          :ui="{ linkTitle: 'text-wrap' }"
-        />
+        <UContentSurround :surround="surround" :ui="{ linkTitle: 'text-wrap' }" />
       </UPageBody>
 
       <template #right>
-        <UContentToc
-          v-if="post.body && post.body.toc"
-          :links="post.body.toc.links"
-        >
+        <UContentToc v-if="post.body && post.body.toc" :links="post.body.toc.links">
           <template #bottom>
             <div class="hidden md:block">
-              <UPageLinks
-                title="链接"
-                :links="links"
-              />
+              <UPageLinks title="链接" :links="links" />
             </div>
           </template>
         </UContentToc>

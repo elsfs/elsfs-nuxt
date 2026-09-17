@@ -29,15 +29,17 @@ export interface ForgetPasswordFormValues {
 type Translate = (key: string, params?: Record<string, unknown>) => string
 
 /**
- * 登录表单校验 Schema（yup）。
+ * 登录表单校验 Schema
  * 校验消息使用函数形式，在「校验发生时」才调用 t()，因此语言切换后消息即时生效。
  */
 export function createLoginSchema(t: Translate) {
   return z.object({
-    email: z.string()
+    email: z
+      .string()
       .min(1, { message: t('validation.required') })
       .email({ message: t('validation.emailInvalid') }),
-    password: z.string()
+    password: z
+      .string()
       .min(1, { message: t('validation.required') })
       .min(8, { message: t('validation.passwordMin', { min: 8 }) }),
     remember: z.boolean(),
@@ -45,36 +47,40 @@ export function createLoginSchema(t: Translate) {
 }
 
 /**
- * 注册表单校验 Schema（yup）。
+ * 注册表单校验 Schema
  */
 
 export function createRegisterSchema(t: Translate) {
-  return z.object({
-    username: z.string()
-      .min(1, { message: t('validation.required') })
-      .min(3, { message: t('validation.usernameMin', { min: 3 }) })
-      .max(20, { message: t('validation.usernameMax', { max: 20 }) }),
-    email: z.string()
-      .min(1, { message: t('validation.required') })
-      .email({ message: t('validation.emailInvalid') }),
-    password: z.string()
-      .min(1, { message: t('validation.required') })
-      .min(8, { message: t('validation.passwordMin', { min: 8 }) })
-      .regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/, {
-        message: t('validation.passwordPattern') }),
-    confirmPassword: z.string()
-      .min(1, { message: t('validation.required') }),
-    agree: z.boolean()
-      .refine(val => val === true, { message: t('validation.termsRequired') }),
-  }).superRefine((data, ctx) => {
-    if (data.password !== data.confirmPassword) {
-      ctx.addIssue({
-        code: 'custom',
-        path: ['confirmPassword'],
-        message: t('validation.confirmMismatch'),
-      })
-    }
-  })
+  return z
+    .object({
+      username: z
+        .string()
+        .min(1, { message: t('validation.required') })
+        .min(3, { message: t('validation.usernameMin', { min: 3 }) })
+        .max(20, { message: t('validation.usernameMax', { max: 20 }) }),
+      email: z
+        .string()
+        .min(1, { message: t('validation.required') })
+        .email({ message: t('validation.emailInvalid') }),
+      password: z
+        .string()
+        .min(1, { message: t('validation.required') })
+        .min(8, { message: t('validation.passwordMin', { min: 8 }) })
+        .regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/, {
+          message: t('validation.passwordPattern'),
+        }),
+      confirmPassword: z.string().min(1, { message: t('validation.required') }),
+      agree: z.boolean().refine((val) => val === true, { message: t('validation.termsRequired') }),
+    })
+    .superRefine((data, ctx) => {
+      if (data.password !== data.confirmPassword) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['confirmPassword'],
+          message: t('validation.confirmMismatch'),
+        })
+      }
+    })
 }
 
 /**
@@ -98,10 +104,12 @@ export function useAuthValidation() {
  */
 export function createCodeLoginSchema(t: Translate) {
   return z.object({
-    email: z.string()
+    email: z
+      .string()
       .min(1, { message: t('validation.required') })
       .email({ message: t('validation.emailInvalid') }),
-    code: z.string()
+    code: z
+      .string()
       .min(1, { message: t('validation.required') })
       .regex(/^\d{6}$/, { message: t('validation.codeInvalid') }),
   })
@@ -112,7 +120,8 @@ export function createCodeLoginSchema(t: Translate) {
  */
 export function createForgetPasswordSchema(t: Translate) {
   return z.object({
-    email: z.string()
+    email: z
+      .string()
       .min(1, { message: t('validation.required') })
       .email({ message: t('validation.emailInvalid') }),
   })

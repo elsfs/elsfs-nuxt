@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate'
 
+import AuthTitle from './-auth-title.vue'
 import type { RegisterFormValues } from './useAuthValidation.ts'
 import { useAuthValidation } from './useAuthValidation.ts'
 import { usePasswordStrength } from './usePasswordStrength.ts'
-import AuthTitle from './-auth-title.vue'
 
 definePageMeta({ layout: 'auth', middleware: 'guest' })
 
@@ -20,15 +20,19 @@ const { registerSchema } = useAuthValidation()
 const { handleSubmit, isSubmitting } = useForm<RegisterFormValues>({
   validationSchema: registerSchema,
   initialValues: {
-    username: '', email: '', password: '',
-    confirmPassword: '', agree: false,
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    agree: false,
   },
 })
 
 const { value: username, errorMessage: usernameError } = useField<string>('username')
 const { value: email, errorMessage: emailError } = useField<string>('email')
 const { value: password, errorMessage: passwordError } = useField<string>('password')
-const { value: confirmPassword, errorMessage: confirmPasswordError } = useField<string>('confirmPassword')
+const { value: confirmPassword, errorMessage: confirmPasswordError } =
+  useField<string>('confirmPassword')
 const { value: agree, errorMessage: agreeError } = useField<boolean>('agree')
 
 const showPassword = ref(false)
@@ -47,8 +51,7 @@ const onSubmit = handleSubmit(async (values) => {
     })
     ElMessage.success(t('register.success'))
     await router.push('/')
-  }
-  catch {
+  } catch {
     // 错误码已写入 store，由 Alert 展示
   }
 })
@@ -67,24 +70,10 @@ function goToLogin(): void {
       </template>
     </AuthTitle>
 
-    <ElAlert
-      v-if="errorMessage"
-      type="error"
-      show-icon
-      class="mb-6"
-      :title="errorMessage"
-    />
+    <ElAlert v-if="errorMessage" type="error" show-icon class="mb-6" :title="errorMessage" />
 
-    <ElForm
-      label-position="top"
-      novalidate
-      class="auth-form"
-      @submit="onSubmit"
-    >
-      <ElFormItem
-        :label="t('register.username')"
-        :error="usernameError"
-      >
+    <ElForm label-position="top" novalidate class="auth-form" @submit="onSubmit">
+      <ElFormItem :label="t('register.username')" :error="usernameError">
         <ElInput
           v-model="username"
           size="large"
@@ -92,18 +81,12 @@ function goToLogin(): void {
           autocomplete="username"
         >
           <template #prefix>
-            <AppIcon
-              name="user"
-              class="size-4 text-dimmed"
-            />
+            <AppIcon name="user" class="text-dimmed size-4" />
           </template>
         </ElInput>
       </ElFormItem>
 
-      <ElFormItem
-        :label="t('register.email')"
-        :error="emailError"
-      >
+      <ElFormItem :label="t('register.email')" :error="emailError">
         <ElInput
           v-model="email"
           type="email"
@@ -112,18 +95,12 @@ function goToLogin(): void {
           autocomplete="email"
         >
           <template #prefix>
-            <AppIcon
-              name="message"
-              class="size-4 text-dimmed"
-            />
+            <AppIcon name="message" class="text-dimmed size-4" />
           </template>
         </ElInput>
       </ElFormItem>
 
-      <ElFormItem
-        :label="t('register.password')"
-        :error="passwordError"
-      >
+      <ElFormItem :label="t('register.password')" :error="passwordError">
         <ElInput
           v-model="password"
           size="large"
@@ -132,10 +109,7 @@ function goToLogin(): void {
           autocomplete="new-password"
         >
           <template #prefix>
-            <AppIcon
-              name="lock"
-              class="size-4 text-dimmed"
-            />
+            <AppIcon name="lock" class="text-dimmed size-4" />
           </template>
           <template #suffix>
             <button
@@ -144,20 +118,14 @@ function goToLogin(): void {
               :aria-label="showPassword ? 'Hide password' : 'Show password'"
               @click="showPassword = !showPassword"
             >
-              <AppIcon
-                :name="showPassword ? 'hide' : 'view'"
-                class="size-4"
-              />
+              <AppIcon :name="showPassword ? 'hide' : 'view'" class="size-4" />
             </button>
           </template>
         </ElInput>
       </ElFormItem>
 
       <!-- 密码强度指示器 -->
-      <div
-        v-if="password"
-        class="-mt-2 mb-4 space-y-1.5"
-      >
+      <div v-if="password" class="-mt-2 mb-4 space-y-1.5">
         <div class="flex gap-1.5">
           <div
             v-for="i in 4"
@@ -166,22 +134,13 @@ function goToLogin(): void {
             :class="i <= strength.score ? strength.bar : ''"
           />
         </div>
-        <p
-          class="flex items-center gap-1 text-xs"
-          :class="strength.text"
-        >
-          <AppIcon
-            name="odometer"
-            class="size-3"
-          />
+        <p class="flex items-center gap-1 text-xs" :class="strength.text">
+          <AppIcon name="odometer" class="size-3" />
           {{ t('register.strength') }}：{{ strength.label }}
         </p>
       </div>
 
-      <ElFormItem
-        :label="t('register.confirmPassword')"
-        :error="confirmPasswordError"
-      >
+      <ElFormItem :label="t('register.confirmPassword')" :error="confirmPasswordError">
         <ElInput
           v-model="confirmPassword"
           size="large"
@@ -190,10 +149,7 @@ function goToLogin(): void {
           autocomplete="new-password"
         >
           <template #prefix>
-            <AppIcon
-              name="key"
-              class="size-4 text-dimmed"
-            />
+            <AppIcon name="key" class="text-dimmed size-4" />
           </template>
           <template #suffix>
             <button
@@ -202,10 +158,7 @@ function goToLogin(): void {
               :aria-label="showConfirmPassword ? 'Hide password' : 'Show password'"
               @click="showConfirmPassword = !showConfirmPassword"
             >
-              <AppIcon
-                :name="showConfirmPassword ? 'hide' : 'view'"
-                class="size-4"
-              />
+              <AppIcon :name="showConfirmPassword ? 'hide' : 'view'" class="size-4" />
             </button>
           </template>
         </ElInput>
@@ -214,13 +167,9 @@ function goToLogin(): void {
       <ElFormItem :error="agreeError">
         <ElCheckbox v-model="agree">
           <template #label>
-            <span class="text-sm text-muted-foreground">
+            <span class="text-muted-foreground text-sm">
               {{ t('register.agreePrefix') }}
-              <a
-                href="#"
-                class="font-medium text-primary hover:underline"
-                @click.prevent
-              >
+              <a href="#" class="text-primary font-medium hover:underline" @click.prevent>
                 {{ t('register.terms') }}
               </a>
             </span>
@@ -238,12 +187,9 @@ function goToLogin(): void {
       </ElButton>
     </ElForm>
 
-    <p class="mt-4 text-center text-sm text-muted-foreground">
+    <p class="text-muted-foreground mt-4 text-center text-sm">
       {{ t('common.backToLogin') }}
-      <span
-        class="vben-link text-sm font-normal"
-        @click="goToLogin()"
-      >
+      <span class="vben-link text-sm font-normal" @click="goToLogin()">
         {{ t('login.title') }}
       </span>
     </p>

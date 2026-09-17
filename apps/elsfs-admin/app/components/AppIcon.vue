@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import * as ElementPlusIcons from '@element-plus/icons-vue'
 import type { Component, VNode } from 'vue'
+
 import { resolveIconifyIcon } from '~/utils/iconify'
 
 export interface IconProps {
@@ -78,7 +79,7 @@ const ICONIFY_SHORTHAND = /^i-([a-z0-9]+)-(.+)$/
 function toPascalCase(input: string): string {
   return input
     .split(/[-_\s]+/)
-    .map(part => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
     .join('')
 }
 
@@ -127,7 +128,9 @@ function isRegisteredIconify(raw: string): boolean {
 const resolved = computed(() => {
   const raw = props.name.trim()
   const provider = props.provider || 'auto'
-  const looksIconify = provider !== 'element-plus' && (provider === 'iconify' || raw.startsWith('icon-[') || raw.includes('--') || raw.includes(':'))
+  const looksIconify =
+    provider !== 'element-plus' &&
+    (provider === 'iconify' || raw.startsWith('icon-[') || raw.includes('--') || raw.includes(':'))
 
   // 1) 本地装了的 iconify 图标集：直接渲染 SVG（后端菜单下发的 mdi:xxx 走这里）
   if (looksIconify) {
@@ -135,8 +138,7 @@ const resolved = computed(() => {
     if (icon) {
       return { kind: 'svg' as const, ...icon }
     }
-  }
-  else {
+  } else {
     // 2) Element Plus 图标
     const component = toElementPlusIcon(raw)
     if (component) {

@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const provider = body.provider || 'github'
 
   // 演示环境：模拟第三方 OAuth 回调后返回令牌
-  await new Promise(resolve => setTimeout(resolve, 600))
+  await new Promise((resolve) => setTimeout(resolve, 600))
 
   const email = `${provider}-user@example.com`
 

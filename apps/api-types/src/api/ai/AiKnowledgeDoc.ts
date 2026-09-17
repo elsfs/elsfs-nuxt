@@ -1,6 +1,6 @@
-import { useRequest } from '../core/api';
+import { useRequest } from '../core/api'
 
-export const { useRequestHandle, requestPath } = useRequest('/AiKnowledgeDoc');
+export const { useRequestHandle, requestPath } = useRequest('/AiKnowledgeDoc')
 /**
  * AI知识库文档实体
  *
@@ -11,27 +11,27 @@ export interface AiKnowledgeDoc {
   /**
    * 主键ID
    */
-  knowledgeDocId?: string;
+  knowledgeDocId?: string
 
   /**
    * 所属知识库ID
    */
-  knowledgeId?: string;
+  knowledgeId?: string
 
   /**
    * 文档标题（支持模糊查询）
    */
-  title?: string;
+  title?: string
 
   /**
    * 文档类型：文本(text)/文件(file)/网页(webpage)
    */
-  knowDocType?: string;
+  knowDocType?: string
 
   /**
    * 文档内容（文本内容或文件内容）
    */
-  content?: string;
+  content?: string
 
   /**
    * 元数据（JSON格式）
@@ -41,10 +41,10 @@ export interface AiKnowledgeDoc {
    *   "website": "https://hellp.elsfs.com" // 网页地址
    * }
    */
-  metadata?: object | string;
+  metadata?: object | string
 
   /**
    * 文档状态
    */
-  status?: string;
+  status?: string
 }

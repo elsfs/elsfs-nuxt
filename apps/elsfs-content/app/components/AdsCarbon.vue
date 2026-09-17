@@ -11,7 +11,10 @@ onMounted(() => {
 
   const script = document.createElement('script')
   script.setAttribute('type', 'text/javascript')
-  script.setAttribute('src', 'https://cdn.carbonads.com/carbon.js?serve=CWYIPK7W&placement=contentnuxtcom')
+  script.setAttribute(
+    'src',
+    'https://cdn.carbonads.com/carbon.js?serve=CWYIPK7W&placement=contentnuxtcom',
+  )
   script.setAttribute('id', '_carbonads_js')
 
   el.value?.appendChild(script)
@@ -19,32 +22,29 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    ref="el"
-    class="carbon"
-  />
+  <div ref="el" class="carbon" />
 </template>
 
 <style scoped>
 @reference "../assets/css/main.css";
 
 .carbon :deep(#carbonads) {
-  @apply relative bg-muted rounded-md hover:bg-elevated w-full transition-colors min-h-[220px] p-2.5;
+  @apply bg-muted hover:bg-elevated relative min-h-[220px] w-full rounded-md p-2.5 transition-colors;
 
   .carbon-img {
-    @apply flex justify-center w-full;
+    @apply flex w-full justify-center;
 
     & > img {
-      @apply !max-w-full w-full rounded-sm;
+      @apply w-full !max-w-full rounded-sm;
     }
   }
 
   .carbon-text {
-    @apply text-[13px] transition-colors font-medium text-pretty flex pt-2;
+    @apply flex pt-2 text-[13px] font-medium text-pretty transition-colors;
   }
 
   .carbon-poweredby {
-    @apply block text-xs text-muted pt-2;
+    @apply text-muted block pt-2 text-xs;
   }
 
   &:hover {

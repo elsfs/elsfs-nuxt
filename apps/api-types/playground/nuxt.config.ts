@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-  modules: ['my-module'],
+  modules: ['api-types'],
   devtools: { enabled: true },
   compatibilityDate: 'latest',
   myModule: {},

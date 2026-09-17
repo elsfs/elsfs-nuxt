@@ -32,8 +32,16 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/dashboard/overview',
           meta: { id: 'dashboard-overview', title: '概览', order: 0 },
           children: [
-            { name: 'Workbench', path: '/datshboard', meta: { id: 'dashboard-workbench', title: '工作台', icon: 'monitor', affixTab: true } },
-            { name: 'Realtime', path: '/dashboard/realtime', meta: { id: 'dashboard-realtime', title: '实时监控', icon: 'mdi:monitor-eye' } },
+            {
+              name: 'Workbench',
+              path: '/datshboard',
+              meta: { id: 'dashboard-workbench', title: '工作台', icon: 'monitor', affixTab: true },
+            },
+            {
+              name: 'Realtime',
+              path: '/dashboard/realtime',
+              meta: { id: 'dashboard-realtime', title: '实时监控', icon: 'mdi:monitor-eye' },
+            },
           ],
         },
         {
@@ -41,10 +49,26 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/dashboard/report',
           meta: { id: 'dashboard-report', title: '统计分析', order: 1 },
           children: [
-            { name: 'Analysis', path: '/dashboard/analysis', meta: { id: 'dashboard-analysis', title: '数据分析', icon: 'data-analysis' } },
-            { name: 'Daily', path: '/dashboard/daily', meta: { id: 'dashboard-daily', title: '日报', icon: 'histogram' } },
-            { name: 'Weekly', path: '/dashboard/weekly', meta: { id: 'dashboard-weekly', title: '周报', icon: 'trend-charts' } },
-            { name: 'Monthly', path: '/dashboard/monthly', meta: { id: 'dashboard-monthly', title: '月报', icon: 'pie-chart' } },
+            {
+              name: 'Analysis',
+              path: '/dashboard/analysis',
+              meta: { id: 'dashboard-analysis', title: '数据分析', icon: 'data-analysis' },
+            },
+            {
+              name: 'Daily',
+              path: '/dashboard/daily',
+              meta: { id: 'dashboard-daily', title: '日报', icon: 'histogram' },
+            },
+            {
+              name: 'Weekly',
+              path: '/dashboard/weekly',
+              meta: { id: 'dashboard-weekly', title: '周报', icon: 'trend-charts' },
+            },
+            {
+              name: 'Monthly',
+              path: '/dashboard/monthly',
+              meta: { id: 'dashboard-monthly', title: '月报', icon: 'pie-chart' },
+            },
           ],
         },
       ],
@@ -59,10 +83,26 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/system/org',
           meta: { id: 'system-org', title: '组织架构' },
           children: [
-            { name: 'SystemUser', path: '/system/user', meta: { id: 'system-user', title: '用户管理', icon: 'user' } },
-            { name: 'SystemRole', path: '/system/role', meta: { id: 'system-role', title: '角色管理', icon: 'avatar' } },
-            { name: 'SystemDept', path: '/system/dept', meta: { id: 'system-dept', title: '部门管理', icon: 'office-building' } },
-            { name: 'SystemPost', path: '/system/post', meta: { id: 'system-post', title: '岗位管理', icon: 'postcard' } },
+            {
+              name: 'SystemUser',
+              path: '/system/user',
+              meta: { id: 'system-user', title: '用户管理', icon: 'user' },
+            },
+            {
+              name: 'SystemRole',
+              path: '/system/role',
+              meta: { id: 'system-role', title: '角色管理', icon: 'avatar' },
+            },
+            {
+              name: 'SystemDept',
+              path: '/system/dept',
+              meta: { id: 'system-dept', title: '部门管理', icon: 'office-building' },
+            },
+            {
+              name: 'SystemPost',
+              path: '/system/post',
+              meta: { id: 'system-post', title: '岗位管理', icon: 'postcard' },
+            },
           ],
         },
         {
@@ -70,9 +110,21 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/system/permission',
           meta: { id: 'system-permission', title: '权限配置', order: 1 },
           children: [
-            { name: 'SystemMenu', path: '/system/menu', meta: { id: 'system-menu', title: '菜单权限', icon: 'menu' } },
-            { name: 'SystemDataPermission', path: '/system/data-permission', meta: { id: 'system-data-permission', title: '数据权限', icon: 'lock' } },
-            { name: 'SystemApiPermission', path: '/system/api-permission', meta: { id: 'system-api-permission', title: '接口权限', icon: 'key' } },
+            {
+              name: 'SystemMenu',
+              path: '/system/menu',
+              meta: { id: 'system-menu', title: '菜单权限', icon: 'menu' },
+            },
+            {
+              name: 'SystemDataPermission',
+              path: '/system/data-permission',
+              meta: { id: 'system-data-permission', title: '数据权限', icon: 'lock' },
+            },
+            {
+              name: 'SystemApiPermission',
+              path: '/system/api-permission',
+              meta: { id: 'system-api-permission', title: '接口权限', icon: 'key' },
+            },
           ],
         },
         {
@@ -80,11 +132,31 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/system/config',
           meta: { id: 'system-config-group', title: '系统配置', order: 2 },
           children: [
-            { name: 'SystemParam', path: '/system/param', meta: { id: 'system-config', title: '参数设置', icon: 'tools' } },
-            { name: 'SystemDict', path: '/system/dict', meta: { id: 'system-dict', title: '数据字典', icon: 'notebook' } },
-            { name: 'SystemNotice', path: '/system/notice', meta: { id: 'system-notice', title: '通知公告', icon: 'bell' } },
-            { name: 'SystemFile', path: '/system/file', meta: { id: 'system-file', title: '附件管理', icon: 'files' } },
-            { name: 'SystemJob', path: '/system/job', meta: { id: 'system-job', title: '定时任务', icon: 'timer' } },
+            {
+              name: 'SystemParam',
+              path: '/system/param',
+              meta: { id: 'system-config', title: '参数设置', icon: 'tools' },
+            },
+            {
+              name: 'SystemDict',
+              path: '/system/dict',
+              meta: { id: 'system-dict', title: '数据字典', icon: 'notebook' },
+            },
+            {
+              name: 'SystemNotice',
+              path: '/system/notice',
+              meta: { id: 'system-notice', title: '通知公告', icon: 'bell' },
+            },
+            {
+              name: 'SystemFile',
+              path: '/system/file',
+              meta: { id: 'system-file', title: '附件管理', icon: 'files' },
+            },
+            {
+              name: 'SystemJob',
+              path: '/system/job',
+              meta: { id: 'system-job', title: '定时任务', icon: 'timer' },
+            },
           ],
         },
         {
@@ -92,9 +164,21 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/system/log',
           meta: { id: 'system-log', title: '日志监控', order: 3 },
           children: [
-            { name: 'SystemLoginLog', path: '/system/login-log', meta: { id: 'system-login-log', title: '登录日志', icon: 'key' } },
-            { name: 'SystemOperationLog', path: '/system/operation-log', meta: { id: 'system-operation-log', title: '操作日志', icon: 'tickets' } },
-            { name: 'SystemMonitor', path: '/system/monitor', meta: { id: 'system-monitor', title: '系统监控', icon: 'monitor' } },
+            {
+              name: 'SystemLoginLog',
+              path: '/system/login-log',
+              meta: { id: 'system-login-log', title: '登录日志', icon: 'key' },
+            },
+            {
+              name: 'SystemOperationLog',
+              path: '/system/operation-log',
+              meta: { id: 'system-operation-log', title: '操作日志', icon: 'tickets' },
+            },
+            {
+              name: 'SystemMonitor',
+              path: '/system/monitor',
+              meta: { id: 'system-monitor', title: '系统监控', icon: 'monitor' },
+            },
           ],
         },
       ],
@@ -109,9 +193,21 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/content/article',
           meta: { id: 'content-article-group', title: '文章内容' },
           children: [
-            { name: 'ContentArticleList', path: '/content/article-list', meta: { id: 'content-article', title: '文章列表', icon: 'document' } },
-            { name: 'ContentColumn', path: '/content/column', meta: { id: 'content-column', title: '专栏管理', icon: 'reading' } },
-            { name: 'ContentPage', path: '/content/page', meta: { id: 'content-page', title: '页面装修', icon: 'magic-stick' } },
+            {
+              name: 'ContentArticleList',
+              path: '/content/article-list',
+              meta: { id: 'content-article', title: '文章列表', icon: 'document' },
+            },
+            {
+              name: 'ContentColumn',
+              path: '/content/column',
+              meta: { id: 'content-column', title: '专栏管理', icon: 'reading' },
+            },
+            {
+              name: 'ContentPage',
+              path: '/content/page',
+              meta: { id: 'content-page', title: '页面装修', icon: 'magic-stick' },
+            },
           ],
         },
         {
@@ -119,8 +215,16 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/content/taxonomy',
           meta: { id: 'content-taxonomy', title: '分类标签', order: 1 },
           children: [
-            { name: 'ContentCategory', path: '/content/category', meta: { id: 'content-category', title: '分类管理', icon: 'collection' } },
-            { name: 'ContentTag', path: '/content/tag', meta: { id: 'content-tag', title: '标签管理', icon: 'price-tag' } },
+            {
+              name: 'ContentCategory',
+              path: '/content/category',
+              meta: { id: 'content-category', title: '分类管理', icon: 'collection' },
+            },
+            {
+              name: 'ContentTag',
+              path: '/content/tag',
+              meta: { id: 'content-tag', title: '标签管理', icon: 'price-tag' },
+            },
           ],
         },
         {
@@ -128,9 +232,21 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/content/interact',
           meta: { id: 'content-interact', title: '互动素材', order: 2 },
           children: [
-            { name: 'ContentComment', path: '/content/comment', meta: { id: 'content-comment', title: '评论管理', icon: 'chat-dot-round' } },
-            { name: 'ContentMaterial', path: '/content/material', meta: { id: 'content-material', title: '素材库', icon: 'picture' } },
-            { name: 'ContentRecycle', path: '/content/recycle', meta: { id: 'content-recycle', title: '回收站', icon: 'delete' } },
+            {
+              name: 'ContentComment',
+              path: '/content/comment',
+              meta: { id: 'content-comment', title: '评论管理', icon: 'chat-dot-round' },
+            },
+            {
+              name: 'ContentMaterial',
+              path: '/content/material',
+              meta: { id: 'content-material', title: '素材库', icon: 'picture' },
+            },
+            {
+              name: 'ContentRecycle',
+              path: '/content/recycle',
+              meta: { id: 'content-recycle', title: '回收站', icon: 'delete' },
+            },
           ],
         },
       ],
@@ -145,10 +261,26 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/goods/base',
           meta: { id: 'goods-base', title: '商品资料' },
           children: [
-            { name: 'GoodsList', path: '/goods/list', meta: { id: 'goods-list', title: '商品列表', icon: 'goods' } },
-            { name: 'GoodsSpec', path: '/goods/spec', meta: { id: 'goods-spec', title: '规格属性', icon: 'operation' } },
-            { name: 'GoodsBrand', path: '/goods/brand', meta: { id: 'goods-brand', title: '品牌管理', icon: 'medal' } },
-            { name: 'GoodsCategory', path: '/goods/category', meta: { id: 'goods-category', title: '类目管理', icon: 'grid' } },
+            {
+              name: 'GoodsList',
+              path: '/goods/list',
+              meta: { id: 'goods-list', title: '商品列表', icon: 'goods' },
+            },
+            {
+              name: 'GoodsSpec',
+              path: '/goods/spec',
+              meta: { id: 'goods-spec', title: '规格属性', icon: 'operation' },
+            },
+            {
+              name: 'GoodsBrand',
+              path: '/goods/brand',
+              meta: { id: 'goods-brand', title: '品牌管理', icon: 'medal' },
+            },
+            {
+              name: 'GoodsCategory',
+              path: '/goods/category',
+              meta: { id: 'goods-category', title: '类目管理', icon: 'grid' },
+            },
           ],
         },
         {
@@ -156,10 +288,26 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/goods/stock',
           meta: { id: 'goods-stock-group', title: '库存与价格', order: 1 },
           children: [
-            { name: 'GoodsStockWarning', path: '/goods/stock-warning', meta: { id: 'goods-stock', title: '库存预警', icon: 'warning' } },
-            { name: 'GoodsPrice', path: '/goods/price', meta: { id: 'goods-price', title: '价格策略', icon: 'discount' } },
-            { name: 'GoodsSupplier', path: '/goods/supplier', meta: { id: 'goods-supplier', title: '供应商管理', icon: 'list' } },
-            { name: 'GoodsRecycle', path: '/goods/recycle', meta: { id: 'goods-recycle', title: '商品回收站', icon: 'delete' } },
+            {
+              name: 'GoodsStockWarning',
+              path: '/goods/stock-warning',
+              meta: { id: 'goods-stock', title: '库存预警', icon: 'warning' },
+            },
+            {
+              name: 'GoodsPrice',
+              path: '/goods/price',
+              meta: { id: 'goods-price', title: '价格策略', icon: 'discount' },
+            },
+            {
+              name: 'GoodsSupplier',
+              path: '/goods/supplier',
+              meta: { id: 'goods-supplier', title: '供应商管理', icon: 'list' },
+            },
+            {
+              name: 'GoodsRecycle',
+              path: '/goods/recycle',
+              meta: { id: 'goods-recycle', title: '商品回收站', icon: 'delete' },
+            },
           ],
         },
       ],
@@ -174,10 +322,26 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/order/manage',
           meta: { id: 'order-manage', title: '订单处理' },
           children: [
-            { name: 'OrderList', path: '/order/list', meta: { id: 'order-list', title: '订单列表', icon: 'list' } },
-            { name: 'OrderAbnormal', path: '/order/abnormal', meta: { id: 'order-abnormal', title: '异常订单', icon: 'warning' } },
-            { name: 'OrderShip', path: '/order/ship', meta: { id: 'order-ship', title: '发货管理', icon: 'van' } },
-            { name: 'OrderLogistics', path: '/order/logistics', meta: { id: 'order-logistics', title: '物流跟踪', icon: 'location' } },
+            {
+              name: 'OrderList',
+              path: '/order/list',
+              meta: { id: 'order-list', title: '订单列表', icon: 'list' },
+            },
+            {
+              name: 'OrderAbnormal',
+              path: '/order/abnormal',
+              meta: { id: 'order-abnormal', title: '异常订单', icon: 'warning' },
+            },
+            {
+              name: 'OrderShip',
+              path: '/order/ship',
+              meta: { id: 'order-ship', title: '发货管理', icon: 'van' },
+            },
+            {
+              name: 'OrderLogistics',
+              path: '/order/logistics',
+              meta: { id: 'order-logistics', title: '物流跟踪', icon: 'location' },
+            },
           ],
         },
         {
@@ -185,10 +349,26 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/order/after',
           meta: { id: 'order-after', title: '售后与财务', order: 1 },
           children: [
-            { name: 'OrderService', path: '/order/service', meta: { id: 'order-service', title: '售后工单', icon: 'service' } },
-            { name: 'OrderRefund', path: '/order/refund', meta: { id: 'order-refund', title: '退款审核', icon: 'refresh' } },
-            { name: 'OrderBill', path: '/order/bill', meta: { id: 'order-bill', title: '对账单', icon: 'tickets' } },
-            { name: 'OrderInvoice', path: '/order/invoice', meta: { id: 'order-invoice', title: '发票管理', icon: 'postcard' } },
+            {
+              name: 'OrderService',
+              path: '/order/service',
+              meta: { id: 'order-service', title: '售后工单', icon: 'service' },
+            },
+            {
+              name: 'OrderRefund',
+              path: '/order/refund',
+              meta: { id: 'order-refund', title: '退款审核', icon: 'refresh' },
+            },
+            {
+              name: 'OrderBill',
+              path: '/order/bill',
+              meta: { id: 'order-bill', title: '对账单', icon: 'tickets' },
+            },
+            {
+              name: 'OrderInvoice',
+              path: '/order/invoice',
+              meta: { id: 'order-invoice', title: '发票管理', icon: 'postcard' },
+            },
           ],
         },
       ],
@@ -203,10 +383,26 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/marketing/promo',
           meta: { id: 'marketing-promo', title: '营销活动' },
           children: [
-            { name: 'MarketingCoupon', path: '/marketing/coupon', meta: { id: 'marketing-coupon', title: '优惠券', icon: 'discount' } },
-            { name: 'MarketingSeckill', path: '/marketing/seckill', meta: { id: 'marketing-seckill', title: '秒杀活动', icon: 'alarm-clock' } },
-            { name: 'MarketingGroup', path: '/marketing/group', meta: { id: 'marketing-group', title: '拼团活动', icon: 'present' } },
-            { name: 'MarketingPoster', path: '/marketing/poster', meta: { id: 'marketing-poster', title: '活动海报', icon: 'picture' } },
+            {
+              name: 'MarketingCoupon',
+              path: '/marketing/coupon',
+              meta: { id: 'marketing-coupon', title: '优惠券', icon: 'discount' },
+            },
+            {
+              name: 'MarketingSeckill',
+              path: '/marketing/seckill',
+              meta: { id: 'marketing-seckill', title: '秒杀活动', icon: 'alarm-clock' },
+            },
+            {
+              name: 'MarketingGroup',
+              path: '/marketing/group',
+              meta: { id: 'marketing-group', title: '拼团活动', icon: 'present' },
+            },
+            {
+              name: 'MarketingPoster',
+              path: '/marketing/poster',
+              meta: { id: 'marketing-poster', title: '活动海报', icon: 'picture' },
+            },
           ],
         },
         {
@@ -214,9 +410,21 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/marketing/member',
           meta: { id: 'marketing-member-group', title: '会员运营', order: 1 },
           children: [
-            { name: 'MarketingMemberCard', path: '/marketing/member-card', meta: { id: 'marketing-member', title: '会员卡', icon: 'wallet' } },
-            { name: 'MarketingPoints', path: '/marketing/points', meta: { id: 'marketing-points', title: '积分商城', icon: 'coin' } },
-            { name: 'MarketingDistribution', path: '/marketing/distribution', meta: { id: 'marketing-distribution', title: '分销推广', icon: 'share' } },
+            {
+              name: 'MarketingMemberCard',
+              path: '/marketing/member-card',
+              meta: { id: 'marketing-member', title: '会员卡', icon: 'wallet' },
+            },
+            {
+              name: 'MarketingPoints',
+              path: '/marketing/points',
+              meta: { id: 'marketing-points', title: '积分商城', icon: 'coin' },
+            },
+            {
+              name: 'MarketingDistribution',
+              path: '/marketing/distribution',
+              meta: { id: 'marketing-distribution', title: '分销推广', icon: 'share' },
+            },
           ],
         },
         {
@@ -224,9 +432,21 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/marketing/touch',
           meta: { id: 'marketing-touch', title: '消息触达', order: 2 },
           children: [
-            { name: 'MarketingSms', path: '/marketing/sms', meta: { id: 'marketing-sms', title: '短信模板', icon: 'message' } },
-            { name: 'MarketingInsite', path: '/marketing/insite', meta: { id: 'marketing-insite', title: '站内信', icon: 'bell' } },
-            { name: 'MarketingPush', path: '/marketing/push', meta: { id: 'marketing-push', title: '推送任务', icon: 'notification' } },
+            {
+              name: 'MarketingSms',
+              path: '/marketing/sms',
+              meta: { id: 'marketing-sms', title: '短信模板', icon: 'message' },
+            },
+            {
+              name: 'MarketingInsite',
+              path: '/marketing/insite',
+              meta: { id: 'marketing-insite', title: '站内信', icon: 'bell' },
+            },
+            {
+              name: 'MarketingPush',
+              path: '/marketing/push',
+              meta: { id: 'marketing-push', title: '推送任务', icon: 'notification' },
+            },
           ],
         },
       ],
@@ -241,9 +461,21 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/finance/flow',
           meta: { id: 'finance-flow', title: '资金流水' },
           children: [
-            { name: 'FinanceIncome', path: '/finance/income', meta: { id: 'finance-income', title: '收入流水', icon: 'trend-charts' } },
-            { name: 'FinanceWithdraw', path: '/finance/withdraw', meta: { id: 'finance-withdraw', title: '提现审核', icon: 'wallet' } },
-            { name: 'FinanceSettlement', path: '/finance/settlement', meta: { id: 'finance-settlement', title: '结算单', icon: 'tickets' } },
+            {
+              name: 'FinanceIncome',
+              path: '/finance/income',
+              meta: { id: 'finance-income', title: '收入流水', icon: 'trend-charts' },
+            },
+            {
+              name: 'FinanceWithdraw',
+              path: '/finance/withdraw',
+              meta: { id: 'finance-withdraw', title: '提现审核', icon: 'wallet' },
+            },
+            {
+              name: 'FinanceSettlement',
+              path: '/finance/settlement',
+              meta: { id: 'finance-settlement', title: '结算单', icon: 'tickets' },
+            },
           ],
         },
         {
@@ -251,9 +483,21 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/finance/config',
           meta: { id: 'finance-config', title: '财务配置', order: 1 },
           children: [
-            { name: 'FinanceCost', path: '/finance/cost', meta: { id: 'finance-cost', title: '成本核算', icon: 'coin' } },
-            { name: 'FinanceInvoiceTitle', path: '/finance/invoice-title', meta: { id: 'finance-invoice-title', title: '发票抬头', icon: 'postcard' } },
-            { name: 'FinanceTax', path: '/finance/tax', meta: { id: 'finance-tax', title: '税务配置', icon: 'set-up' } },
+            {
+              name: 'FinanceCost',
+              path: '/finance/cost',
+              meta: { id: 'finance-cost', title: '成本核算', icon: 'coin' },
+            },
+            {
+              name: 'FinanceInvoiceTitle',
+              path: '/finance/invoice-title',
+              meta: { id: 'finance-invoice-title', title: '发票抬头', icon: 'postcard' },
+            },
+            {
+              name: 'FinanceTax',
+              path: '/finance/tax',
+              meta: { id: 'finance-tax', title: '税务配置', icon: 'set-up' },
+            },
           ],
         },
       ],
@@ -268,9 +512,21 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/report/sales',
           meta: { id: 'report-sales-group', title: '销售报表' },
           children: [
-            { name: 'ReportSalesList', path: '/report/sales-list', meta: { id: 'report-sales', title: '销售报表', icon: 'histogram' } },
-            { name: 'ReportProduct', path: '/report/product', meta: { id: 'report-product', title: '商品报表', icon: 'goods' } },
-            { name: 'ReportMember', path: '/report/member', meta: { id: 'report-member', title: '会员报表', icon: 'user-filled' } },
+            {
+              name: 'ReportSalesList',
+              path: '/report/sales-list',
+              meta: { id: 'report-sales', title: '销售报表', icon: 'histogram' },
+            },
+            {
+              name: 'ReportProduct',
+              path: '/report/product',
+              meta: { id: 'report-product', title: '商品报表', icon: 'goods' },
+            },
+            {
+              name: 'ReportMember',
+              path: '/report/member',
+              meta: { id: 'report-member', title: '会员报表', icon: 'user-filled' },
+            },
           ],
         },
         {
@@ -278,9 +534,21 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/report/traffic',
           meta: { id: 'report-traffic-group', title: '流量与转化', order: 1 },
           children: [
-            { name: 'ReportTrafficList', path: '/report/traffic-list', meta: { id: 'report-traffic', title: '流量分析', icon: 'pie-chart' } },
-            { name: 'ReportProfile', path: '/report/profile', meta: { id: 'report-profile', title: '用户画像', icon: 'user-filled' } },
-            { name: 'ReportFunnel', path: '/report/funnel', meta: { id: 'report-funnel', title: '转化漏斗', icon: 'filter' } },
+            {
+              name: 'ReportTrafficList',
+              path: '/report/traffic-list',
+              meta: { id: 'report-traffic', title: '流量分析', icon: 'pie-chart' },
+            },
+            {
+              name: 'ReportProfile',
+              path: '/report/profile',
+              meta: { id: 'report-profile', title: '用户画像', icon: 'user-filled' },
+            },
+            {
+              name: 'ReportFunnel',
+              path: '/report/funnel',
+              meta: { id: 'report-funnel', title: '转化漏斗', icon: 'filter' },
+            },
           ],
         },
         {
@@ -288,8 +556,16 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/report/tools',
           meta: { id: 'report-tools', title: '报表工具', order: 2 },
           children: [
-            { name: 'ReportBoard', path: '/report/board', meta: { id: 'report-board', title: '实时看板', icon: 'data-board' } },
-            { name: 'ReportExport', path: '/report/export', meta: { id: 'report-export', title: '导出中心', icon: 'download' } },
+            {
+              name: 'ReportBoard',
+              path: '/report/board',
+              meta: { id: 'report-board', title: '实时看板', icon: 'data-board' },
+            },
+            {
+              name: 'ReportExport',
+              path: '/report/export',
+              meta: { id: 'report-export', title: '导出中心', icon: 'download' },
+            },
           ],
         },
       ],
@@ -304,9 +580,21 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/dev/open',
           meta: { id: 'dev-open', title: '开放能力' },
           children: [
-            { name: 'DevKey', path: '/dev/key', meta: { id: 'dev-key', title: '接口密钥', icon: 'key' } },
-            { name: 'DevWebhook', path: '/dev/webhook', meta: { id: 'dev-webhook', title: 'Webhook 配置', icon: 'link' } },
-            { name: 'DevDoc', path: '/dev/doc', meta: { id: 'dev-doc', title: '接口文档', icon: 'notebook' } },
+            {
+              name: 'DevKey',
+              path: '/dev/key',
+              meta: { id: 'dev-key', title: '接口密钥', icon: 'key' },
+            },
+            {
+              name: 'DevWebhook',
+              path: '/dev/webhook',
+              meta: { id: 'dev-webhook', title: 'Webhook 配置', icon: 'link' },
+            },
+            {
+              name: 'DevDoc',
+              path: '/dev/doc',
+              meta: { id: 'dev-doc', title: '接口文档', icon: 'notebook' },
+            },
           ],
         },
         {
@@ -314,10 +602,26 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
           path: '/dev/ops',
           meta: { id: 'dev-ops', title: '运维工具', order: 1 },
           children: [
-            { name: 'DevJob', path: '/dev/job', meta: { id: 'dev-job', title: '定时任务', icon: 'timer' } },
-            { name: 'DevEnv', path: '/dev/env', meta: { id: 'dev-env', title: '环境变量', icon: 'set-up' } },
-            { name: 'DevLog', path: '/dev/log', meta: { id: 'dev-log', title: '系统日志', icon: 'document-copy' } },
-            { name: 'DevGenerator', path: '/dev/generator', meta: { id: 'dev-generator', title: '代码生成', icon: 'magic-stick' } },
+            {
+              name: 'DevJob',
+              path: '/dev/job',
+              meta: { id: 'dev-job', title: '定时任务', icon: 'timer' },
+            },
+            {
+              name: 'DevEnv',
+              path: '/dev/env',
+              meta: { id: 'dev-env', title: '环境变量', icon: 'set-up' },
+            },
+            {
+              name: 'DevLog',
+              path: '/dev/log',
+              meta: { id: 'dev-log', title: '系统日志', icon: 'document-copy' },
+            },
+            {
+              name: 'DevGenerator',
+              path: '/dev/generator',
+              meta: { id: 'dev-generator', title: '代码生成', icon: 'magic-stick' },
+            },
           ],
         },
       ],
@@ -328,18 +632,66 @@ export const ADMIN_MENU_RESPONSE: BackendMenuResponse = {
       name: 'Demos',
       path: '/demos',
       redirect: '/demos/access',
-      meta: { id: 'demos', icon: 'ic:baseline-view-in-ar', keepAlive: true, order: 1000, title: 'demos.title' },
+      meta: {
+        id: 'demos',
+        icon: 'ic:baseline-view-in-ar',
+        keepAlive: true,
+        order: 1000,
+        title: 'demos.title',
+      },
       children: [
         {
           name: 'AccessDemos',
           path: '/demos/access',
           redirect: '/demos/access/page-control',
-          meta: { id: 'demos-access', icon: 'mdi:cloud-key-outline', title: 'demos.access.backendPermissions' },
+          meta: {
+            id: 'demos-access',
+            icon: 'mdi:cloud-key-outline',
+            title: 'demos.access.backendPermissions',
+          },
           children: [
-            { name: 'AccessPageControlDemo', path: '/demos/access/page-control', component: '/demos/access/index', meta: { id: 'demos-access-page-control', icon: 'mdi:page-previous-outline', title: 'demos.access.pageAccess' } },
-            { name: 'AccessButtonControlDemo', path: '/demos/access/button-control', component: '/demos/access/button-control', meta: { id: 'demos-access-button-control', icon: 'mdi:button-cursor', title: 'demos.access.buttonControl' } },
-            { name: 'AccessMenuVisible403Demo', path: '/demos/access/menu-visible-403', component: '/demos/access/menu-visible-403', meta: { id: 'demos-access-menu-visible-403', authority: ['no-body'], icon: 'mdi:button-cursor', menuVisibleWithForbidden: true, title: 'demos.access.menuVisible403' } },
-            { name: 'AccessSuperVisibleDemo', path: '/demos/access/super-visible', component: '/demos/access/super-visible', meta: { id: 'demos-access-super-visible', icon: 'mdi:button-cursor', title: 'demos.access.superVisible' } },
+            {
+              name: 'AccessPageControlDemo',
+              path: '/demos/access/page-control',
+              component: '/demos/access/index',
+              meta: {
+                id: 'demos-access-page-control',
+                icon: 'mdi:page-previous-outline',
+                title: 'demos.access.pageAccess',
+              },
+            },
+            {
+              name: 'AccessButtonControlDemo',
+              path: '/demos/access/button-control',
+              component: '/demos/access/button-control',
+              meta: {
+                id: 'demos-access-button-control',
+                icon: 'mdi:button-cursor',
+                title: 'demos.access.buttonControl',
+              },
+            },
+            {
+              name: 'AccessMenuVisible403Demo',
+              path: '/demos/access/menu-visible-403',
+              component: '/demos/access/menu-visible-403',
+              meta: {
+                id: 'demos-access-menu-visible-403',
+                authority: ['no-body'],
+                icon: 'mdi:button-cursor',
+                menuVisibleWithForbidden: true,
+                title: 'demos.access.menuVisible403',
+              },
+            },
+            {
+              name: 'AccessSuperVisibleDemo',
+              path: '/demos/access/super-visible',
+              component: '/demos/access/super-visible',
+              meta: {
+                id: 'demos-access-super-visible',
+                icon: 'mdi:button-cursor',
+                title: 'demos.access.superVisible',
+              },
+            },
           ],
         },
       ],
@@ -373,7 +725,7 @@ function normalizeNode(node: BackendMenu): AdminMenuItem {
  */
 export function normalizeAdminMenus(list: BackendMenu[]): AdminMenuItem[] {
   return [...list]
-    .sort((a, b) => (a.meta?.order ?? 0) - (b.meta?.order ?? 0))
+    .toSorted((a, b) => (a.meta?.order ?? 0) - (b.meta?.order ?? 0))
     .map(normalizeNode)
 }
 
@@ -414,7 +766,10 @@ export function flattenMenuTree(list: AdminMenuItem[]): AdminMenuLeaf[] {
 
 /** 统计一棵菜单树里的叶子菜单数量 */
 export function countMenuLeaves(list: AdminMenuItem[]): number {
-  return list.reduce((total, item) => total + (item.children?.length ? countMenuLeaves(item.children) : 1), 0)
+  return list.reduce(
+    (total, item) => total + (item.children?.length ? countMenuLeaves(item.children) : 1),
+    0,
+  )
 }
 
 /**
@@ -435,7 +790,9 @@ const MENU_TILE_CLASSES: Record<string, string> = {
 
 /** 方形图标块的底色：分类没登记时回落到中性色 */
 export function menuTileClass(categoryId?: string): string {
-  return (categoryId ? MENU_TILE_CLASSES[categoryId] : undefined) ?? 'bg-muted text-muted-foreground'
+  return (
+    (categoryId ? MENU_TILE_CLASSES[categoryId] : undefined) ?? 'bg-muted text-muted-foreground'
+  )
 }
 
 /** 菜单地址：没有真实页面时统一落到占位页（真实路由判断在 `useMenuPath` 里） */
@@ -451,7 +808,7 @@ export function fallbackMenuPath(item: AdminMenuItem): string {
 export function filterMenuTree(
   list: AdminMenuItem[],
   keyword: string,
-  toDisplay: (title: string) => string = title => title,
+  toDisplay: (title: string) => string = (title) => title,
 ): AdminMenuItem[] {
   const kw = keyword.trim().toLowerCase()
   if (!kw) {

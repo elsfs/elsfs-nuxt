@@ -48,7 +48,7 @@ function seededShade(seed: string, x: number, y: number): boolean {
   return (h + x * 3 + y * 7 + x * y) % 3 !== 0
 }
 const cells = computed(() => {
-  const list: { x: number, y: number, on: boolean }[] = []
+  const list: { x: number; y: number; on: boolean }[] = []
   for (let y = 0; y < SIZE; y++) {
     for (let x = 0; x < SIZE; x++) {
       const border = x === 0 || y === 0 || x === SIZE - 1 || y === SIZE - 1
@@ -80,37 +80,25 @@ function goToLogin(): void {
 
     <div class="flex-col-center mt-6">
       <!-- 演示二维码图形 -->
-      <div class="rounded-xl border border-border bg-card p-3 shadow-sm">
+      <div class="border-border bg-card rounded-xl border p-3 shadow-sm">
         <div
           class="grid gap-px"
           :style="{ gridTemplateColumns: `repeat(${SIZE}, minmax(0, 1fr))` }"
         >
-          <template
-            v-for="cell in cells"
-            :key="`${cell.x}-${cell.y}`"
-          >
-            <span
-              class="size-2.5"
-              :class="cell.on ? 'bg-foreground' : 'bg-transparent'"
-            />
+          <template v-for="cell in cells" :key="`${cell.x}-${cell.y}`">
+            <span class="size-2.5" :class="cell.on ? 'bg-foreground' : 'bg-transparent'" />
           </template>
         </div>
       </div>
 
-      <p class="mt-4 text-sm text-muted-foreground">
+      <p class="text-muted-foreground mt-4 text-sm">
         <slot name="description">
           {{ description || t('qrcodeLogin.prompt') }}
         </slot>
       </p>
     </div>
 
-    <ElButton
-      v-if="showBack"
-      type="default"
-      plain
-      class="mt-4 w-full"
-      @click="goToLogin()"
-    >
+    <ElButton v-if="showBack" type="default" plain class="mt-4 w-full" @click="goToLogin()">
       {{ t('common.back') }}
     </ElButton>
   </div>

@@ -58,22 +58,20 @@ async function handleSelect(item: AdminMenuItem): Promise<void> {
   >
     <div class="flex h-full min-h-0 flex-nowrap">
       <!-- 左：一级菜单 -->
-      <nav class="flex w-[188px] shrink-0 flex-col overflow-y-auto bg-muted/50 py-2">
+      <nav class="bg-muted/50 flex w-[188px] shrink-0 flex-col overflow-y-auto py-2">
         <button
           v-for="(item, index) in menuStore.menus"
           :key="item.id"
           type="button"
           class="flex h-11 shrink-0 cursor-pointer items-center gap-2 pl-3 text-left text-sm transition-colors"
-          :class="activeCategory === index && !keyword
-            ? 'bg-background font-bold text-primary dark:bg-foreground/10'
-            : 'text-foreground hover:bg-background/60 dark:hover:bg-foreground/5'"
+          :class="
+            activeCategory === index && !keyword
+              ? 'bg-background text-primary dark:bg-foreground/10 font-bold'
+              : 'text-foreground hover:bg-background/60 dark:hover:bg-foreground/5'
+          "
           @click="selectCategory(index)"
         >
-          <AppIcon
-            :name="item.icon ?? 'menu'"
-            fallback="menu"
-            class="size-4 shrink-0"
-          />
+          <AppIcon :name="item.icon ?? 'menu'" fallback="menu" class="size-4 shrink-0" />
           <span class="truncate">{{ menuTitle(item.title) }}</span>
         </button>
       </nav>
@@ -83,64 +81,49 @@ async function handleSelect(item: AdminMenuItem): Promise<void> {
         <!-- 搜索框 + 关闭按钮 -->
         <div class="flex h-15 shrink-0 items-center gap-5 px-5 py-2.5">
           <div class="relative min-w-0 flex-1">
-            <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-muted-foreground">
-              <AppIcon
-                name="search"
-                class="size-4"
-              />
+            <span
+              class="text-muted-foreground pointer-events-none absolute inset-y-0 left-3 flex items-center"
+            >
+              <AppIcon name="search" class="size-4" />
             </span>
             <input
               v-model="keyword"
               type="text"
               :placeholder="t('admin.searchPlaceholder')"
-              class="h-10 w-full rounded-lg border border-border bg-background pr-9 pl-9 text-sm text-foreground transition-colors outline-none placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20"
-            >
+              class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-10 w-full rounded-lg border pr-9 pl-9 text-sm transition-colors outline-none focus:ring-2"
+            />
             <button
               v-if="keyword"
               type="button"
-              class="absolute inset-y-0 right-2 my-auto flex size-6 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              class="text-muted-foreground hover:bg-accent hover:text-foreground absolute inset-y-0 right-2 my-auto flex size-6 items-center justify-center rounded-full transition-colors"
               :aria-label="t('admin.clearSearch')"
               @click="keyword = ''"
             >
-              <AppIcon
-                name="close"
-                class="size-3.5"
-              />
+              <AppIcon name="close" class="size-3.5" />
             </button>
           </div>
 
           <button
             type="button"
-            class="flex size-6 shrink-0 cursor-pointer items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
+            class="text-muted-foreground hover:text-foreground flex size-6 shrink-0 cursor-pointer items-center justify-center transition-colors"
             :aria-label="t('admin.closeMenuList')"
             @click="show = false"
           >
-            <AppIcon
-              name="close"
-              class="size-5"
-            />
+            <AppIcon name="close" class="size-5" />
           </button>
         </div>
 
         <div class="min-h-0 flex-1 overflow-y-auto px-5 pb-6">
           <template v-if="visibleCount">
-            <section
-              v-for="item in visibleMenus"
-              :key="item.id"
-              class="mb-5"
-            >
+            <section v-for="item in visibleMenus" :key="item.id" class="mb-5">
               <!-- 一级：子系统 / 分类（参考项目用主色加粗） -->
-              <h4 class="mb-2 text-sm font-bold text-primary">
+              <h4 class="text-primary mb-2 text-sm font-bold">
                 {{ menuTitle(item.title) }}
               </h4>
 
               <!-- 二级：分组 -->
-              <div
-                v-for="group in item.children"
-                :key="group.id"
-                class="mb-3 last:mb-0"
-              >
-                <h6 class="mb-1 text-xs font-semibold text-muted-foreground">
+              <div v-for="group in item.children" :key="group.id" class="mb-3 last:mb-0">
+                <h6 class="text-muted-foreground mb-1 text-xs font-semibold">
                   {{ menuTitle(group.title) }}
                 </h6>
 
@@ -149,34 +132,41 @@ async function handleSelect(item: AdminMenuItem): Promise<void> {
                   <div
                     v-for="child in group.children"
                     :key="child.id"
-                    class="group/row relative flex h-8 items-center rounded transition-colors hover:bg-accent"
+                    class="group/row hover:bg-accent relative flex h-8 items-center rounded transition-colors"
                   >
                     <button
                       type="button"
-                      class="flex h-full min-w-0 flex-1 cursor-pointer items-center pl-3 text-left text-sm text-foreground"
+                      class="text-foreground flex h-full min-w-0 flex-1 cursor-pointer items-center pl-3 text-left text-sm"
                       @click="handleSelect(child)"
                     >
                       <span class="truncate">{{ menuTitle(child.title) }}</span>
                     </button>
 
                     <ElTooltip
-                      :content="menuStore.isFavorite(child.id) ? t('admin.removeFavorite') : t('admin.addFavorite')"
+                      :content="
+                        menuStore.isFavorite(child.id)
+                          ? t('admin.removeFavorite')
+                          : t('admin.addFavorite')
+                      "
                       placement="bottom-start"
                       :show-after="0"
                     >
                       <button
                         type="button"
                         class="absolute top-1/2 right-2.5 flex size-5 -translate-y-1/2 cursor-pointer items-center justify-center rounded transition-opacity"
-                        :class="menuStore.isFavorite(child.id)
-                          ? 'text-primary opacity-100'
-                          : 'text-muted-foreground/70 opacity-0 hover:text-primary group-hover/row:opacity-100 focus-visible:opacity-100'"
-                        :aria-label="menuStore.isFavorite(child.id) ? t('admin.removeFavorite') : t('admin.addFavorite')"
+                        :class="
+                          menuStore.isFavorite(child.id)
+                            ? 'text-primary opacity-100'
+                            : 'text-muted-foreground/70 hover:text-primary opacity-0 group-hover/row:opacity-100 focus-visible:opacity-100'
+                        "
+                        :aria-label="
+                          menuStore.isFavorite(child.id)
+                            ? t('admin.removeFavorite')
+                            : t('admin.addFavorite')
+                        "
                         @click="menuStore.toggleFavorite(child.id)"
                       >
-                        <AppIcon
-                          name="star-filled"
-                          class="size-4"
-                        />
+                        <AppIcon name="star-filled" class="size-4" />
                       </button>
                     </ElTooltip>
                   </div>
@@ -187,12 +177,9 @@ async function handleSelect(item: AdminMenuItem): Promise<void> {
 
           <div
             v-else
-            class="flex flex-col items-center justify-center gap-2 py-20 text-sm text-muted-foreground"
+            class="text-muted-foreground flex flex-col items-center justify-center gap-2 py-20 text-sm"
           >
-            <AppIcon
-              name="search"
-              class="size-8 opacity-40"
-            />
+            <AppIcon name="search" class="size-8 opacity-40" />
             {{ t('admin.searchEmpty') }}
           </div>
         </div>

@@ -29,7 +29,7 @@ export default defineAppConfig({
         csv: 'i-vscode-icons-file-type-excel',
         jsonc: 'i-vscode-icons-file-type-json2',
         // 中文文件名标签对应的图标映射（CodeIcon 会拿文件名/扩展名去这张表里查）
-        '终端': 'i-lucide-terminal',
+        终端: 'i-lucide-terminal',
       },
       codePreview: {
         slots: {

@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate'
 import { onBeforeUnmount } from 'vue'
+
+import AuthTitle from './-auth-title.vue'
 import type { CodeLoginFormValues } from './useAuthValidation'
 import { useAuthValidation } from './useAuthValidation'
-import AuthTitle from './-auth-title.vue'
 
 definePageMeta({ layout: 'auth', middleware: 'guest' })
 
@@ -49,11 +50,9 @@ async function handleSendCode(): Promise<void> {
     await auth.sendCode({ email: target, scene: 'login' })
     ElMessage.success(t('codeLogin.sendSuccess'))
     startCountdown()
-  }
-  catch {
+  } catch {
     // 错误码已写入 store，由模板内 Alert 展示
-  }
-  finally {
+  } finally {
     sendingCode.value = false
   }
 }
@@ -75,8 +74,7 @@ const onSubmit = handleSubmit(async (values) => {
     await auth.codeLogin(values)
     const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
     await router.push(redirect)
-  }
-  catch {
+  } catch {
     // 错误码已写入 store，由模板内 Alert 展示
   }
 })
@@ -93,9 +91,7 @@ onBeforeUnmount(() => {
 <template>
   <div>
     <AuthTitle>
-      <slot name="title">
-        {{ t('login.welcomeBack') }} 📲
-      </slot>
+      <slot name="title"> {{ t('login.welcomeBack') }} 📲 </slot>
       <template #desc>
         <slot name="subTitle">
           {{ t('codeLogin.subtitle') }}
@@ -111,16 +107,8 @@ onBeforeUnmount(() => {
       :title="t(`errors.${auth.errorCode}`)"
     />
 
-    <ElForm
-      label-position="top"
-      novalidate
-      class="auth-form"
-      @submit="onSubmit"
-    >
-      <ElFormItem
-        :label="t('codeLogin.email')"
-        :error="emailError"
-      >
+    <ElForm label-position="top" novalidate class="auth-form" @submit="onSubmit">
+      <ElFormItem :label="t('codeLogin.email')" :error="emailError">
         <ElInput
           v-model="email"
           type="email"
@@ -129,18 +117,12 @@ onBeforeUnmount(() => {
           autocomplete="email"
         >
           <template #prefix>
-            <AppIcon
-              name="message"
-              class="size-4 text-dimmed"
-            />
+            <AppIcon name="message" class="text-dimmed size-4" />
           </template>
         </ElInput>
       </ElFormItem>
 
-      <ElFormItem
-        :label="t('codeLogin.code')"
-        :error="codeError"
-      >
+      <ElFormItem :label="t('codeLogin.code')" :error="codeError">
         <ElInput
           v-model="code"
           inputmode="numeric"
@@ -150,16 +132,13 @@ onBeforeUnmount(() => {
           autocomplete="one-time-code"
         >
           <template #prefix>
-            <AppIcon
-              name="key"
-              class="size-4 text-dimmed"
-            />
+            <AppIcon name="key" class="text-dimmed size-4" />
           </template>
           <template #suffix>
             <button
               type="button"
               :disabled="!canSend"
-              class="text-xs font-medium text-primary transition-colors hover:text-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
+              class="text-primary hover:text-primary-hover text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50"
               @click="handleSendCode"
             >
               {{ getCodeText }}
@@ -178,12 +157,7 @@ onBeforeUnmount(() => {
       </ElButton>
     </ElForm>
 
-    <ElButton
-      type="default"
-      plain
-      class="mt-4 w-full"
-      @click="goToLogin()"
-    >
+    <ElButton type="default" plain class="mt-4 w-full" @click="goToLogin()">
       {{ t('common.back') }}
     </ElButton>
   </div>

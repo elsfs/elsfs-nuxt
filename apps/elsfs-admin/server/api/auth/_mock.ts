@@ -14,8 +14,7 @@ export function parseMockToken(token: string | null | undefined): string | null 
   try {
     const email = Buffer.from(parts[1], 'base64url').toString('utf8')
     return email.includes('@') ? email : null
-  }
-  catch {
+  } catch {
     return null
   }
 }

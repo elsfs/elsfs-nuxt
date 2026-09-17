@@ -1,7 +1,6 @@
 import { useRequest } from '../core/api'
 
-export const { useRequestHandle, requestPath }
-  = useRequest('/aiEmbeddingStore')
+export const { useRequestHandle, requestPath } = useRequest('/aiEmbeddingStore')
 
 /**
  * 向量配置

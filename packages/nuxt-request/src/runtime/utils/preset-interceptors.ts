@@ -1,9 +1,9 @@
+import axios from 'axios'
+import { useI18n } from 'vue-i18n'
+
 import type { RequestClient } from './request-client'
 import type { MakeErrorMessageFn, ResponseInterceptorConfig } from './types'
 import { isFunction } from './util'
-import { useI18n } from 'vue-i18n'
-
-import axios from 'axios'
 
 /**
  * 获取 vue-i18n 的翻译函数。
@@ -14,8 +14,7 @@ import axios from 'axios'
 function getT(): (key: string) => string {
   try {
     return useI18n().t
-  }
-  catch {
+  } catch {
     return (key: string) => key
   }
 }
@@ -43,15 +42,12 @@ export const defaultResponseInterceptor = ({
       if (status >= 200 && status < 400) {
         if (config.responseReturn === 'body') {
           return responseData
-        }
-        else if (
+        } else if (
           isFunction(successCode)
             ? successCode(responseData[codeField])
             : responseData[codeField] === successCode
         ) {
-          return isFunction(dataField)
-            ? dataField(responseData)
-            : responseData[dataField]
+          return isFunction(dataField) ? dataField(responseData) : responseData[dataField]
         }
       }
       throw Object.assign({}, response, { response })
@@ -104,22 +100,20 @@ export const authenticateResponseInterceptor = ({
         const newToken = await doRefreshToken()
 
         // 处理队列中的请求
-        client.refreshTokenQueue.forEach(callback => callback(newToken))
+        client.refreshTokenQueue.forEach((callback) => callback(newToken))
         // 清空队列
         client.refreshTokenQueue = []
 
         return client.request(error.config.url, { ...error.config })
-      }
-      catch (refreshError) {
+      } catch (refreshError) {
         // 如果刷新 token 失败，处理错误（如强制登出或跳转登录页面）
-        client.refreshTokenQueue.forEach(callback => callback(''))
+        client.refreshTokenQueue.forEach((callback) => callback(''))
         client.refreshTokenQueue = []
         console.error('Refresh token failed, please login again.')
         await doReAuthenticate()
 
         throw refreshError
-      }
-      finally {
+      } finally {
         client.isRefreshing = false
       }
     },
@@ -139,8 +133,7 @@ export const errorMessageResponseInterceptor = (
       let errMsg = ''
       if (err?.includes('Network Error')) {
         errMsg = getT()('ui.fallback.http.networkError')
-      }
-      else if (error?.message?.includes?.('timeout')) {
+      } else if (error?.message?.includes?.('timeout')) {
         errMsg = getT()('ui.fallback.http.requestTimeout')
       }
       if (errMsg) {

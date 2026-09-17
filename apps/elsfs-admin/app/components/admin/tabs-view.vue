@@ -16,7 +16,7 @@ const menuStore = useMenuStore()
 const menuTitle = useMenuTitle()
 
 /** 右键菜单：坐标 + 目标标签 */
-const contextMenu = ref<{ x: number, y: number, tab: AppTab } | null>(null)
+const contextMenu = ref<{ x: number; y: number; tab: AppTab } | null>(null)
 
 /* ---------- 拖拽排序 ---------- */
 const dragIndex = ref<number | null>(null)
@@ -69,7 +69,7 @@ async function goTab(tab: AppTab): Promise<void> {
 }
 
 async function closeTab(tab: AppTab): Promise<void> {
-  const index = tabsStore.tabs.findIndex(item => item.path === tab.path)
+  const index = tabsStore.tabs.findIndex((item) => item.path === tab.path)
   tabsStore.closeTab(tab.path)
   if (tab.path !== route.path) {
     return
@@ -123,7 +123,7 @@ async function closeAll(): Promise<void> {
 
 async function handleMoreCommand(command: string): Promise<void> {
   if (command === 'others') {
-    const active = tabsStore.tabs.find(tab => tab.path === route.path) ?? tabsStore.tabs[0]
+    const active = tabsStore.tabs.find((tab) => tab.path === route.path) ?? tabsStore.tabs[0]
     if (active) {
       tabsStore.closeOthers(active.path)
     }
@@ -147,7 +147,9 @@ async function handleMoreCommand(command: string): Promise<void> {
           route.path === tab.path
             ? 'border-primary/40 bg-primary/10 text-primary'
             : 'border-border bg-background text-muted-foreground hover:text-foreground',
-          dragIndex !== null && overIndex === index && dragIndex !== index ? 'ring-2 ring-primary/60' : '',
+          dragIndex !== null && overIndex === index && dragIndex !== index
+            ? 'ring-primary/60 ring-2'
+            : '',
         ]"
         @click="goTab(tab)"
         @contextmenu.prevent="openContextMenu(tab, $event)"
@@ -156,43 +158,28 @@ async function handleMoreCommand(command: string): Promise<void> {
         @drop.prevent="handleDrop(index)"
         @dragend="resetDrag"
       >
-        <AppIcon
-          v-if="tab.icon"
-          :name="tab.icon"
-          fallback="document"
-          class="size-3.5 shrink-0"
-        />
+        <AppIcon v-if="tab.icon" :name="tab.icon" fallback="document" class="size-3.5 shrink-0" />
         <span class="max-w-28 truncate text-xs">{{ menuTitle(tab.title) }}</span>
         <button
           v-if="!tab.affix"
           type="button"
-          class="flex size-4 shrink-0 items-center justify-center rounded-full transition-opacity hover:bg-accent hover:text-destructive"
+          class="hover:bg-accent hover:text-destructive flex size-4 shrink-0 items-center justify-center rounded-full transition-opacity"
           :class="route.path === tab.path ? 'opacity-100' : 'opacity-0 group-hover/tab:opacity-100'"
           :aria-label="t('admin.closeTab')"
           @click.stop="closeTab(tab)"
         >
-          <AppIcon
-            name="close"
-            class="size-3"
-          />
+          <AppIcon name="close" class="size-3" />
         </button>
       </div>
     </div>
 
-    <ElDropdown
-      v-if="tabsStore.tabs.length"
-      trigger="click"
-      @command="handleMoreCommand"
-    >
+    <ElDropdown v-if="tabsStore.tabs.length" trigger="click" @command="handleMoreCommand">
       <button
         type="button"
-        class="flex size-8 shrink-0 items-center justify-center rounded-md border border-border text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+        class="border-border text-muted-foreground hover:bg-accent hover:text-foreground flex size-8 shrink-0 items-center justify-center rounded-md border transition-colors"
         :aria-label="t('admin.moreTabs')"
       >
-        <AppIcon
-          name="arrow-down"
-          class="size-3.5"
-        />
+        <AppIcon name="arrow-down" class="size-3.5" />
       </button>
       <template #dropdown>
         <ElDropdownMenu>
@@ -214,12 +201,12 @@ async function handleMoreCommand(command: string): Promise<void> {
         @contextmenu.prevent="closeContextMenu"
       />
       <div
-        class="fixed z-50 min-w-32 overflow-hidden rounded-lg border border-border bg-popover py-1 text-sm text-popover-foreground shadow-md"
+        class="border-border bg-popover text-popover-foreground fixed z-50 min-w-32 overflow-hidden rounded-lg border py-1 text-sm shadow-md"
         :style="{ left: `${contextMenu.x}px`, top: `${contextMenu.y}px` }"
       >
         <button
           type="button"
-          class="flex w-full items-center gap-2 px-3 py-1.5 text-left transition-colors hover:bg-accent"
+          class="hover:bg-accent flex w-full items-center gap-2 px-3 py-1.5 text-left transition-colors"
           @click="toggleFavorite"
         >
           <AppIcon
@@ -231,35 +218,26 @@ async function handleMoreCommand(command: string): Promise<void> {
         </button>
         <button
           type="button"
-          class="flex w-full items-center gap-2 px-3 py-1.5 text-left transition-colors hover:bg-accent"
+          class="hover:bg-accent flex w-full items-center gap-2 px-3 py-1.5 text-left transition-colors"
           @click="reload"
         >
-          <AppIcon
-            name="refresh"
-            class="size-3.5 text-muted-foreground"
-          />
+          <AppIcon name="refresh" class="text-muted-foreground size-3.5" />
           {{ t('admin.reload') }}
         </button>
         <button
           type="button"
-          class="flex w-full items-center gap-2 px-3 py-1.5 text-left transition-colors hover:bg-accent"
+          class="hover:bg-accent flex w-full items-center gap-2 px-3 py-1.5 text-left transition-colors"
           @click="closeOthers"
         >
-          <AppIcon
-            name="close"
-            class="size-3.5 text-muted-foreground"
-          />
+          <AppIcon name="close" class="text-muted-foreground size-3.5" />
           {{ t('admin.closeOthers') }}
         </button>
         <button
           type="button"
-          class="flex w-full items-center gap-2 px-3 py-1.5 text-left transition-colors hover:bg-accent"
+          class="hover:bg-accent flex w-full items-center gap-2 px-3 py-1.5 text-left transition-colors"
           @click="closeAll"
         >
-          <AppIcon
-            name="delete"
-            class="size-3.5 text-muted-foreground"
-          />
+          <AppIcon name="delete" class="text-muted-foreground size-3.5" />
           {{ t('admin.closeAll') }}
         </button>
       </div>

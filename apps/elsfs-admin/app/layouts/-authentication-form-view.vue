@@ -13,7 +13,7 @@ withDefaults(
 
 <template>
   <div
-    class="relative flex-col-center min-h-screen bg-background px-6 py-10 lg:flex-initial lg:px-8 dark:bg-background-deep"
+    class="flex-col-center bg-background dark:bg-background-deep relative min-h-screen px-6 py-10 lg:flex-initial lg:px-8"
   >
     <!-- 表单内容（含认证页面） -->
     <div class="side-content mt-8 w-full sm:mx-auto md:max-w-md">
@@ -21,9 +21,7 @@ withDefaults(
     </div>
 
     <!-- 底部版权 -->
-    <div
-      class="absolute right-0 bottom-3 left-0 flex justify-center px-6 text-center text-xs"
-    >
+    <div class="absolute right-0 bottom-3 left-0 flex justify-center px-6 text-center text-xs">
       <slot name="copyright" />
     </div>
   </div>

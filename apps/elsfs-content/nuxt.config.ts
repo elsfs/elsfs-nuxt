@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
+
 import { defineNuxtConfig } from 'nuxt/config'
 
 export default defineNuxtConfig({
@@ -9,6 +10,40 @@ export default defineNuxtConfig({
   site: {
     name: 'Nuxt Content',
     url: 'https://content.nuxt.com',
+  },
+  content: {
+    experimental: {
+      sqliteConnector: 'native',
+    },
+    build: {
+      markdown: {
+        highlight: {
+          langs: ['docker', 'json'],
+        },
+      },
+    },
+  },
+  routeRules: {
+    ...readFileSync(resolve(import.meta.dirname, '_redirects'), 'utf-8')
+      .split('\n')
+      .filter((line) => line.trim().length && !line.trim().startsWith('#'))
+      .reduce(
+        (acc, line) => {
+          const [from, to] = line.split('=') as [string, string]
+          return Object.assign(acc, { [from]: { redirect: to } })
+        },
+        {} as Record<string, { redirect: string }>,
+      ),
+  },
+  nitro: {
+    compatibilityDate: {
+      // Don't generate observability routes
+      vercel: '2025-07-14',
+    },
+  },
+  hub: {
+    db: 'sqlite',
+    cache: true,
   },
   fonts: {
     providers: {
@@ -59,45 +94,11 @@ export default defineNuxtConfig({
       ],
     },
   },
-  content: {
-    experimental: {
-      sqliteConnector: 'native',
-    },
-    build: {
-      markdown: {
-        highlight: {
-          langs: ['docker', 'json'],
-        },
-      },
-    },
-  },
-  routeRules: {
-    ...(readFileSync(resolve(import.meta.dirname, '_redirects'), 'utf-8'))
-      .split('\n')
-      .filter(line => line.trim().length && !line.trim().startsWith('#'))
-      .reduce((acc, line) => {
-        const [from, to] = line.split('=') as [string, string]
-        return Object.assign(acc, { [from]: { redirect: to } })
-      }, {} as Record<string, { redirect: string }>),
-  },
-  nitro: {
-    compatibilityDate: {
-      // Don't generate observability routes
-      vercel: '2025-07-14',
-    },
-  },
-  hub: {
-    db: 'sqlite',
-    cache: true,
-  },
   llms: {
     domain: 'https://content.nuxt.com',
     title: 'Nuxt Content',
     description: 'Nuxt Content 是面向 Nuxt 项目的基于 Git 的 CMS。',
-    notes: [
-      '本文档仅包含 Nuxt Content v3 的文档。',
-      '内容与官方文档同源，自动生成。',
-    ],
+    notes: ['本文档仅包含 Nuxt Content v3 的文档。', '内容与官方文档同源，自动生成。'],
     full: {
       title: '完整文档',
       description: '包含全部内容的完整文档',
@@ -108,7 +109,7 @@ export default defineNuxtConfig({
   },
   studio: {
     route: '/admin',
-    // @ts-ignore
+    // nuxt-studio 1.7 的 ModuleOptions 已包含 repository（GitHubRepositoryOptions），无需类型抑制
     repository: {
       owner: 'nuxt',
       repo: 'content',

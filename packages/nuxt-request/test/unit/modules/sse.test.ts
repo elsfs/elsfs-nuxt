@@ -1,8 +1,7 @@
-import type { RequestClient } from '../../../src/runtime/utils/request-client'
-
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { SSE } from '../../../src/runtime/utils/modules/sse'
+import type { RequestClient } from '../../../src/runtime/utils/request-client'
 
 // 模拟 TextDecoder
 const OriginalTextDecoder = globalThis.TextDecoder
@@ -12,7 +11,7 @@ beforeEach(() => {
     'TextDecoder',
     class {
       private decoder = new OriginalTextDecoder()
-      decode(value: Uint8Array, opts?: any) {
+      decode(value: Uint8Array, opts?: TextDecodeOptions) {
         return this.decoder.decode(value, opts)
       }
     },
@@ -73,9 +72,7 @@ describe('sSE', () => {
 
   it('should throw error if fetch response not ok', async () => {
     vi.stubGlobal('fetch', createFetchMock([], false))
-    await expect(sse.requestSSE('/bad')).rejects.toThrow(
-      'HTTP error! status: 500',
-    )
+    await expect(sse.requestSSE('/bad')).rejects.toThrow('HTTP error! status: 500')
   })
 
   it('should trigger onMessage and onEnd callbacks', async () => {
@@ -97,8 +94,8 @@ describe('sSE', () => {
     const interceptor = vi.fn(async (config) => {
       config.headers['x-test'] = 'intercepted'
       return config
-    });
-    (client.instance.interceptors.request as any).handlers.push({
+    })
+    ;(client.instance.interceptors.request as any).handlers.push({
       fulfilled: interceptor,
     })
 

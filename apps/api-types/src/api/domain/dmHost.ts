@@ -1,6 +1,6 @@
-import { useRequest } from '../core/api';
+import { useRequest } from '../core/api'
 
-export const { useRequestHandle, requestPath } = useRequest('/dmHost');
+export const { useRequestHandle, requestPath } = useRequest('/dmHost')
 
 /**
  * 证书主机
@@ -9,48 +9,48 @@ export interface DmHost {
   /**
    * 主键ID
    */
-  hostId?: string;
+  hostId?: string
 
   /**
    * 用户ID
    */
-  userId?: number;
+  userId?: number
 
   /**
    * 远程主机地址
    */
-  host?: string;
+  host?: string
 
   /**
    * 端口号
    */
-  port?: string;
+  port?: string
 
   /**
    * 验证方式 默认密码验证
    * 1-密码验证
    * 2-私钥验证
    */
-  authType?: number;
+  authType?: number
 
   /**
    * 私钥
    */
-  privateKey?: string;
+  privateKey?: string
 
   /**
    * 登录用户
    */
-  user?: string;
+  user?: string
 
   /**
    * 密码
    */
-  password?: string;
+  password?: string
 
   // 继承自BaseEntity的属性（如果有的话）
-  createTime?: Date;
-  updateTime?: Date;
-  createBy?: string;
-  updateBy?: string;
+  createTime?: Date
+  updateTime?: Date
+  createBy?: string
+  updateBy?: string
 }

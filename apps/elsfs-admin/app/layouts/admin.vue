@@ -26,16 +26,20 @@ const favoritesCollapsed = useCookie<boolean>('elsfs_menu_rail_collapsed', {
 })
 
 /* ---------- 多页签：进一个页面就记一个标签 ---------- */
-watch(() => route.path, (path) => {
-  const menu = menuStore.leafByPath(path)
-  tabsStore.openTab({
-    path,
-    title: menu?.title ?? path,
-    menuId: menu?.id,
-    icon: menu?.icon,
-    affix: menu?.meta.affixTab,
-  })
-}, { immediate: true })
+watch(
+  () => route.path,
+  (path) => {
+    const menu = menuStore.leafByPath(path)
+    tabsStore.openTab({
+      path,
+      title: menu?.title ?? path,
+      menuId: menu?.id,
+      icon: menu?.icon,
+      affix: menu?.meta.affixTab,
+    })
+  },
+  { immediate: true },
+)
 
 /* ---------- 主题 ---------- */
 const colorMode = useColorMode()
@@ -60,7 +64,7 @@ function toggleTheme(): void {
 
 /* ---------- 语言 ---------- */
 const localeItems = computed(() =>
-  locales.value.map(item => ({ label: item.name || item.code, value: item.code })),
+  locales.value.map((item) => ({ label: item.name || item.code, value: item.code })),
 )
 
 async function switchLocale(code: string): Promise<void> {
@@ -119,67 +123,52 @@ function browseFromMobile(): void {
 </script>
 
 <template>
-  <div class="flex h-screen w-full flex-col overflow-hidden bg-background text-foreground">
+  <div class="bg-background text-foreground flex h-screen w-full flex-col overflow-hidden">
     <!-- 顶栏 -->
-    <header class="flex h-14 shrink-0 items-center gap-2 border-b border-border bg-card/60 pr-3 pl-2 sm:pr-4">
+    <header
+      class="border-border bg-card/60 flex h-14 shrink-0 items-center gap-2 border-b pr-3 pl-2 sm:pr-4"
+    >
       <!-- 左：主页 / 全部菜单 / 平台名 -->
       <ul class="flex shrink-0 items-center gap-1">
         <li>
-          <ElTooltip
-            :content="t('admin.home')"
-            placement="bottom"
-            :show-after="500"
-          >
+          <ElTooltip :content="t('admin.home')" placement="bottom" :show-after="500">
             <button
               type="button"
-              class="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              class="text-muted-foreground hover:bg-accent hover:text-foreground flex size-9 items-center justify-center rounded-lg transition-colors"
               :aria-label="t('admin.home')"
               @click="goHome"
             >
-              <AppIcon
-                name="house"
-                class="size-4"
-              />
+              <AppIcon name="house" class="size-4" />
             </button>
           </ElTooltip>
         </li>
         <li>
-          <ElTooltip
-            :content="t('admin.allMenus')"
-            placement="bottom"
-            :show-after="500"
-          >
+          <ElTooltip :content="t('admin.allMenus')" placement="bottom" :show-after="500">
             <button
               type="button"
-              class="flex size-9 items-center justify-center rounded-lg transition-colors hover:bg-accent hover:text-foreground"
+              class="hover:bg-accent hover:text-foreground flex size-9 items-center justify-center rounded-lg transition-colors"
               :class="showMenuDrawer ? 'bg-accent text-primary' : 'text-muted-foreground'"
               :aria-label="t('admin.allMenus')"
               @click="showMenuDrawer = !showMenuDrawer"
             >
-              <AppIcon
-                :name="showMenuDrawer ? 'expand' : 'menu'"
-                class="size-4"
-              />
+              <AppIcon :name="showMenuDrawer ? 'expand' : 'menu'" class="size-4" />
             </button>
           </ElTooltip>
         </li>
         <li class="md:hidden">
           <button
             type="button"
-            class="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+            class="text-muted-foreground hover:bg-accent hover:text-foreground flex size-9 items-center justify-center rounded-lg transition-colors"
             :aria-label="t('admin.openFavorites')"
             @click="showMobileFavorites = true"
           >
-            <AppIcon
-              name="star-filled"
-              class="size-4"
-            />
+            <AppIcon name="star-filled" class="size-4" />
           </button>
         </li>
         <li>
           <button
             type="button"
-            class="max-w-40 cursor-pointer truncate px-1 text-base text-foreground"
+            class="text-foreground max-w-40 cursor-pointer truncate px-1 text-base"
             @click="showMenuDrawer = true"
           >
             {{ t('common.appName') }}
@@ -196,44 +185,37 @@ function browseFromMobile(): void {
           <AdminNoticeBell />
         </li>
         <li>
-          <ElTooltip
-            :content="t('admin.settings')"
-            placement="bottom"
-            :show-after="500"
-          >
+          <ElTooltip :content="t('admin.settings')" placement="bottom" :show-after="500">
             <button
               type="button"
-              class="flex size-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+              class="text-muted-foreground hover:bg-accent hover:text-foreground flex size-9 items-center justify-center rounded-lg transition-colors"
               :aria-label="t('admin.settings')"
               @click="handleComingSoon"
             >
-              <AppIcon
-                name="setting"
-                class="size-4"
-              />
+              <AppIcon name="setting" class="size-4" />
             </button>
           </ElTooltip>
         </li>
         <li>
-          <ElDropdown
-            trigger="click"
-            @command="handleUserCommand"
-          >
-            <div class="flex cursor-pointer items-center gap-2 rounded-lg px-1.5 py-1 transition-colors hover:bg-accent">
-              <span class="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xs font-medium text-primary">
+          <ElDropdown trigger="click" @command="handleUserCommand">
+            <div
+              class="hover:bg-accent flex cursor-pointer items-center gap-2 rounded-lg px-1.5 py-1 transition-colors"
+            >
+              <span
+                class="bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-medium"
+              >
                 {{ userInitial }}
               </span>
               <span class="hidden flex-col leading-tight sm:flex">
-                <span class="flex items-center gap-1 text-xs text-foreground">
+                <span class="text-foreground flex items-center gap-1 text-xs">
                   {{ userName }}
                   <span class="text-muted-foreground">{{ t('admin.roleAdmin') }}</span>
                 </span>
-                <span class="max-w-40 truncate text-[11px] text-muted-foreground">{{ auth.user?.email }}</span>
+                <span class="text-muted-foreground max-w-40 truncate text-[11px]">{{
+                  auth.user?.email
+                }}</span>
               </span>
-              <AppIcon
-                name="arrow-down"
-                class="size-3 shrink-0 text-muted-foreground"
-              />
+              <AppIcon name="arrow-down" class="text-muted-foreground size-3 shrink-0" />
             </div>
             <template #dropdown>
               <ElDropdownMenu>
@@ -246,16 +228,12 @@ function browseFromMobile(): void {
                 <ElDropdownItem command="clearCache">
                   {{ t('admin.clearCache') }}
                 </ElDropdownItem>
-                <ElDropdownItem
-                  divided
-                  command="theme"
-                >
+                <ElDropdownItem divided command="theme">
                   <span class="flex items-center gap-2">
-                    <AppIcon
-                      :name="showDarkIcon ? 'sun' : 'moon'"
-                      class="size-4"
-                    />
-                    {{ t('common.theme') }}：{{ showDarkIcon ? t('admin.themeDark') : t('admin.themeLight') }}
+                    <AppIcon :name="showDarkIcon ? 'sun' : 'moon'" class="size-4" />
+                    {{ t('common.theme') }}：{{
+                      showDarkIcon ? t('admin.themeDark') : t('admin.themeLight')
+                    }}
                   </span>
                 </ElDropdownItem>
                 <ElDropdownItem
@@ -267,20 +245,16 @@ function browseFromMobile(): void {
                     <AppIcon
                       v-if="locale === item.value"
                       name="check"
-                      class="size-4 text-primary"
+                      class="text-primary size-4"
                     />
-                    <span :class="locale === item.value ? 'text-primary' : ''">{{ item.label }}</span>
+                    <span :class="locale === item.value ? 'text-primary' : ''">{{
+                      item.label
+                    }}</span>
                   </span>
                 </ElDropdownItem>
-                <ElDropdownItem
-                  divided
-                  command="logout"
-                >
+                <ElDropdownItem divided command="logout">
                   <span class="flex items-center gap-2">
-                    <AppIcon
-                      name="switch-button"
-                      class="size-4"
-                    />
+                    <AppIcon name="switch-button" class="size-4" />
                     {{ t('common.logout') }}
                   </span>
                 </ElDropdownItem>
@@ -294,20 +268,17 @@ function browseFromMobile(): void {
     <div class="flex min-h-0 flex-1">
       <!-- 左侧：收藏夹（参考 onehip-frontend，窄栏 + 可收起） -->
       <aside
-        class="hidden shrink-0 flex-col border-r border-border bg-card/30 transition-[width] duration-200 md:flex"
+        class="border-border bg-card/30 hidden shrink-0 flex-col border-r transition-[width] duration-200 md:flex"
         :class="favoritesCollapsed ? 'w-9' : 'w-[76px]'"
       >
         <button
           type="button"
-          class="flex shrink-0 cursor-pointer items-center justify-center gap-0.5 py-2 text-[11px] text-muted-foreground transition-colors hover:text-primary"
+          class="text-muted-foreground hover:text-primary flex shrink-0 cursor-pointer items-center justify-center gap-0.5 py-2 text-[11px] transition-colors"
           :class="favoritesCollapsed ? 'flex-col gap-2' : 'flex-row'"
           :aria-label="favoritesCollapsed ? t('admin.myFavorites') : t('admin.collapse')"
           @click="favoritesCollapsed = !favoritesCollapsed"
         >
-          <span
-            v-if="!favoritesCollapsed"
-            class="leading-none"
-          >{{ t('admin.collapse') }}</span>
+          <span v-if="!favoritesCollapsed" class="leading-none">{{ t('admin.collapse') }}</span>
           <AppIcon
             :name="favoritesCollapsed ? 'd-arrow-right' : 'd-arrow-left'"
             class="size-3.5 shrink-0"
@@ -315,17 +286,15 @@ function browseFromMobile(): void {
           <span
             v-if="favoritesCollapsed"
             class="text-[11px] leading-none tracking-widest [writing-mode:vertical-rl]"
-          >{{ t('admin.myFavorites') }}</span>
+            >{{ t('admin.myFavorites') }}</span
+          >
         </button>
         <div
           v-if="!favoritesCollapsed"
-          class="h-px shrink-0 bg-gradient-to-r from-transparent via-border to-transparent"
+          class="via-border h-px shrink-0 bg-gradient-to-r from-transparent to-transparent"
         />
 
-        <AdminFavoriteMenus
-          v-if="!favoritesCollapsed"
-          @browse="showMenuDrawer = true"
-        />
+        <AdminFavoriteMenus v-if="!favoritesCollapsed" @browse="showMenuDrawer = true" />
       </aside>
 
       <!-- 内容区 -->
@@ -338,19 +307,11 @@ function browseFromMobile(): void {
     <AdminMenuDrawer v-model="showMenuDrawer" />
 
     <!-- 移动端收藏菜单 -->
-    <ElDrawer
-      v-model="showMobileFavorites"
-      direction="ltr"
-      size="72%"
-    >
+    <ElDrawer v-model="showMobileFavorites" direction="ltr" size="72%">
       <template #header>
-        <span class="text-base font-semibold text-foreground">{{ t('admin.title') }}</span>
+        <span class="text-foreground text-base font-semibold">{{ t('admin.title') }}</span>
       </template>
-      <AdminFavoriteMenus
-        wide
-        @select="showMobileFavorites = false"
-        @browse="browseFromMobile"
-      />
+      <AdminFavoriteMenus wide @select="showMobileFavorites = false" @browse="browseFromMobile" />
     </ElDrawer>
   </div>
 </template>

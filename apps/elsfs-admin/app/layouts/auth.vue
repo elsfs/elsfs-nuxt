@@ -21,20 +21,13 @@ const currentYear = new Date().getFullYear()
 
 <template>
   <div
-    class="relative flex min-h-screen w-full overflow-hidden bg-background text-foreground transition-colors duration-300 select-none"
+    class="bg-background text-foreground relative flex min-h-screen w-full overflow-hidden transition-colors duration-300 select-none"
   >
     <!-- 顶部工具栏 -->
-    <AuthToolbar
-      :panel="authPanel"
-      @change-panel="authPanel = $event"
-    />
+    <AuthToolbar :panel="authPanel" @change-panel="authPanel = $event" />
 
     <!-- 左侧认证面板 -->
-    <AuthenticationFormView
-      v-if="authPanelLeft"
-      class="w-full lg:w-2/5"
-      data-side="left"
-    >
+    <AuthenticationFormView v-if="authPanelLeft" class="w-full lg:w-2/5" data-side="left">
       <template #default>
         <slot />
       </template>
@@ -47,16 +40,12 @@ const currentYear = new Date().getFullYear()
 
     <!-- Logo -->
     <slot name="logo">
-      <div
-        class="absolute top-0 left-0 z-10 flex cursor-pointer"
-        @click="switchPanel('left')"
-      >
-        <div class="mt-4 ml-4 flex items-center text-foreground sm:top-6 sm:left-6">
-          <div class="mr-2.5 flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-md shadow-primary/25">
-            <AppIcon
-              name="medal"
-              class="size-5"
-            />
+      <div class="absolute top-0 left-0 z-10 flex cursor-pointer" @click="switchPanel('left')">
+        <div class="text-foreground mt-4 ml-4 flex items-center sm:top-6 sm:left-6">
+          <div
+            class="bg-primary text-primary-foreground shadow-primary/25 mr-2.5 flex size-9 items-center justify-center rounded-xl shadow-md"
+          >
+            <AppIcon name="medal" class="size-5" />
           </div>
           <p class="m-0 text-xl font-semibold">
             {{ t('common.appName') }}
@@ -71,19 +60,16 @@ const currentYear = new Date().getFullYear()
       class="relative hidden w-0 flex-1 lg:block"
       :class="authPanelRight ? 'lg:order-first' : ''"
     >
-      <div class="absolute inset-0 size-full bg-background-deep dark:bg-[#070709]">
+      <div class="bg-background-deep absolute inset-0 size-full dark:bg-[#070709]">
         <div class="login-background absolute inset-0" />
         <div class="relative flex size-full flex-col items-center justify-center px-8">
           <div class="flex h-40 w-64 items-center justify-center opacity-90">
-            <AppIcon
-              name="lucide--shield-check"
-              class="size-28 text-primary drop-shadow-2xl"
-            />
+            <AppIcon name="lucide--shield-check" class="text-primary size-28 drop-shadow-2xl" />
           </div>
-          <h1 class="mt-6 text-center text-2xl font-semibold text-foreground lg:text-3xl">
+          <h1 class="text-foreground mt-6 text-center text-2xl font-semibold lg:text-3xl">
             {{ t('common.brandTagline') }}
           </h1>
-          <p class="mt-3 max-w-md text-center text-sm text-muted-foreground lg:text-base">
+          <p class="text-muted-foreground mt-3 max-w-md text-center text-sm lg:text-base">
             {{ t('common.brandDescription') }}
           </p>
         </div>
@@ -91,11 +77,7 @@ const currentYear = new Date().getFullYear()
     </div>
 
     <!-- 右侧认证面板 -->
-    <AuthenticationFormView
-      v-if="authPanelRight"
-      class="w-full lg:w-2/5"
-      data-side="right"
-    >
+    <AuthenticationFormView v-if="authPanelRight" class="w-full lg:w-2/5" data-side="right">
       <template #default>
         <slot />
       </template>
@@ -107,13 +89,10 @@ const currentYear = new Date().getFullYear()
     </AuthenticationFormView>
 
     <!-- 居中认证面板 -->
-    <div
-      v-if="authPanelCenter"
-      class="relative flex w-full flex-1 items-center justify-center"
-    >
+    <div v-if="authPanelCenter" class="relative flex w-full flex-1 items-center justify-center">
       <div class="login-background absolute inset-0" />
       <AuthenticationFormView
-        class="w-full pb-16 shadow-float shadow-primary/5 md:w-2/3 md:rounded-3xl lg:w-1/2 xl:w-[36%]"
+        class="shadow-float shadow-primary/5 w-full pb-16 md:w-2/3 md:rounded-3xl lg:w-1/2 xl:w-[36%]"
         data-side="bottom"
       >
         <template #default>
@@ -148,7 +127,7 @@ const currentYear = new Date().getFullYear()
 .auth-form .el-input__wrapper.is-focus {
   box-shadow:
     0 0 0 1px var(--el-color-primary) inset,
-    0 0 0 3px rgb(var(--el-color-primary-rgb) / 0.15);
+    0 0 0 3px rgb(var(--el-color-primary-rgb) / 15%);
 }
 
 .auth-form .el-input__inner {
@@ -205,22 +184,12 @@ const currentYear = new Date().getFullYear()
 
 /* ================= 认证页专用：封面面板背景光斑 ================= */
 .login-background {
-  background: linear-gradient(
-    154deg,
-    #07070915 30%,
-    hsl(var(--primary) / 24%) 48%,
-    #07070915 64%
-  );
+  background: linear-gradient(154deg, #07070915 30%, hsl(var(--primary) / 24%) 48%, #07070915 64%);
   filter: blur(100px);
 }
 
 .dark .login-background {
-  background: linear-gradient(
-    154deg,
-    #07070915 30%,
-    hsl(var(--primary) / 18%) 48%,
-    #07070915 64%
-  );
+  background: linear-gradient(154deg, #07070915 30%, hsl(var(--primary) / 18%) 48%, #07070915 64%);
   filter: blur(100px);
 }
 </style>

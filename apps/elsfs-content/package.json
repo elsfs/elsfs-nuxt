@@ -6,12 +6,14 @@
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "preview": "nuxt preview"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "better-sqlite3"
-    ]
+    "preview": "nuxt preview",
+    "lint": "pnpm lint:eslint && pnpm lint:oxlint && pnpm lint:style && pnpm lint:spell",
+    "lint:eslint": "eslint .",
+    "lint:oxlint": "oxlint",
+    "lint:style": "stylelint \"**/*.{css,vue}\"",
+    "lint:spell": "cspell lint \"**/*.{ts,vue,js,mjs,cjs,json,jsonc,md,mdx,css,yaml,yml}\"",
+    "fmt": "oxfmt -c ../../packages/code-quality/oxfmt.json",
+    "fmt:check": "oxfmt --check -c ../../packages/code-quality/oxfmt.json"
   },
   "dependencies": {
     "@libsql/client": "^0.17.4",
@@ -31,6 +33,16 @@
     "vue-router": "catalog:"
   },
   "devDependencies": {
+    "@nuxt/eslint": "catalog:",
+    "@nuxt/eslint-config": "catalog:",
+    "code-quality": "workspace:*",
+    "cspell": "catalog:",
+    "eslint": "catalog:",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "postcss-html": "catalog:",
+    "stylelint": "catalog:",
+    "stylelint-config-standard": "catalog:",
     "tsdown": "^0.23.0",
     "typescript": "catalog:",
     "vite": "catalog:"

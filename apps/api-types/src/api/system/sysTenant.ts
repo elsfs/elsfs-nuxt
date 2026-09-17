@@ -1,35 +1,38 @@
-import type { DuplicateCheckQry } from '../core/duplicateCheck';
-
-import { useRequest } from '../core/api';
+import { useRequest } from '../core/api'
+import type { DuplicateCheckQry } from '../core/duplicateCheck'
 
 export interface SysTenant {
-  tenantId: string; // 租户ID
+  tenantId: string // 租户ID
   /** 租户名称 */
-  tenantName: string;
+  tenantName: string
   /** 租户域名 */
-  tenantDomain: string;
+  tenantDomain: string
   /** 租户编码 */
-  tenantCode: string;
+  tenantCode: string
   /** 租户联系人 */
-  tenantContact: string;
+  tenantContact: string
   /** 租户联系人电话 */
-  tenantContactPhone: string;
+  tenantContactPhone: string
   /** 租户联系人邮箱 */
-  tenantContactEmail: string;
+  tenantContactEmail: string
   /** 租户联系地址 */
-  tenantContactAddress: string;
+  tenantContactAddress: string
   /** 状态 0-无效 1-有效 */
-  validFlag: string;
+  validFlag: string
   /** 备注 */
-  tenantDesc: string;
+  tenantDesc: string
   /** 租户logo */
-  tenantLogo: string;
+  tenantLogo: string
   /** 租户类型 */
-  tenantType: string;
+  tenantType: string
 }
 
-export const { useRequestHandle, requestPath } = useRequest('/tenant');
-export function checkDate(fieldVal, dataId, fieldName): DuplicateCheckQry {
+export const { useRequestHandle, requestPath } = useRequest('/tenant')
+export function checkDate(
+  fieldVal: string,
+  dataId: string | undefined,
+  fieldName: string,
+): DuplicateCheckQry {
   return {
     schemaName: 'e_admin', // 数据库名
     tableName: 'sys_tenant', // 表名
@@ -37,5 +40,5 @@ export function checkDate(fieldVal, dataId, fieldName): DuplicateCheckQry {
     fieldVal, // 字段值
     dataId, // 数据ID
     keyName: 'tenant_id', // 主键名称
-  };
+  }
 }

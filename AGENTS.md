@@ -2,13 +2,16 @@
 
 ## 项目概况
 
-pnpm workspace 单仓多包。**根目录 `package.json` 是空容器**（`scripts: {}`、无依赖），任何命令都要进到具体包里跑。
+pnpm workspace 单仓多包。根目录 `package.json` 只有聚合脚本（`lint`/`fmt`/`fmt:check`/`typecheck`，基于 `pnpm -r`）且无依赖，**具体命令一律进到对应包里跑**。
 
 | 包 | 路径 | 说明 |
 | --- | --- | --- |
-| `elsfs-nuxt` | `apps/elsfs-admin` | Nuxt 4 应用：认证后台（目录名与包名不一致，注意 filter 用包名） |
+| `elsfs-nuxt` | `apps/elsfs-admin` | Nuxt 4 应用：认证后台 |
 | `elsfs-content` | `apps/elsfs-content` | Nuxt 4 应用：基于 `docus` 的文档站（Nuxt Content + Nuxt UI + NuxtHub） |
 | `tailwind-config` | `packages/tailwind-config` | Nuxt Layer，被 `elsfs-admin` 以 `extends: ['tailwind-config']` 复用 |
+| `nuxt-request` | `packages/nuxt-request` | Nuxt 模块：axios 封装（含 playground、vitest 用例、`dist/` 构建产物） |
+| `api-types` | `apps/api-types` | Nuxt 模块：后端接口类型集合（含 playground、vitest），从 vben 项目迁入 |
+| `code-quality` | `packages/code-quality` | 共享代码质量工具链配置（ESLint / Oxlint / Oxfmt / Stylelint / CSpell / Publint） |
 
 两个应用互不相干，各自的命令都要进到自己的目录里跑（端口默认都是 3000，同时开发时后启动的会自动退到 3001）。
 
@@ -18,18 +21,19 @@ pnpm workspace 单仓多包。**根目录 `package.json` 是空容器**（`scrip
 
 没有后端服务、没有数据库、没有测试框架；验证手段只有 `lint` + `typecheck` + `build`。
 
-> 仓库里留着改版前的产物/占位，别被误导：根 `i18n/` 是空目录、根 `.nuxt`/`.output` 是旧构建残留、根 `package.json` 无脚本、`README.md` 仍是旧的单应用描述（写的是 Nuxt UI + Module Federation，都已不存在）、根 `package.json` 的 `pnpm.overrides` 里还挂着 `@module-federation/vite`（无人使用）。
+> 仓库里留着改版前的产物/占位，别被误导：根 `i18n/` 是空目录、根 `.nuxt`/`.output` 是旧构建残留、`README.md` 仍是旧的单应用描述（写的是 Nuxt UI + Module Federation，都已不存在）、根 `package.json` 的 `pnpm.overrides` 里还挂着 `@module-federation/vite`（无人使用）。
 
 ## 命令（包管理器必须是 pnpm）
 
 在 `apps/elsfs-admin/` 下执行：
 
 - `pnpm dev` 开发服务器（localhost:3000）
-- `pnpm lint`（`eslint .`，flat config 在 `apps/elsfs-admin/eslint.config.mjs`，`.vscode` 已开启 `eslint.useFlatConfig`）
+- `pnpm lint` 聚合检查（`lint:eslint` + `lint:oxlint` + `lint:style` + `lint:spell`）
+- `pnpm fmt` / `pnpm fmt:check` 用 oxfmt 写入 / 校验格式
 - `pnpm typecheck`（`vue-tsc --noEmit`）
 - `pnpm build` / `pnpm preview` / `pnpm generate`
 
-从仓库根执行等价命令：`pnpm --filter elsfs-nuxt <script>`。
+从仓库根执行等价命令：`pnpm --filter elsfs-nuxt <script>`；根 `package.json` 另有聚合脚本 `pnpm lint` / `pnpm fmt` / `pnpm fmt:check` / `pnpm typecheck`（`pnpm -r` 跑遍所有包，`typecheck` 带 `--if-present`）。
 
 layer 自带 playground，可脱离应用单独调试样式：在 `packages/tailwind-config/` 下 `pnpm dev`（跑的是 `.playground`）。
 
@@ -37,9 +41,35 @@ layer 自带 playground，可脱离应用单独调试样式：在 `packages/tail
 
 - `apps/elsfs-admin/tsconfig.json` 只继承 `./.nuxt/tsconfig.json`，该文件由 `postinstall`（`nuxt prepare`）生成；类型检查报「找不到类型」时先 `pnpm install` 或重跑 `nuxt prepare`。**别把它改回 `references` 引用 `.nuxt/tsconfig.{app,server,shared,node}.json`**：那些文件是 `noEmit` 且没开 `composite`，`vue-tsc --noEmit` 会直接刷一屏 TS6305/TS6306
 - lint 输出管道给 `tail`/`head` 会吞掉 ESLint 的退出码（拿到的是管道最后一条命令的状态）；要判断成败就别接管道
-- 仓库没有 turbo/nx 之类的任务编排器，根目录没有聚合的 `lint`/`typecheck`/`build`
+- 仓库没有 turbo/nx 之类的任务编排器；根 `package.json` 只有 `pnpm -r` 聚合脚本（`lint`/`fmt`/`fmt:check`/`typecheck`），**`build` 未聚合**（两个应用的构建环境不同：content 需要 `.data`/`better-sqlite3`）
 - 根 `.npmrc`：`legacy-peer-deps=true`、项目本地 store `.pnpm-store`；`packages/tailwind-config/.npmrc` 另有一份（`shamefully-hoist=true`、`strict-peer-dependencies=false`；后者的键名在当前 pnpm 版本已不生效）
 
+## 代码质量工具链（`packages/code-quality`）
+
+共享配置包，被 5 个 consumer 包（`elsfs-admin`、`elsfs-content`、`api-types`、`nuxt-request`、`tailwind-config`）以 `workspace:*` 引用。工具分工固定：**格式归 oxfmt，语义归 ESLint + Oxlint，样式语义归 Stylelint，拼写归 CSpell，发布元数据归 Publint**。
+
+| 工具 | 共享配置 | 各包入口文件 |
+| --- | --- | --- |
+| ESLint（`@nuxt/eslint-config` flat config） | `code-quality/eslint` 的 `createNuxtEslintConfig()` | `eslint.config.mjs` / `.js` |
+| Oxlint | `code-quality/oxlint` 的 `createNuxtOxlintConfig()` | `oxlint.config.ts` |
+| Oxfmt | `packages/code-quality/oxfmt.json`（用 `-c` 引用） | 无（靠 scripts 的 `-c`） |
+| Stylelint | `code-quality/stylelint` 的 `stylelintConfig` | `stylelint.config.mjs` |
+| CSpell | `packages/code-quality/cspell.json` | `cspell.config.json` 的 `import` 字段引用 |
+| Publint | 无配置 | `lint:package: publint`（仅 `nuxt-request`、`code-quality` 这类要发布的包） |
+
+各包 `scripts` 约定：`lint` = `lint:eslint` + `lint:oxlint` + `lint:style` + `lint:spell`（库包再加 `lint:package`），另有 `fmt` / `fmt:check`。
+
+坑（都是踩过的）：
+
+- **oxlint 的 `extends` 只合并 `rules`/`plugins`/`overrides`**：`categories`/`env`/`globals`/`settings`/`ignorePatterns` 都不会继承，所以共享包导出的是**工厂函数**而不是纯配置对象，别改成只写 `extends: [oxlintConfig]`
+- **oxlint 的 `ignorePatterns` 相对「入口配置文件」目录解析**：共享工厂里统一用 `**/` 前缀（如 `**/public/sw.js`），否则匹配不到子包路径
+- **oxfmt 用 `-c <共享配置>` 时，其 `ignorePatterns` 只能在共享配置所在目录内生效**（且不允许 `..`）：所以忽略依赖各包自己的 `.gitignore` / `.prettierignore`，共享 `oxfmt.json` 里不要写 `ignorePatterns`；`apps/elsfs-content/.prettierignore` 排除了上游文档 `content/`
+- **共享包自己的 `fmt` 脚本要显式写 `-c ./oxfmt.json`**：否则 oxfmt 用默认配置（双引号 + 分号）格式化，与其它包风格不一致
+- **ESLint 默认关闭 stylistic**（`createNuxtEslintConfig` 里 `features.stylistic` 默认 `false`）：oxfmt 与 `@stylistic/*` 在 `arrow-parens`、`quote-props`、`member-delimiter-style` 等处偏好不同，两套一起开会让 `eslint --fix` 与 `fmt` 来回拉扯；`vue/html-self-closing` 也已按 oxfmt 的写法对齐（void 元素要求自闭合）
+- **stylelint 17 的配置必须是对象形式**（顶层要有 `rules`）：写成数组会直接报 `No rules found within configuration`；解析 Vue 的 `<style>` 用 `customSyntax: 'postcss-html'`
+- **cspell 10 用 `import` 字段引用共享配置**（旧版是 `imports`，写错不报错、只是静默不生效）：改完用 `cspell trace <word>` 确认词典来源
+- **`packages/code-quality` 里的 `.ts`/`.mjs` 会被 `apps/elsfs-admin` 的 `vue-tsc` 检查**（layer 机制把 `packages/` 纳入 include）：改了共享配置后要跑一次 admin 的 `pnpm typecheck`，共享包自身也配了 `tsc --noEmit`
+- 新增词：通用词进 `packages/code-quality/cspell.json` 的 `words`，单包特有词进该包 `cspell.config.json` 的 `words`；改共享词表后所有包立即生效
 ## 依赖版本管理
 
 - 公共依赖版本集中在 `pnpm-workspace.yaml` 的 `catalog:` 段（vue、nuxt、eslint、typescript、vee-validate、zod、tailwind 相关等），包内写 `"xxx": "catalog:"`
@@ -119,7 +149,6 @@ Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 
 ## 表单校验
 
 - vee-validate + **zod**，Schema 工厂集中在 `app/composables/useAuthValidation.ts`：`createLoginSchema` / `createRegisterSchema` / `createCodeLoginSchema` / `createForgetPasswordSchema`，经 `useAuthValidation()` 绑定当前 i18n 实例
-- **该文件头部注释仍写「yup」，是过时注释，以代码为准**
 - zod 的校验消息必须传对象（`z.string().min(1, { message: t('validation.required') })`），不是字符串位置参数
 - 消息在 Schema 创建时就调用 `t()`，所以换语言后要重新创建 Schema 才会刷新消息
 
@@ -143,8 +172,9 @@ Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 
 
 ## 其他约定与待修项
 
-- CI（`.github/workflows/ci.yml`）：Node 24.19.0 + `corepack enable` + `npx nypm@latest i`，两个 job 分别跑 `npm run lint`/`npm run typecheck` 与 `npm run build`。**但它在仓库根目录执行 `npm run`，而根 `package.json` 没有 scripts，这条流水线在当前结构下必然失败**——属于已知待修项，别把它当作可用验证手段
+- CI（`.github/workflows/ci.yml`）：Node 24.19.0 + `corepack enable` + `npx nypm@latest i`，两个 job 分别跑 `npm run lint`/`npm run typecheck` 与 `npm run build`。**build job 仍会失败**（根没有 `build` 脚本，且两个应用的构建环境不同）——属于已知待修项，别把它当作可用验证手段
 - 提交信息用 Conventional Commits + 中文描述，如 `feat(auth): 添加完整的认证功能模块`
-- 没有测试框架、没有 husky/lint-staged；提交前手动跑 lint + typecheck
+- `apps/api-types` 是从 vben 项目迁入的 API 类型集合，`src/api/**` 里还引用了未声明的 `element-plus`、`lodash/debounce`、`@vben/types`（后者仓库里不存在），所以该包**只接了 lint 链路、暂未加 `typecheck` 脚本**（否则根 `pnpm typecheck` 必红）；补齐依赖后再补 `"typecheck": "nuxt-module-build prepare && vue-tsc --noEmit"`
+- 没有测试框架（`nuxt-request` 自带 vitest，但不在 lint/CI 链路里）、没有 husky/lint-staged；提交前手动跑 `pnpm lint` + `pnpm typecheck`（必要时 `pnpm fmt`）
 - Element Plus 通过 `@element-plus/nuxt` 自动引入组件与样式，不要在业务代码里手写 `import { ElButton } from 'element-plus'`
-- 现阶段 `pnpm lint` 与 `pnpm typecheck` 都是全绿，改完记得都跑一遍再提交
+- 现状：`pnpm lint`（ESLint 0 error、Oxlint 0 error、CSpell 0 issue、Stylelint 通过）、`pnpm fmt:check`、admin 的 `pnpm typecheck` 全绿；`nuxt-request` 侧保留若干 `no-explicit-any` warning（设计如此，见该包 `eslint.config.mjs` 注释）

@@ -32,7 +32,10 @@ const { copy, copied } = useClipboard()
           variant="link"
           :padded="false"
           :ui="{ leadingIcon: 'size-4' }"
-          :class="{ 'text-green-500 hover:text-green-500 dark:text-green-400 hover:dark:text-green-400': copied }"
+          :class="{
+            'text-green-500 hover:text-green-500 dark:text-green-400 hover:dark:text-green-400':
+              copied,
+          }"
           aria-label="复制按钮"
           @click="copy(value)"
         />

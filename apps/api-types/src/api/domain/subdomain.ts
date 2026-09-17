@@ -1,12 +1,12 @@
-import { ElMessageBox } from 'element-plus';
+import { ElMessageBox } from 'element-plus'
 
-import { useRequest } from '../core/api';
-import { requestClient } from '../request';
+import { useRequest } from '../core/api'
+import { requestClient } from '../request'
 
-export const { useRequestHandle, requestPath } = useRequest('/subdomain');
+export const { useRequestHandle, requestPath } = useRequest('/subdomain')
 // subdomain.ts
 export function updateAllDomainCertInfo() {
-  requestClient().post('/subdomain/updateAllDomainCertInfo');
+  requestClient().post('/subdomain/updateAllDomainCertInfo')
 }
 
 export function updateAllDomainCertInfoBySubdomainId(
@@ -18,51 +18,51 @@ export function updateAllDomainCertInfoBySubdomainId(
     cancelButtonText: '取消',
     type: 'warning',
     callback: (action: any) => {
-      if (action !== 'confirm') return;
+      if (action !== 'confirm') return
       return requestClient()
         .post(`/subdomain/updateAllDomainCertInfo/${subdomainId}`)
-        .then(() => handleSuccess && handleSuccess());
+        .then(() => handleSuccess && handleSuccess())
     },
-  });
+  })
 }
 export interface Subdomain {
   /**
    * 子域名ID
    */
-  subdomainId: string;
+  subdomainId: string
 
   /**
    * 域名ID
    */
-  domainId: string;
+  domainId: string
 
   /**
    * 子域名名称
    */
-  subdomainName: string;
+  subdomainName: string
 
   /**
    * 分组ID
    */
-  groupId: string;
+  groupId: string
 
   /**
    * 端口号
    */
-  port: number;
+  port: number
 
   /**
    * 检查时间
    */
-  checkTime: string; // 使用字符串表示 ISO 8601 时间格式，或者你可以使用 Date 类型
+  checkTime: string // 使用字符串表示 ISO 8601 时间格式，或者你可以使用 Date 类型
 
   /**
    * 主机数量
    */
-  hostCount: number;
+  hostCount: number
 
   /**
    * 备注
    */
-  remark: string;
+  remark: string
 }

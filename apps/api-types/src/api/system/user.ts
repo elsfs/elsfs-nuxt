@@ -1,4 +1,4 @@
-import { useRequest } from '../core/api';
+import { useRequest } from '../core/api'
 
 /**
  * 用户
@@ -7,55 +7,55 @@ export interface SysUser {
   /**
    * 用户 id
    */
-  userId: string;
+  userId: string
   /**
    * 用户名
    */
-  username: string;
+  username: string
   /**
    * 用户密码
    */
-  password?: string;
+  password?: string
   /**
    * 用户头像
    */
-  avatar?: string;
+  avatar?: string
   /**
    * 用户邮箱
    */
-  email: string;
+  email: string
   /**
    * 用户手机号
    */
-  phone: string;
+  phone: string
   /**
    * 用户租户
    */
-  tenantId?: string;
+  tenantId?: string
   /**
    * 用户昵称
    */
-  nickname: string;
+  nickname: string
   /**
    * 用户性别
    */
-  sex?: string;
+  sex?: string
   /**
    * 用户生日
    */
-  birthday?: string;
+  birthday?: string
   /**
    * 状态
    */
-  status?: string;
+  status?: string
   /**
    *   部门
    */
-  deptIds?: string[];
+  deptIds?: string[]
   /**
    * 职位
    */
-  postIds?: string[];
+  postIds?: string[]
 }
 
-export const { useRequestHandle, requestPath } = useRequest('/user');
+export const { useRequestHandle, requestPath } = useRequest('/user')

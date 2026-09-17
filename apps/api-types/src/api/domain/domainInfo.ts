@@ -1,12 +1,12 @@
-import { ElMessageBox } from 'element-plus';
+import { ElMessageBox } from 'element-plus'
 
-import { useRequest } from '../core/api';
-import { requestClient } from '../request';
+import { useRequest } from '../core/api'
+import { requestClient } from '../request'
 
-export const { useRequestHandle, requestPath } = useRequest('/domainInfo');
+export const { useRequestHandle, requestPath } = useRequest('/domainInfo')
 
 export function updateDomainInfo() {
-  requestClient().post('/domainInfo/updateDomainInfo');
+  requestClient().post('/domainInfo/updateDomainInfo')
 }
 export function updateWhois(domainInfoId: string, handleSuccess: () => void) {
   ElMessageBox.confirm('确认更新Whois吗', {
@@ -14,12 +14,12 @@ export function updateWhois(domainInfoId: string, handleSuccess: () => void) {
     cancelButtonText: '取消',
     type: 'warning',
     callback: (action: any) => {
-      if (action !== 'confirm') return;
+      if (action !== 'confirm') return
       return requestClient()
         .post(`/domainInfo/updateWhois/${domainInfoId}`)
-        .then(() => handleSuccess && handleSuccess());
+        .then(() => handleSuccess && handleSuccess())
     },
-  });
+  })
 }
 /**
  * 域名信息表
@@ -28,76 +28,76 @@ export interface DomainInfo {
   /**
    * 主键ID
    */
-  domainInfoId: string;
+  domainInfoId: string
 
   /**
    * 分组ID
    */
-  groupId?: string;
+  groupId?: string
 
   /**
    * 域名
    */
-  domain?: string;
+  domain?: string
 
   /**
    * 备注
    */
-  remark?: string;
+  remark?: string
 
   /**
    * 域名注册商
    */
-  domainRegistrar?: string;
+  domainRegistrar?: string
 
   /**
    * 域名注册商地址
    */
-  domainRegistrarUrl?: string;
+  domainRegistrarUrl?: string
 
   /**
    * 域名注册时间
    */
-  domainStartTime?: string;
+  domainStartTime?: string
 
   /**
    * 域名过期时间
    */
-  domainExpireTime?: string;
+  domainExpireTime?: string
 
   /**
    * 域名过期剩余天数
    */
-  domainExpireDays?: number;
+  domainExpireDays?: number
 
   /**
    * 域名信息自动更新
    */
-  autoUpdate?: boolean;
+  autoUpdate?: boolean
 
   /**
    * 域名过期监测
    */
-  expireMonitor?: boolean;
+  expireMonitor?: boolean
 
   /**
    * 主办单位名称
    */
-  icpCompany?: string;
+  icpCompany?: string
 
   /**
    * ICP备案/许可证号
    */
-  icpLicence?: string;
+  icpLicence?: string
 
   /**
    * 标签list;
    */
-  tagsRaw?: string;
+  tagsRaw?: string
 
   /**
    * 数据版本号
    */
-  version?: number;
-  domainTime: (string | undefined)[]; // 域名时间
+  version?: number
+  domainTime: (string | undefined)[] // 域名时间
 }

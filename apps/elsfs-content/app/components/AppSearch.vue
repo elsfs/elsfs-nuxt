@@ -12,17 +12,27 @@ const appConfig = useAppConfig()
 const { forced: forcedColorMode } = useDocusColorMode()
 const { locale, isEnabled } = useDocusI18n()
 
-const collectionName = computed(() => (isEnabled.value ? `docs_${locale.value}` : 'docs') as keyof PageCollections)
+const collectionName = computed(
+  () => (isEnabled.value ? `docs_${locale.value}` : 'docs') as keyof PageCollections,
+)
 const useFts = appConfig.search.fts
 
 const { data: files } = useFts
   ? { data: ref(null) }
-  : useLazyAsyncData(`search_${collectionName.value}`, () => queryCollectionSearchSections(collectionName.value), {
-      server: false,
-      watch: [locale],
-    })
+  : useLazyAsyncData(
+      `search_${collectionName.value}`,
+      () => queryCollectionSearchSections(collectionName.value),
+      {
+        server: false,
+        watch: [locale],
+      },
+    )
 
-const { search, status: searchStatus, init } = useFts
+const {
+  search,
+  status: searchStatus,
+  init,
+} = useFts
   ? useSearchCollection(collectionName, { immediate: false, ignoredTags: ['style'] })
   : { search: undefined, status: ref(undefined), init: () => {} }
 
@@ -35,13 +45,16 @@ if (useFts) {
   })
 }
 
-const links = computed(() => useFts
-  ? props.navigation?.filter(item => item.children?.length).map(item => ({
-      label: item.title,
-      icon: item.icon,
-      to: item.children![0]!.path,
-    }))
-  : undefined,
+const links = computed(() =>
+  useFts
+    ? props.navigation
+        ?.filter((item) => item.children?.length)
+        .map((item) => ({
+          label: item.title,
+          icon: item.icon,
+          to: item.children![0]!.path,
+        }))
+    : undefined,
 )
 </script>
 

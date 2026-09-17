@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate'
 
+import AuthTitle from './-auth-title.vue'
+import AuthThirdPartyLogin from './-third-party-login.vue'
 import type { LoginFormValues } from './useAuthValidation.ts'
 import { useAuthValidation } from './useAuthValidation.ts'
-import AuthThirdPartyLogin from './-third-party-login.vue'
-import AuthTitle from './-auth-title.vue'
 
 interface Props {
   /** 是否处于提交加载状态 */
@@ -72,8 +72,7 @@ const onSubmit = handleSubmit(async (values) => {
   // 记住账号（仅浏览器环境）
   if (values.remember) {
     localStorage.setItem('elsfs_remember_email', values.email)
-  }
-  else {
+  } else {
     localStorage.removeItem('elsfs_remember_email')
   }
   await onLogin(values)
@@ -96,8 +95,7 @@ async function onLogin(values: LoginFormValues) {
     })
     const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
     await router.push(redirect)
-  }
-  catch {
+  } catch {
     // 错误码已写入 store，由组件内 Alert 展示
   }
 }
@@ -106,8 +104,7 @@ async function onSocial(provider: string) {
   try {
     await auth.socialLogin(provider)
     await router.push('/')
-  }
-  catch {
+  } catch {
     // 错误码已写入 store，由组件内 Alert 展示
   }
 }
@@ -126,24 +123,10 @@ async function onSocial(provider: string) {
       </template>
     </AuthTitle>
 
-    <ElAlert
-      v-if="errorMessage"
-      type="error"
-      show-icon
-      class="mb-6"
-      :title="errorMessage"
-    />
+    <ElAlert v-if="errorMessage" type="error" show-icon class="mb-6" :title="errorMessage" />
 
-    <ElForm
-      label-position="top"
-      novalidate
-      class="auth-form"
-      @submit="onSubmit"
-    >
-      <ElFormItem
-        :label="t('login.email')"
-        :error="emailError"
-      >
+    <ElForm label-position="top" novalidate class="auth-form" @submit="onSubmit">
+      <ElFormItem :label="t('login.email')" :error="emailError">
         <ElInput
           v-model="email"
           type="email"
@@ -152,18 +135,12 @@ async function onSocial(provider: string) {
           autocomplete="email"
         >
           <template #prefix>
-            <AppIcon
-              name="message"
-              class="size-4 text-dimmed"
-            />
+            <AppIcon name="message" class="text-dimmed size-4" />
           </template>
         </ElInput>
       </ElFormItem>
 
-      <ElFormItem
-        :label="t('login.password')"
-        :error="passwordError"
-      >
+      <ElFormItem :label="t('login.password')" :error="passwordError">
         <ElInput
           v-model="password"
           size="large"
@@ -172,10 +149,7 @@ async function onSocial(provider: string) {
           autocomplete="current-password"
         >
           <template #prefix>
-            <AppIcon
-              name="lock"
-              class="size-4 text-dimmed"
-            />
+            <AppIcon name="lock" class="text-dimmed size-4" />
           </template>
           <template #suffix>
             <button
@@ -184,10 +158,7 @@ async function onSocial(provider: string) {
               :aria-label="showPassword ? 'Hide password' : 'Show password'"
               @click="showPassword = !showPassword"
             >
-              <AppIcon
-                :name="showPassword ? 'hide' : 'view'"
-                class="size-4"
-              />
+              <AppIcon :name="showPassword ? 'hide' : 'view'" class="size-4" />
             </button>
           </template>
         </ElInput>
@@ -195,10 +166,7 @@ async function onSocial(provider: string) {
 
       <!-- 记住我 / 忘记密码 -->
       <div class="flex items-center justify-between">
-        <ElCheckbox
-          v-if="showRememberMe"
-          v-model="remember"
-        >
+        <ElCheckbox v-if="showRememberMe" v-model="remember">
           {{ t('login.rememberMe') }}
         </ElCheckbox>
         <span
@@ -232,10 +200,7 @@ async function onSocial(provider: string) {
         plain
         @click="goTo(codeLoginPath)"
       >
-        <AppIcon
-          name="key"
-          class="mr-1 size-4"
-        />
+        <AppIcon name="key" class="mr-1 size-4" />
         {{ t('login.mobileLogin') }}
       </ElButton>
       <ElButton
@@ -245,33 +210,21 @@ async function onSocial(provider: string) {
         plain
         @click="goTo(qrcodeLoginPath)"
       >
-        <AppIcon
-          name="monitor"
-          class="mr-1 size-4"
-        />
+        <AppIcon name="monitor" class="mr-1 size-4" />
         {{ t('login.qrcodeLogin') }}
       </ElButton>
     </div>
 
     <!-- 第三方登录 -->
     <slot name="third-party-login">
-      <AuthThirdPartyLogin
-        v-if="showThirdPartyLogin"
-        @submit="handleSocial"
-      />
+      <AuthThirdPartyLogin v-if="showThirdPartyLogin" @submit="handleSocial" />
     </slot>
 
     <!-- 注册引导 -->
     <slot name="to-register">
-      <div
-        v-if="showRegister"
-        class="mt-4 text-center text-sm text-muted-foreground"
-      >
+      <div v-if="showRegister" class="text-muted-foreground mt-4 text-center text-sm">
         {{ t('login.noAccountTip') }}
-        <span
-          class="vben-link text-sm font-normal"
-          @click="goTo(registerPath)"
-        >
+        <span class="vben-link text-sm font-normal" @click="goTo(registerPath)">
           {{ t('login.createAccount') }}
         </span>
       </div>

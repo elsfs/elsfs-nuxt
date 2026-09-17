@@ -5,7 +5,9 @@ export const useWebsiteStore = defineStore('websiteStore', {
   }),
   actions: {
     async fetch() {
-      const infos = await $fetch<{ name: string, description: string }>('https://api.nuxt.com/modules/pinia')
+      const infos = await $fetch<{ name: string; description: string }>(
+        'https://api.nuxt.com/modules/pinia',
+      )
 
       this.name = infos.name
       this.description = infos.description

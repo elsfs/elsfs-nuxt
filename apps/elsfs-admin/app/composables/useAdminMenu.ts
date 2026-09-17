@@ -30,13 +30,14 @@ export function useMenuTitle() {
 export function useMenuPath() {
   const router = useRouter()
 
-  const matchers = router.getRoutes()
-    .filter(record => !record.path.includes(':pathMatch'))
-    .map(record => new RegExp(`^${record.path.replace(/:[^/]+/g, '[^/]+')}/?$`))
+  const matchers = router
+    .getRoutes()
+    .filter((record) => !record.path.includes(':pathMatch'))
+    .map((record) => new RegExp(`^${record.path.replace(/:[^/]+/g, '[^/]+')}/?$`))
 
   return (item: AdminMenuItem): string => {
     const target = item.path ?? item.redirect
-    if (target && matchers.some(matcher => matcher.test(target))) {
+    if (target && matchers.some((matcher) => matcher.test(target))) {
       return target
     }
     return fallbackMenuPath(item)

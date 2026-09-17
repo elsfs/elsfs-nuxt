@@ -1,12 +1,12 @@
-import { useRequest } from '../core/api';
-import { requestClient } from '../request';
+import { useRequest } from '../core/api'
+import { requestClient } from '../request'
 
-export const { useRequestHandle, requestPath } = useRequest('/post');
+export const { useRequestHandle, requestPath } = useRequest('/post')
 /**
  * 根据用户id查询用户职位信息
  */
 export async function getPostIdsByUserId(userId: string): Promise<string[]> {
-  return requestClient().get(`/user/post/getByUserId/${userId}`);
+  return requestClient().get(`/user/post/getByUserId/${userId}`)
 }
 /**
  * 部门
@@ -15,35 +15,35 @@ export interface SysPost {
   /**
    * postId
    */
-  postId: string;
+  postId: string
 
   /**
    * 职务编码
    */
-  postCode?: string;
+  postCode?: string
 
   /**
    * 职务名称
    */
-  postName: string;
+  postName: string
 
   /**
    * 职级
    */
-  postRank: string;
+  postRank: string
 
   /**
    * 状态
    */
-  status?: string;
+  status?: string
 
   /**
    * 排序
    */
-  orderNo: number;
+  orderNo: number
 
   /**
    * 备注
    */
-  remark?: string;
+  remark?: string
 }

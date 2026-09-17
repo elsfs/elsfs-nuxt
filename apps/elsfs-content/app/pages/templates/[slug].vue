@@ -2,7 +2,9 @@
 const route = useRoute()
 const siteConfig = useSiteConfig()
 
-const { data: template } = await useAsyncData(`template-${route.params.slug}`, () => queryCollection('templates').path(route.path).first())
+const { data: template } = await useAsyncData(`template-${route.params.slug}`, () =>
+  queryCollection('templates').path(route.path).first(),
+)
 if (!template.value) {
   showError({ statusCode: 404, statusMessage: 'Template Not Found' })
 }
@@ -12,19 +14,21 @@ useSeoMeta({
   description: template.value?.seo.description,
   ogTitle: template.value?.seo.title,
   ogDescription: template.value?.seo.description,
-  ogImage: template.value?.mainScreen ? `${siteConfig.url}/${template.value?.mainScreen}` : `${siteConfig.url}/social.png`,
-  twitterImage: template.value?.mainScreen ? `${siteConfig.url}/${template.value?.mainScreen}` : `${siteConfig.url}/social.png`,
+  ogImage: template.value?.mainScreen
+    ? `${siteConfig.url}/${template.value?.mainScreen}`
+    : `${siteConfig.url}/social.png`,
+  twitterImage: template.value?.mainScreen
+    ? `${siteConfig.url}/${template.value?.mainScreen}`
+    : `${siteConfig.url}/social.png`,
 })
 
 const isNuxtUITemplate = computed(() => template.value?.licenseType === 'nuxt-ui')
 
-const images = computed(() => template.value
-  ? [
-      template.value.image1,
-      template.value.image2,
-      template.value.image3,
-    ].filter(Boolean)
-  : [])
+const images = computed(() =>
+  template.value
+    ? [template.value.image1, template.value.image2, template.value.image3].filter(Boolean)
+    : [],
+)
 </script>
 
 <template>
@@ -39,9 +43,7 @@ const images = computed(() => template.value
           <div class="flex flex-col gap-6">
             <UBreadcrumb
               :items="[
-                { label: 'Templates',
-                  icon: 'i-lucide-image',
-                  to: '/templates' },
+                { label: 'Templates', icon: 'i-lucide-image', to: '/templates' },
                 { label: template.title },
               ]"
             />
@@ -60,18 +62,10 @@ const images = computed(() => template.value
             <span class="font-semibold">
               {{ template.title }}
             </span>
-            <span class="hidden xl:flex items-center gap-2">
-              <span class="text-gray-500 dark:text-gray-400">
-                By
-              </span>
-              <NuxtUILogo
-                v-if="isNuxtUITemplate"
-                class="h-6 w-auto flex"
-              />
-              <span
-                v-else
-                class="font-semibold"
-              >{{ template.owner }}</span>
+            <span class="hidden items-center gap-2 xl:flex">
+              <span class="text-gray-500 dark:text-gray-400"> By </span>
+              <NuxtUILogo v-if="isNuxtUITemplate" class="flex h-6 w-auto" />
+              <span v-else class="font-semibold">{{ template.owner }}</span>
             </span>
           </div>
         </template>
@@ -103,18 +97,12 @@ const images = computed(() => template.value
           v-slot="{ item }"
           dots
           :items="images"
-          class="w-full max-w-5xl mx-auto"
+          class="mx-auto w-full max-w-5xl"
         >
-          <img
-            :src="item"
-            class="rounded-lg"
-          >
+          <img :src="item" class="rounded-lg" />
         </UCarousel>
 
-        <ContentRenderer
-          v-if="template.body"
-          :value="template"
-        />
+        <ContentRenderer v-if="template.body" :value="template" />
       </UPageBody>
     </UPage>
   </UContainer>

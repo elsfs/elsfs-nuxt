@@ -29,7 +29,7 @@ function onSelect(provider: ProviderItem): void {
     <!-- 分隔线 -->
     <div class="mt-5 flex items-center justify-between gap-4">
       <span class="h-px flex-1 bg-slate-200 dark:bg-white/10" />
-      <span class="shrink-0 text-xs uppercase text-muted-foreground">
+      <span class="text-muted-foreground shrink-0 text-xs uppercase">
         {{ t('thirdParty.label') }}
       </span>
       <span class="h-px flex-1 bg-slate-200 dark:bg-white/10" />
@@ -43,16 +43,8 @@ function onSelect(provider: ProviderItem): void {
         :content="t(provider.labelKey)"
         placement="top"
       >
-        <ElButton
-          circle
-          plain
-          :aria-label="t(provider.labelKey)"
-          @click="onSelect(provider)"
-        >
-          <AppIcon
-            :name="provider.icon"
-            class="size-5"
-          />
+        <ElButton circle plain :aria-label="t(provider.labelKey)" @click="onSelect(provider)">
+          <AppIcon :name="provider.icon" class="size-5" />
         </ElButton>
       </ElTooltip>
     </div>

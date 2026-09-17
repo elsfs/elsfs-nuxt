@@ -1,15 +1,15 @@
 import { defineContentConfig, defineCollection, property } from '@nuxt/content'
 import z from 'zod'
 
-const createPricingFeatureSchema = () => z.object({
-  title: z.string(),
-  plans: z.array(z.enum(['solo', 'team', 'unlimited'])).optional(),
-  value: z.array(z.string()).optional(),
-  soon: z.boolean().optional(),
-})
+const createPricingFeatureSchema = () =>
+  z.object({
+    title: z.string(),
+    plans: z.array(z.enum(['solo', 'team', 'unlimited'])).optional(),
+    value: z.array(z.string()).optional(),
+    soon: z.boolean().optional(),
+  })
 
 export default defineContentConfig({
-
   collections: {
     content: defineCollection({
       type: 'page',
@@ -21,27 +21,37 @@ export default defineContentConfig({
         include: 'docs/**',
       },
       schema: z.object({
-        links: z.array(z.object({
-          label: z.string(),
-          icon: z.string(),
-          to: z.string(),
-          target: z.string().optional(),
-        })).optional(),
+        links: z
+          .array(
+            z.object({
+              label: z.string(),
+              icon: z.string(),
+              to: z.string(),
+              target: z.string().optional(),
+            }),
+          )
+          .optional(),
       }),
     }),
     landing: defineCollection({
       type: 'page',
-      source: [{
-        include: 'index.md',
-      }, {
-        include: 'blog.yml',
-      }, {
-        include: 'changelog.yml',
-      }, {
-        include: 'studio/index.md',
-      }, {
-        include: 'templates.yml',
-      }],
+      source: [
+        {
+          include: 'index.md',
+        },
+        {
+          include: 'blog.yml',
+        },
+        {
+          include: 'changelog.yml',
+        },
+        {
+          include: 'studio/index.md',
+        },
+        {
+          include: 'templates.yml',
+        },
+      ],
     }),
     pricing: defineCollection({
       type: 'page',
@@ -146,16 +156,18 @@ export default defineContentConfig({
       schema: z.object({
         categories: z.array(z.string()),
         draft: z.boolean().default(false),
-        authors: z.array(z.object({
-          slug: z.string(),
-          username: z.string(),
-          name: z.string(),
-          to: z.string(),
-          avatar: z.object({
-            src: z.string(),
-            alt: z.string(),
+        authors: z.array(
+          z.object({
+            slug: z.string(),
+            username: z.string(),
+            name: z.string(),
+            to: z.string(),
+            avatar: z.object({
+              src: z.string(),
+              alt: z.string(),
+            }),
           }),
-        })),
+        ),
         category: z.enum(['studio', 'content']).optional(),
         date: z.date(),
         image: z.object({

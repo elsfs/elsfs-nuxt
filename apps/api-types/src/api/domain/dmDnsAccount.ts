@@ -1,6 +1,6 @@
-import { useRequest } from '../core/api';
+import { useRequest } from '../core/api'
 
-export const { useRequestHandle, requestPath } = useRequest('/dmDnsAccount');
+export const { useRequestHandle, requestPath } = useRequest('/dmDnsAccount')
 
 /**
  * DNS账号实体类
@@ -9,38 +9,38 @@ export interface DmDnsAccount {
   /**
    * 主键ID
    */
-  dnsAccountId?: string;
+  dnsAccountId?: string
 
   /**
    * DNS类型
    */
-  dnsType?: string;
+  dnsType?: string
 
   /**
    * 名称
    */
-  name?: string;
+  name?: string
 
   /**
    * Access Key
    */
-  accessKey?: string;
+  accessKey?: string
 
   /**
    * Secret Key
    */
-  secretKey?: string;
+  secretKey?: string
 
   /**
    * 数据版本号
    */
-  version?: number;
+  version?: number
 
   // 继承自BaseEntity的属性
-  id?: number;
-  deleted?: number;
-  createTime?: string; // 或者 Date 类型，取决于您的日期处理方式
-  updateTime?: string; // 或者 Date 类型，取决于您的日期处理方式
-  createBy?: string;
-  updateBy?: string;
+  id?: number
+  deleted?: number
+  createTime?: string // 或者 Date 类型，取决于您的日期处理方式
+  updateTime?: string // 或者 Date 类型，取决于您的日期处理方式
+  createBy?: string
+  updateBy?: string
 }

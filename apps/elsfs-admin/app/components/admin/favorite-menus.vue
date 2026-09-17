@@ -69,30 +69,20 @@ function resetDrag(): void {
 <template>
   <div class="flex h-full min-h-0 flex-col">
     <!-- 移动端标题栏 -->
-    <div
-      v-if="wide"
-      class="flex items-center justify-between px-3 py-2"
-    >
-      <span class="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+    <div v-if="wide" class="flex items-center justify-between px-3 py-2">
+      <span class="text-muted-foreground text-xs font-medium tracking-wide uppercase">
         {{ t('admin.myFavorites') }}
       </span>
       <span
         v-if="menuStore.favoriteCount"
-        class="rounded-full bg-accent px-1.5 py-0.5 text-[11px] text-muted-foreground"
+        class="bg-accent text-muted-foreground rounded-full px-1.5 py-0.5 text-[11px]"
       >
         {{ t('admin.favoriteCount', { count: menuStore.favoriteCount }) }}
       </span>
     </div>
 
-    <div
-      class="min-h-0 flex-1 overflow-y-auto"
-      :class="wide ? 'px-2 pb-3' : 'px-1.5 pb-3'"
-    >
-      <div
-        v-if="menuStore.favoriteCount"
-        class="flex flex-col"
-        :class="wide ? 'gap-0.5' : 'gap-1'"
-      >
+    <div class="min-h-0 flex-1 overflow-y-auto" :class="wide ? 'px-2 pb-3' : 'px-1.5 pb-3'">
+      <div v-if="menuStore.favoriteCount" class="flex flex-col" :class="wide ? 'gap-0.5' : 'gap-1'">
         <!-- 一行一项 / 图标在上名称在下 -->
         <NuxtLink
           v-for="(item, index) in menuStore.favorites"
@@ -106,7 +96,7 @@ function resetDrag(): void {
               ? 'bg-accent text-primary'
               : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
             dragIndex !== null && overIndex === index && dragIndex !== index
-              ? 'ring-2 ring-primary/60'
+              ? 'ring-primary/60 ring-2'
               : '',
           ]"
           @click="emit('select', item.id)"
@@ -120,7 +110,7 @@ function resetDrag(): void {
             :class="[
               wide ? 'size-7' : 'size-9',
               isActive(item)
-                ? 'bg-primary text-primary-foreground shadow-sm shadow-primary/30'
+                ? 'bg-primary text-primary-foreground shadow-primary/30 shadow-sm'
                 : menuTileClass(item.rootId),
             ]"
           >
@@ -132,10 +122,13 @@ function resetDrag(): void {
           </span>
 
           <span
-            :class="wide
-              ? 'min-w-0 flex-1 truncate text-sm'
-              : 'line-clamp-2 w-full text-center text-[11px] leading-tight break-all'"
-          >{{ menuTitle(item.title) }}</span>
+            :class="
+              wide
+                ? 'min-w-0 flex-1 truncate text-sm'
+                : 'line-clamp-2 w-full text-center text-[11px] leading-tight break-all'
+            "
+            >{{ menuTitle(item.title) }}</span
+          >
 
           <!-- hover 出现：取消收藏（二次确认，避免误删） -->
           <ElPopconfirm
@@ -149,17 +142,16 @@ function resetDrag(): void {
               <span
                 role="button"
                 tabindex="0"
-                class="absolute flex items-center justify-center rounded-full bg-background/90 text-muted-foreground opacity-0 shadow-sm transition-opacity group-hover:opacity-100 hover:text-destructive focus-visible:opacity-100"
-                :class="wide ? 'top-1/2 right-1 size-5 -translate-y-1/2' : 'top-0.5 right-0.5 size-4'"
+                class="bg-background/90 text-muted-foreground hover:text-destructive absolute flex items-center justify-center rounded-full opacity-0 shadow-sm transition-opacity group-hover:opacity-100 focus-visible:opacity-100"
+                :class="
+                  wide ? 'top-1/2 right-1 size-5 -translate-y-1/2' : 'top-0.5 right-0.5 size-4'
+                "
                 :title="t('admin.removeFavorite')"
                 :aria-label="t('admin.removeFavorite')"
                 @click.prevent.stop
                 @keydown.enter.prevent.stop
               >
-                <AppIcon
-                  name="close"
-                  :class="wide ? 'size-3' : 'size-2.5'"
-                />
+                <AppIcon name="close" :class="wide ? 'size-3' : 'size-2.5'" />
               </span>
             </template>
           </ElPopconfirm>
@@ -169,27 +161,18 @@ function resetDrag(): void {
       <!-- 空态 -->
       <div
         v-else
-        class="flex flex-col items-center gap-3 rounded-xl border border-dashed border-border px-2 py-6 text-center"
+        class="border-border flex flex-col items-center gap-3 rounded-xl border border-dashed px-2 py-6 text-center"
       >
-        <AppIcon
-          name="star"
-          class="size-6 text-muted-foreground/60"
-        />
-        <div
-          class="text-sm text-foreground"
-          :class="wide ? '' : 'text-xs'"
-        >
+        <AppIcon name="star" class="text-muted-foreground/60 size-6" />
+        <div class="text-foreground text-sm" :class="wide ? '' : 'text-xs'">
           {{ t('admin.emptyFavorites') }}
         </div>
-        <p
-          v-if="wide"
-          class="text-xs leading-relaxed text-muted-foreground"
-        >
+        <p v-if="wide" class="text-muted-foreground text-xs leading-relaxed">
           {{ t('admin.emptyFavoritesHint') }}
         </p>
         <button
           type="button"
-          class="rounded-lg bg-primary px-3 py-1.5 font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          class="bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg px-3 py-1.5 font-medium transition-colors"
           :class="wide ? 'mt-1 text-xs' : 'text-[11px]'"
           @click="emit('browse')"
         >

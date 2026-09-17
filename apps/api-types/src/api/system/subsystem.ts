@@ -1,39 +1,37 @@
-import { useRequest } from '../core/api';
+import { useRequest } from '../core/api'
 
 /**
  * 子系统
  */
 export interface SysSubsystem {
   /** 子系统ID */
-  subsystemId?: string;
+  subsystemId?: string
   /** 子系统名称 */
-  subsystemName?: string;
+  subsystemName?: string
   /** 子系统编码 */
-  subsystemCode?: string;
+  subsystemCode?: string
   /** 排序 */
-  sort?: number;
+  sort?: number
   /** 图标 */
-  icon?: string;
+  icon?: string
   /** 状态 */
-  status?: number;
+  status?: number
   /** 备注 */
-  remark?: string;
+  remark?: string
   /** 拼音码 */
-  pinyinCode?: string;
+  pinyinCode?: string
   /** 五笔码 */
-  wubiCode?: string;
+  wubiCode?: string
   /** 创建时间 */
-  createAt?: string;
+  createAt?: string
   /** 创建人 */
-  createBy?: string;
+  createBy?: string
   /** 更新时间 */
-  updateAt?: string;
+  updateAt?: string
   /** 更新人 */
-  updateBy?: string;
+  updateBy?: string
   /** 删除标识 */
-  deleteFlag?: string;
+  deleteFlag?: string
 }
 
-
-export const { useRequestHandle, requestPath }
-  = useRequest('/sysSubsystem');
+export const { useRequestHandle, requestPath } = useRequest('/sysSubsystem')

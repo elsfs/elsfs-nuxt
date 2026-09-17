@@ -16,12 +16,9 @@ defineProps({
 </script>
 
 <template>
-  <div class="p-6 border bg-white dark:bg-black dark:border-gray-700 rounded">
-    <UIcon
-      :name="icon"
-      class="w-20 h-20"
-    />
-    <h2 class="text-3xl font-semibold mb-2">
+  <div class="rounded border bg-white p-6 dark:border-gray-700 dark:bg-black">
+    <UIcon :name="icon" class="h-20 w-20" />
+    <h2 class="mb-2 text-3xl font-semibold">
       {{ title }}
     </h2>
     <p>{{ description }}</p>

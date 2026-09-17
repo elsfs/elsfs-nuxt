@@ -12,11 +12,11 @@ export function bindMethods<T extends object>(instance: T): void {
     const propertyValue = instance[propertyName as keyof T]
 
     if (
-      typeof propertyValue === 'function'
-      && propertyName !== 'constructor'
-      && descriptor
-      && !descriptor.get
-      && !descriptor.set
+      typeof propertyValue === 'function' &&
+      propertyName !== 'constructor' &&
+      descriptor &&
+      !descriptor.get &&
+      !descriptor.set
     ) {
       instance[propertyName as keyof T] = propertyValue.bind(instance)
     }

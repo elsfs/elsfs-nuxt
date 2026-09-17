@@ -1,3 +1,4 @@
-import withNuxt from './.playground/.nuxt/eslint.config.mjs'
+import { createNuxtEslintConfig } from 'code-quality/eslint'
 
-export default withNuxt()
+// tailwind-config（Nuxt Layer）复用同一套共享代码质量基线
+export default createNuxtEslintConfig()

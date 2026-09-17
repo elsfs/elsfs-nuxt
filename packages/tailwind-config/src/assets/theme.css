@@ -10,7 +10,6 @@
  */
 @layer properties, theme, base, ant, antd, el, td, components, utilities;
 
-
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
@@ -48,8 +47,7 @@
 
   /* Box Shadow */
   --shadow-float:
-    0 6px 16px 0 rgb(0 0 0 / 8%), 0 3px 6px -4px rgb(0 0 0 / 12%),
-    0 9px 28px 8px rgb(0 0 0 / 5%);
+    0 6px 16px 0 rgb(0 0 0 / 8%), 0 3px 6px -4px rgb(0 0 0 / 12%), 0 9px 28px 8px rgb(0 0 0 / 5%);
 
   /* Animations */
   --animate-accordion-down: accordion-down 0.2s ease-out;
@@ -363,7 +361,7 @@
   html {
     --vben-viewport-height: 100vh;
 
-    @apply bg-background font-sans text-foreground;
+    @apply bg-background text-foreground font-sans;
 
     scroll-behavior: smooth;
     font-size: var(--font-size-base, 16px);
@@ -435,7 +433,7 @@
     }
 
     ::-webkit-scrollbar-thumb {
-      @apply rounded-sm border-none bg-border;
+      @apply bg-border rounded-sm border-none;
     }
 
     ::-webkit-scrollbar-track {
@@ -473,7 +471,7 @@
  * 见：https://tailwindcss.com/docs/adding-custom-styles#using-css-and-layering */
 @layer components {
   .outline-box {
-    @apply relative cursor-pointer rounded-md p-1 outline-1 outline-border;
+    @apply outline-border relative cursor-pointer rounded-md p-1 outline-1;
   }
 
   .outline-box::after {
@@ -481,7 +479,7 @@
   }
 
   .outline-box.outline-box-active {
-    @apply outline-2 outline-primary;
+    @apply outline-primary outline-2;
   }
 
   .outline-box.outline-box-active::after {
@@ -489,15 +487,15 @@
   }
 
   .outline-box:not(.outline-box-active):hover::after {
-    @apply top-0 left-0 h-full w-full p-1 opacity-100 outline-primary;
+    @apply outline-primary top-0 left-0 h-full w-full p-1 opacity-100;
   }
 
   .vben-link {
-    @apply cursor-pointer text-primary hover:text-primary-hover active:text-primary-active;
+    @apply text-primary hover:text-primary-hover active:text-primary-active cursor-pointer;
   }
 
   .card-box {
-    @apply rounded-xl border border-border bg-card text-card-foreground;
+    @apply border-border bg-card text-card-foreground rounded-xl border;
   }
 }
 

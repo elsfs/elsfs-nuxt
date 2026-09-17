@@ -25,7 +25,7 @@ const breadcrumb = computed(() => {
   }
   return [leaf.rootTitle, leaf.groupTitle, leaf.title]
     .filter(Boolean)
-    .map(title => menuTitle(title))
+    .map((title) => menuTitle(title))
     .join(' / ')
 })
 </script>
@@ -35,23 +35,22 @@ const breadcrumb = computed(() => {
     <h1 class="text-xl font-bold sm:text-2xl">
       {{ menu ? menuTitle(menu.title) : t('admin.menuNotFound') }}
     </h1>
-    <p
-      v-if="menu"
-      class="mt-2 text-sm text-muted-foreground"
-    >
+    <p v-if="menu" class="text-muted-foreground mt-2 text-sm">
       {{ breadcrumb }}
     </p>
 
-    <div class="mt-6 flex flex-col items-center gap-3 rounded-xl border border-dashed border-border px-6 py-12 text-center">
+    <div
+      class="border-border mt-6 flex flex-col items-center gap-3 rounded-xl border border-dashed px-6 py-12 text-center"
+    >
       <AppIcon
         :name="menu?.icon ?? 'question-filled'"
         fallback="question-filled"
-        class="size-8 text-muted-foreground"
+        class="text-muted-foreground size-8"
       />
-      <div class="text-sm text-foreground">
+      <div class="text-foreground text-sm">
         {{ t('admin.comingSoon') }}
       </div>
-      <p class="text-xs leading-relaxed text-muted-foreground">
+      <p class="text-muted-foreground text-xs leading-relaxed">
         {{ t('admin.comingSoonHint') }}
       </p>
     </div>

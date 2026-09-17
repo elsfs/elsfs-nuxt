@@ -4,7 +4,6 @@
  * 共享的 API 函数都会使用被注入后的 client，从而做到「API 函数共享、认证策略 app 自持」。
  */
 import type { RequestClientOptions } from 'nuxt-request/runtime'
-
 import { defaultResponseInterceptor, RequestClient } from 'nuxt-request/runtime'
 
 const apiURL = import.meta.env.VITE_GLOB_API_URL || '/api'

@@ -14,9 +14,9 @@ const res = await useFetch('/api/demo', {
 
 <template>
   <main>
-    <h2> 请求的数据：{{ res.data }}</h2>
-    <h2> 请求的数据：{{ res.status }}</h2>
-    <h2> 请求的数据：{{ res.error }}</h2>
+    <h2>请求的数据：{{ res.data }}</h2>
+    <h2>请求的数据：{{ res.status }}</h2>
+    <h2>请求的数据：{{ res.error }}</h2>
 
     <h1>{{ website.name }}</h1>
     <p>{{ website.description }}</p>
