@@ -1,6 +1,8 @@
+import type { AuthUser } from 'api-types/elsfs'
+
 import { parseMockToken } from './_mock'
 
-export default defineEventHandler((event) => {
+export default defineEventHandler((event): AuthUser => {
   const token = getCookie(event, 'elsfs_token')
   const subject = parseMockToken(token)
 

@@ -23,6 +23,7 @@
     "@nuxtjs/i18n": "catalog:",
     "@nuxtjs/tailwindcss": "catalog:",
     "@pinia/nuxt": "catalog:",
+    "api-types": "workspace:*",
     "nuxt-request": "workspace:*",
     "tailwind-config": "workspace:*",
     "tailwindcss": "^4.3.3",

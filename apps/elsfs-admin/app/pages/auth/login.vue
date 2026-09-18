@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate'
+import { z } from 'zod'
 
 import AuthTitle from './-auth-title.vue'
 import AuthThirdPartyLogin from './-third-party-login.vue'
 import type { LoginFormValues } from './useAuthValidation.ts'
-import { useAuthValidation } from './useAuthValidation.ts'
 
 interface Props {
   /** 是否处于提交加载状态 */
@@ -53,11 +53,27 @@ const auth = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 
-const { loginSchema } = useAuthValidation()
-
+/**
+ * 登录表单校验 Schema
+ * 校验消息使用函数形式，在「校验发生时」才调用 t()，因此语言切换后消息即时生效。
+ */
+ function validationSchema() {
+  return z.object({
+    username: z.string().min(1, { message: $t('validation.required') }),
+    password: z
+      .string('bn')
+      .min(1, { message: $t('validation.required') })
+      .min(8, { message: $t('validation.passwordMin', { min: 8 }) }),
+    remember: z.boolean(),
+  })
+}
 const { handleSubmit, isSubmitting } = useForm<LoginFormValues>({
-  validationSchema: loginSchema,
-  initialValues: { username: '', password: '', remember: false },
+  validationSchema,
+  initialValues: {
+    username: '',
+    password: '',
+    remember: false
+  },
 })
 
 const { value: username, errorMessage: usernameError } = useField<string>('username')
@@ -68,7 +84,7 @@ const showPassword = ref(false)
 
 const errorMessage = computed(() => (auth.errorCode ? t(`errors.${auth.errorCode}`) : ''))
 
-const onSubmit = handleSubmit(async (values) => {
+const onSubmit = handleSubmit(async (values:LoginFormValues,s ) => {
   // 记住账号（仅浏览器环境）
   if (values.remember) {
     localStorage.setItem('elsfs_remember_username', values.username)

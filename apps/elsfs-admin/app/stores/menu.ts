@@ -1,4 +1,5 @@
-import { fetchUserMenusApi } from '~/api/auth'
+import { fetchUserMenusApi } from 'api-types/elsfs'
+
 import { useApi } from '~/composables/useApi'
 import type { AdminMenuLeaf, AdminMenuItem } from '~/types/menu'
 import { ADMIN_MENU_RAW, flattenMenuTree, normalizeAdminMenus } from '~/utils/admin-menu'

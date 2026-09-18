@@ -23,9 +23,15 @@
     ".": {
       "types": "./dist/types.d.mts",
       "import": "./dist/module.mjs"
+    },
+    "./elsfs": {
+      "types": "./dist/runtime/elsfs/index.d.ts",
+      "import": "./dist/runtime/elsfs/index.js",
+      "default": "./dist/runtime/elsfs/index.js"
     }
   },
   "scripts": {
+    "postinstall": "nuxt-module-build build",
     "prepack": "nuxt-module-build build",
     "dev": "npm run dev:prepare && nuxt dev playground",
     "dev:build": "nuxt build playground",

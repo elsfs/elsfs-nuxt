@@ -1,4 +1,6 @@
-import type { AdminMenuLeaf, AdminMenuItem, BackendMenu, BackendMenuResponse } from '~/types/menu'
+import type { BackendMenu, BackendMenuResponse } from 'api-types/elsfs'
+
+import type { AdminMenuLeaf, AdminMenuItem } from '~/types/menu'
 
 /**
  * 后端菜单接口的 mock 响应（`{ code, data, error, message }`）。

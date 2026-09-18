@@ -1,4 +1,4 @@
-import { createApiClient } from '~/api/client'
+import { createApiClient } from 'api-types/elsfs'
 
 /**
  * 注入全局请求客户端与 token cookie ref。

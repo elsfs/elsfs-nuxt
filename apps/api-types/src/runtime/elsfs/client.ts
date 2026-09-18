@@ -5,6 +5,14 @@ import {
 } from 'nuxt-request/runtime'
 
 /**
+ * elsfs 后台的请求层公共契约：响应信封 + 归一化错误 + 客户端工厂。
+ *
+ * 这里只放「与具体应用无关」的部分：baseURL、token 读取、登录态失效后的跳转
+ * 都由应用侧通过 {@link CreateApiClientOptions} 注入（如 elsfs-admin 的
+ * `app/plugins/api.ts`）。
+ */
+
+/**
  * 后端统一响应信封：`{ code, message, type, success, result, timestamp }`。
  * - `code === 0` 表示成功，数据在 `result`（不是 `data`）；
  * - 业务失败（含 token 失效）依然是 HTTP 200，只能靠信封判断。

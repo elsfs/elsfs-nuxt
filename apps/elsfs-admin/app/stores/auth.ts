@@ -1,48 +1,17 @@
-import { fetchUserInfoApi, loginApi } from '~/api/auth'
-import type { ApiError } from '~/api/client'
+// 接口出入参类型集中在 api-types（`api-types/elsfs`），应用侧只保留状态与流程
+import type {
+  ApiError,
+  AuthResponse,
+  AuthStatus,
+  AuthUser,
+  CodeLoginPayload,
+  LoginPayload,
+  RegisterPayload,
+  SendCodePayload,
+} from 'api-types/elsfs'
+import { fetchUserInfoApi, loginApi } from 'api-types/elsfs'
+
 import { useApi } from '~/composables/useApi'
-
-export interface AuthUser {
-  id: string
-  name: string
-  username?: string
-  email: string
-  avatar?: string
-  authorities?: string[]
-}
-
-export interface LoginPayload {
-  username: string
-  password: string
-  remember: boolean
-}
-
-export interface RegisterPayload {
-  username: string
-  email: string
-  password: string
-}
-
-export interface CodeLoginPayload {
-  email: string
-  code: string
-}
-
-/** 发送验证码的请求体 */
-export interface SendCodePayload {
-  email: string
-  scene: 'login' | 'forget'
-}
-
-/** mock 认证接口的响应体（`server/api/auth/*`） */
-export interface AuthResponse {
-  token: string
-  user: AuthUser
-}
-
-export type AuthStatus = 'idle' | 'loading' | 'success' | 'error'
-
-export type CodeScene = 'login' | 'forget'
 
 /** 接口错误码 -> i18n key；未识别的落到兜底值 */
 function resolveErrorCode(error: unknown, scene?: 'login'): string {

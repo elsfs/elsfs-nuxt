@@ -1,6 +1,8 @@
+import type { AuthResponse } from 'api-types/elsfs'
+
 import { createMockToken } from './_mock'
 
-export default defineEventHandler(async (event) => {
+export default defineEventHandler(async (event): Promise<AuthResponse> => {
   const body = await readBody<{ username?: string; email?: string; password?: string }>(event)
   const username = (body.username || '').trim()
   const email = (body.email || '').trim()
