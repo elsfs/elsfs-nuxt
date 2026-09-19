@@ -96,8 +96,8 @@ Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 
 
 现有页面：`/`(index)、`/auth/login`、`/auth/register`、`/auth/code-login`、`/auth/qrcode-login`、`/auth/forget-password`、`/datshboard`、`/about`、`/posts/[id]`、`/menu/[id]`（后台菜单占位页）。
 
-- 认证类页面统一用 `definePageMeta({ layout: 'auth', middleware: 'guest' })`；受保护页面用 `middleware: 'auth'`
-- `app/middleware/auth.ts`：未登录跳 `/auth/login?redirect=<原地址>`（认证页在 `app/pages/auth/` 下，路由带 `/auth` 前缀，**没有** `/login` 这个路径）；`guest.ts`：已登录访问登录/注册页时跳回 `redirect` 或 `/`
+- 认证类页面统一用 `definePageMeta({ layout: 'auth', middleware: 'guest' })`；**其余页面无需显式声明守卫**，由全局中间件统一兜底
+- `app/middleware/auth.global.ts`（全局中间件）：除 `/auth` 下的认证页外，所有路由都必须登录，未登录跳 `/auth/login?redirect=<原地址>`（认证页在 `app/pages/auth/` 下，路由带 `/auth` 前缀，**没有** `/login` 这个路径）；`guest.ts`：已登录访问登录/注册页时跳回 `redirect` 或 `/`
 - 四个布局：`auth`（认证页双栏外壳，支持左/中/右三种面板形态与明暗切换）、`admin`（后台外壳：左上角「全部菜单」抽屉 + 左侧收藏菜单栏，`/datshboard`、`/menu/[id]` 使用）、`default`（占位）、`orange`（演示用，`/about` 使用）
 - `auth` 布局把表单包在 `AuthenticationFormView` 里，并全局覆盖 `.auth-form` 下的 Element Plus 输入框/按钮样式
 - `app/plugins/loading.client.ts` 负责首屏 loading（`#__app-loading__`）的隐藏与兜底移除，配合 `LoadingHide` 组件
@@ -154,7 +154,7 @@ Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 
 
 ## 常见改动怎么做
 
-- 新增受保护页面：建 `app/pages/xxx.vue`，加 `definePageMeta({ middleware: 'auth' })`，文案同时补两个语言包
+- 新增受保护页面：建 `app/pages/xxx.vue` 即可（全局中间件 `auth.global.ts` 会自动要求登录并加载菜单，无需再写 `middleware`），文案同时补两个语言包
 - 新增错误码：先在 `server/` 用 `createError({ message: 'XXX' })` 抛出，再到 `i18n/locales/{zh-CN,en}.json` 的 `errors` 下补 key，否则 UI 只能显示 key
 - 新增认证表单：在 `useAuthValidation.ts` 加 zod 工厂 → 页面用 vee-validate 的 `toTypedSchema` 接上 → 文案补双语言
 - 新增 iconify 图标：优先直接在模板写 `icon-[lucide--xxx]`；要按名传参就登记进 `AppIcon.vue` 的 `ICONIFY_CLASSES`
