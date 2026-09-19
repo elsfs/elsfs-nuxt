@@ -202,9 +202,15 @@ function browseFromMobile(): void {
             </div>
             <template #dropdown>
               <ElDropdownMenu>
-                <ElDropdownItem command="profile"> 个人信息 </ElDropdownItem>
-                <ElDropdownItem command="password"> 修改密码 </ElDropdownItem>
-                <ElDropdownItem command="clearCache"> 清除缓存 </ElDropdownItem>
+                <ElDropdownItem command="profile">
+                  个人信息
+                </ElDropdownItem>
+                <ElDropdownItem command="password">
+                  修改密码
+                </ElDropdownItem>
+                <ElDropdownItem command="clearCache">
+                  清除缓存
+                </ElDropdownItem>
                 <ElDropdownItem divided command="theme">
                   <span class="flex items-center gap-2">
                     <AppIcon :name="showDarkIcon ? 'sun' : 'moon'" class="size-4" />

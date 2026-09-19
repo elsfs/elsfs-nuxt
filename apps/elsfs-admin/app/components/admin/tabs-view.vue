@@ -182,8 +182,12 @@ async function handleMoreCommand(command: string): Promise<void> {
       </button>
       <template #dropdown>
         <ElDropdownMenu>
-          <ElDropdownItem command="others"> 关闭其他 </ElDropdownItem>
-          <ElDropdownItem command="all"> 关闭全部 </ElDropdownItem>
+          <ElDropdownItem command="others">
+            关闭其他
+          </ElDropdownItem>
+          <ElDropdownItem command="all">
+            关闭全部
+          </ElDropdownItem>
         </ElDropdownMenu>
       </template>
     </ElDropdown>

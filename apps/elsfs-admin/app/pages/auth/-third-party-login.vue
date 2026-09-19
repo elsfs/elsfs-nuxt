@@ -27,7 +27,9 @@ function onSelect(provider: ProviderItem): void {
     <!-- 分隔线 -->
     <div class="mt-5 flex items-center justify-between gap-4">
       <span class="h-px flex-1 bg-slate-200 dark:bg-white/10" />
-      <span class="text-muted-foreground shrink-0 text-xs uppercase"> 第三方登录 </span>
+      <span class="text-muted-foreground shrink-0 text-xs uppercase">
+        第三方登录
+      </span>
       <span class="h-px flex-1 bg-slate-200 dark:bg-white/10" />
     </div>
 

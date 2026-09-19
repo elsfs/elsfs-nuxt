@@ -2,8 +2,6 @@
 import { useField, useForm } from 'vee-validate'
 import { onBeforeUnmount } from 'vue'
 
-import { authErrorMessage } from '~/utils/auth-errors'
-
 import AuthTitle from './-auth-title.vue'
 import type { CodeLoginFormValues } from './useAuthValidation'
 import { useAuthValidation } from './useAuthValidation'
@@ -94,7 +92,9 @@ onBeforeUnmount(() => {
     <AuthTitle>
       <slot name="title"> 欢迎回来 📲 </slot>
       <template #desc>
-        <slot name="subTitle"> 输入注册邮箱并获取验证码 </slot>
+        <slot name="subTitle">
+          输入注册邮箱并获取验证码
+        </slot>
       </template>
     </AuthTitle>
 
@@ -156,6 +156,8 @@ onBeforeUnmount(() => {
       </ElButton>
     </ElForm>
 
-    <ElButton type="default" plain class="mt-4 w-full" @click="goToLogin()"> 返回 </ElButton>
+    <ElButton type="default" plain class="mt-4 w-full" @click="goToLogin()">
+      返回
+    </ElButton>
   </div>
 </template>

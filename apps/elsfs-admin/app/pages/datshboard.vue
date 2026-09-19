@@ -17,7 +17,9 @@ const stats = [
 
 <template>
   <div class="mx-auto max-w-5xl p-6 sm:p-8">
-    <h1 class="text-xl font-bold sm:text-2xl">欢迎来到你的仪表盘</h1>
+    <h1 class="text-xl font-bold sm:text-2xl">
+      欢迎来到你的仪表盘
+    </h1>
 
     <p v-if="auth.user" class="text-muted-foreground mt-2 text-sm">
       当前登录用户：{{ auth.user.email }}

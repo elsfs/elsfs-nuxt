@@ -31,7 +31,9 @@ const currentYear = new Date().getFullYear()
         <slot />
       </template>
       <template #copyright>
-        <div class="text-muted-foreground">© {{ currentYear }} ELSFS · 保留所有权利</div>
+        <div class="text-muted-foreground">
+          © {{ currentYear }} ELSFS · 保留所有权利
+        </div>
       </template>
     </AuthenticationFormView>
 
@@ -44,7 +46,9 @@ const currentYear = new Date().getFullYear()
           >
             <AppIcon name="medal" class="size-5" />
           </div>
-          <p class="m-0 text-xl font-semibold">ELSFS</p>
+          <p class="m-0 text-xl font-semibold">
+            ELSFS
+          </p>
         </div>
       </div>
     </slot>
@@ -77,7 +81,9 @@ const currentYear = new Date().getFullYear()
         <slot />
       </template>
       <template #copyright>
-        <div class="text-muted-foreground">© {{ currentYear }} ELSFS · 保留所有权利</div>
+        <div class="text-muted-foreground">
+          © {{ currentYear }} ELSFS · 保留所有权利
+        </div>
       </template>
     </AuthenticationFormView>
 
@@ -92,7 +98,9 @@ const currentYear = new Date().getFullYear()
           <slot />
         </template>
         <template #copyright>
-          <div class="text-muted-foreground">© {{ currentYear }} ELSFS · 保留所有权利</div>
+          <div class="text-muted-foreground">
+            © {{ currentYear }} ELSFS · 保留所有权利
+          </div>
         </template>
       </AuthenticationFormView>
     </div>

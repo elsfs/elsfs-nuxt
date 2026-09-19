@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate'
 
-import { authErrorMessage } from '~/utils/auth-errors'
-
 import AuthTitle from './-auth-title.vue'
 import type { ForgetPasswordFormValues } from './useAuthValidation.ts'
 import { useAuthValidation } from './useAuthValidation.ts'
@@ -45,7 +43,9 @@ function goToLogin(): void {
   <div>
     <AuthTitle>
       重置密码 🤦🏻‍♂️
-      <template #desc> 输入注册邮箱，我们将发送重置链接 </template>
+      <template #desc>
+        输入注册邮箱，我们将发送重置链接
+      </template>
     </AuthTitle>
 
     <ElAlert
@@ -81,6 +81,8 @@ function goToLogin(): void {
       </ElButton>
     </ElForm>
 
-    <ElButton type="default" plain class="mt-4 w-full" @click="goToLogin()"> 返回 </ElButton>
+    <ElButton type="default" plain class="mt-4 w-full" @click="goToLogin()">
+      返回
+    </ElButton>
   </div>
 </template>

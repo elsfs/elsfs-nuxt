@@ -1,6 +1,11 @@
 export default defineNuxtConfig({
   extends: ['tailwind-config'],
-  modules: ['@nuxt/eslint', '@pinia/nuxt', '@element-plus/nuxt', '@nuxtjs/color-mode'],
+  modules: [
+    '@nuxt/eslint',
+    '@pinia/nuxt',
+    '@element-plus/nuxt',
+    '@nuxtjs/color-mode',
+  ],
   $development: undefined,
   $env: undefined,
   $meta: undefined,
