@@ -209,9 +209,7 @@ function switchPanel(mode: AuthPanelMode): void {
         </ElButton>
         <template #dropdown>
           <ElDropdownMenu>
-            <ElDropdownItem command="left" :disabled="panel === 'left'">
-              左侧面板
-            </ElDropdownItem>
+            <ElDropdownItem command="left" :disabled="panel === 'left'"> 左侧面板 </ElDropdownItem>
             <ElDropdownItem command="center" :disabled="panel === 'center'">
               居中面板
             </ElDropdownItem>

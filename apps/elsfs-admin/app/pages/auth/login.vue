@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { FormInstance, FormRules } from 'element-plus'
 
+import { authErrorMessage } from '~/utils/auth-errors'
+
 import AuthTitle from './-auth-title.vue'
 import AuthThirdPartyLogin from './-third-party-login.vue'
 import type { LoginFormValues } from './useAuthValidation.ts'
@@ -195,9 +197,7 @@ async function onSocial(provider: string) {
 
       <!-- 记住我 / 忘记密码 -->
       <div class="flex items-center justify-between">
-        <ElCheckbox v-if="showRememberMe" v-model="ruleForm.remember">
-          记住我
-        </ElCheckbox>
+        <ElCheckbox v-if="showRememberMe" v-model="ruleForm.remember"> 记住我 </ElCheckbox>
         <span
           v-if="showForgetPassword"
           class="vben-link text-sm font-normal"
@@ -253,9 +253,7 @@ async function onSocial(provider: string) {
     <slot name="to-register">
       <div v-if="showRegister" class="text-muted-foreground mt-4 text-center text-sm">
         还没有账号？
-        <span class="vben-link text-sm font-normal" @click="goTo(registerPath)">
-          立即注册
-        </span>
+        <span class="vben-link text-sm font-normal" @click="goTo(registerPath)"> 立即注册 </span>
       </div>
     </slot>
   </div>

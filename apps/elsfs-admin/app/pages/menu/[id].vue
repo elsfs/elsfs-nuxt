@@ -46,9 +46,7 @@ const breadcrumb = computed(() => {
         fallback="question-filled"
         class="text-muted-foreground size-8"
       />
-      <div class="text-foreground text-sm">
-        该功能正在建设中
-      </div>
+      <div class="text-foreground text-sm">该功能正在建设中</div>
       <p class="text-muted-foreground text-xs leading-relaxed">
         菜单已经接好路由，替换成真实页面即可。
       </p>

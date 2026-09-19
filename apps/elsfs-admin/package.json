@@ -34,7 +34,6 @@
   "devDependencies": {
     "@element-plus/icons-vue": "^2.3.2",
     "@element-plus/nuxt": "1.1.5",
-    "element-plus": "^2.14.5",
     "@nuxt/devtools": "^3.4.1",
     "@nuxt/eslint": "^1.17.0",
     "@nuxt/eslint-config": "catalog:",
@@ -42,6 +41,7 @@
     "@types/node": "latest",
     "code-quality": "workspace:*",
     "cspell": "catalog:",
+    "element-plus": "^2.14.5",
     "eslint": "^10.8.1",
     "nuxt": "catalog:",
     "oxfmt": "catalog:",

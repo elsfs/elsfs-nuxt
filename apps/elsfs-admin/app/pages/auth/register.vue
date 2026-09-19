@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useField, useForm } from 'vee-validate'
 
+import { authErrorMessage } from '~/utils/auth-errors'
+
 import AuthTitle from './-auth-title.vue'
 import type { RegisterFormValues } from './useAuthValidation.ts'
 import { useAuthValidation } from './useAuthValidation.ts'
@@ -64,21 +66,14 @@ function goToLogin(): void {
   <div>
     <AuthTitle>
       创建账号 🚀
-      <template #desc>
-        注册一个免费账号，开始你的旅程
-      </template>
+      <template #desc> 注册一个免费账号，开始你的旅程 </template>
     </AuthTitle>
 
     <ElAlert v-if="errorMessage" type="error" show-icon class="mb-6" :title="errorMessage" />
 
     <ElForm label-position="top" novalidate class="auth-form" @submit="onSubmit">
       <ElFormItem label="用户名" :error="usernameError">
-        <ElInput
-          v-model="username"
-          size="large"
-          placeholder="请输入用户名"
-          autocomplete="username"
-        >
+        <ElInput v-model="username" size="large" placeholder="请输入用户名" autocomplete="username">
           <template #prefix>
             <AppIcon name="user" class="text-dimmed size-4" />
           </template>
@@ -188,9 +183,7 @@ function goToLogin(): void {
 
     <p class="text-muted-foreground mt-4 text-center text-sm">
       已有账号？返回登录
-      <span class="vben-link text-sm font-normal" @click="goToLogin()">
-        欢迎回来
-      </span>
+      <span class="vben-link text-sm font-normal" @click="goToLogin()"> 欢迎回来 </span>
     </p>
   </div>
 </template>

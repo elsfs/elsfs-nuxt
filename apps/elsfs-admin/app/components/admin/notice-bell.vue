@@ -97,9 +97,7 @@ const unread = computed(() => NOTICES.notice.length)
           <p class="text-muted-foreground mt-1 line-clamp-2 text-xs leading-relaxed">
             {{ item.brief }}
           </p>
-          <p class="text-muted-foreground/80 mt-1 text-[11px]">
-            发布时间：{{ item.time }}
-          </p>
+          <p class="text-muted-foreground/80 mt-1 text-[11px]">发布时间：{{ item.time }}</p>
         </div>
 
         <div
