@@ -10,7 +10,6 @@ definePageMeta({ layout: 'auth', middleware: 'guest' })
 
 defineOptions({ name: 'AuthRegister' })
 
-const { t } = useI18n()
 const auth = useAuthStore()
 const router = useRouter()
 const { meta: passwordMeta } = usePasswordStrength()
@@ -39,7 +38,7 @@ const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 
 const strength = computed(() => passwordMeta(password.value || ''))
-const errorMessage = computed(() => (auth.errorCode ? t(`errors.${auth.errorCode}`) : ''))
+const errorMessage = computed(() => authErrorMessage(auth.errorCode))
 const loading = computed(() => auth.status === 'loading')
 
 const onSubmit = handleSubmit(async (values) => {
@@ -49,7 +48,7 @@ const onSubmit = handleSubmit(async (values) => {
       email: values.email,
       password: values.password,
     })
-    ElMessage.success(t('register.success'))
+    ElMessage.success('注册成功，正在跳转...')
     await router.push('/')
   } catch {
     // 错误码已写入 store，由 Alert 展示
@@ -64,20 +63,20 @@ function goToLogin(): void {
 <template>
   <div>
     <AuthTitle>
-      {{ t('register.title') }} 🚀
+      创建账号 🚀
       <template #desc>
-        {{ t('register.subtitle') }}
+        注册一个免费账号，开始你的旅程
       </template>
     </AuthTitle>
 
     <ElAlert v-if="errorMessage" type="error" show-icon class="mb-6" :title="errorMessage" />
 
     <ElForm label-position="top" novalidate class="auth-form" @submit="onSubmit">
-      <ElFormItem :label="t('register.username')" :error="usernameError">
+      <ElFormItem label="用户名" :error="usernameError">
         <ElInput
           v-model="username"
           size="large"
-          :placeholder="t('register.usernamePlaceholder')"
+          placeholder="请输入用户名"
           autocomplete="username"
         >
           <template #prefix>
@@ -86,12 +85,12 @@ function goToLogin(): void {
         </ElInput>
       </ElFormItem>
 
-      <ElFormItem :label="t('register.email')" :error="emailError">
+      <ElFormItem label="邮箱" :error="emailError">
         <ElInput
           v-model="email"
           type="email"
           size="large"
-          :placeholder="t('register.emailPlaceholder')"
+          placeholder="you@example.com"
           autocomplete="email"
         >
           <template #prefix>
@@ -100,12 +99,12 @@ function goToLogin(): void {
         </ElInput>
       </ElFormItem>
 
-      <ElFormItem :label="t('register.password')" :error="passwordError">
+      <ElFormItem label="密码" :error="passwordError">
         <ElInput
           v-model="password"
           size="large"
           :type="showPassword ? 'text' : 'password'"
-          :placeholder="t('register.passwordPlaceholder')"
+          placeholder="请输入密码"
           autocomplete="new-password"
         >
           <template #prefix>
@@ -136,16 +135,16 @@ function goToLogin(): void {
         </div>
         <p class="flex items-center gap-1 text-xs" :class="strength.text">
           <AppIcon name="odometer" class="size-3" />
-          {{ t('register.strength') }}：{{ strength.label }}
+          密码强度：{{ strength.label }}
         </p>
       </div>
 
-      <ElFormItem :label="t('register.confirmPassword')" :error="confirmPasswordError">
+      <ElFormItem label="确认密码" :error="confirmPasswordError">
         <ElInput
           v-model="confirmPassword"
           size="large"
           :type="showConfirmPassword ? 'text' : 'password'"
-          :placeholder="t('register.confirmPasswordPlaceholder')"
+          placeholder="请再次输入密码"
           autocomplete="new-password"
         >
           <template #prefix>
@@ -168,9 +167,9 @@ function goToLogin(): void {
         <ElCheckbox v-model="agree">
           <template #label>
             <span class="text-muted-foreground text-sm">
-              {{ t('register.agreePrefix') }}
+              我已阅读并同意
               <a href="#" class="text-primary font-medium hover:underline" @click.prevent>
-                {{ t('register.terms') }}
+                《服务条款》与《隐私政策》
               </a>
             </span>
           </template>
@@ -183,14 +182,14 @@ function goToLogin(): void {
         native-type="submit"
         :loading="isSubmitting || loading"
       >
-        {{ t('register.submit') }}
+        注 册
       </ElButton>
     </ElForm>
 
     <p class="text-muted-foreground mt-4 text-center text-sm">
-      {{ t('common.backToLogin') }}
+      已有账号？返回登录
       <span class="vben-link text-sm font-normal" @click="goToLogin()">
-        {{ t('login.title') }}
+        欢迎回来
       </span>
     </p>
   </div>

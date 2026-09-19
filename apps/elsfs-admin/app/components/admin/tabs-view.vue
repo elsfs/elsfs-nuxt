@@ -8,7 +8,6 @@ import type { AppTab } from '~/stores/tabs'
  * 左右拖拽可以换顺序；标签顺序与开关状态存在 cookie 里。
  * 后端 `meta.affixTab` 的标签固定显示、不可关闭。
  */
-const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
 const tabsStore = useTabsStore()
@@ -165,7 +164,7 @@ async function handleMoreCommand(command: string): Promise<void> {
           type="button"
           class="hover:bg-accent hover:text-destructive flex size-4 shrink-0 items-center justify-center rounded-full transition-opacity"
           :class="route.path === tab.path ? 'opacity-100' : 'opacity-0 group-hover/tab:opacity-100'"
-          :aria-label="t('admin.closeTab')"
+          aria-label="关闭标签"
           @click.stop="closeTab(tab)"
         >
           <AppIcon name="close" class="size-3" />
@@ -177,17 +176,17 @@ async function handleMoreCommand(command: string): Promise<void> {
       <button
         type="button"
         class="border-border text-muted-foreground hover:bg-accent hover:text-foreground flex size-8 shrink-0 items-center justify-center rounded-md border transition-colors"
-        :aria-label="t('admin.moreTabs')"
+        aria-label="标签操作"
       >
         <AppIcon name="arrow-down" class="size-3.5" />
       </button>
       <template #dropdown>
         <ElDropdownMenu>
           <ElDropdownItem command="others">
-            {{ t('admin.closeOthers') }}
+            关闭其他
           </ElDropdownItem>
           <ElDropdownItem command="all">
-            {{ t('admin.closeAll') }}
+            关闭全部
           </ElDropdownItem>
         </ElDropdownMenu>
       </template>
@@ -214,7 +213,7 @@ async function handleMoreCommand(command: string): Promise<void> {
             class="size-3.5"
             :class="isFavorite(contextMenu.tab) ? 'text-primary' : 'text-muted-foreground'"
           />
-          {{ isFavorite(contextMenu.tab) ? t('admin.removeFavorite') : t('admin.addFavorite') }}
+          {{ isFavorite(contextMenu.tab) ? '取消收藏' : '加入收藏' }}
         </button>
         <button
           type="button"
@@ -222,7 +221,7 @@ async function handleMoreCommand(command: string): Promise<void> {
           @click="reload"
         >
           <AppIcon name="refresh" class="text-muted-foreground size-3.5" />
-          {{ t('admin.reload') }}
+          重新加载
         </button>
         <button
           type="button"
@@ -230,7 +229,7 @@ async function handleMoreCommand(command: string): Promise<void> {
           @click="closeOthers"
         >
           <AppIcon name="close" class="text-muted-foreground size-3.5" />
-          {{ t('admin.closeOthers') }}
+          关闭其他
         </button>
         <button
           type="button"
@@ -238,7 +237,7 @@ async function handleMoreCommand(command: string): Promise<void> {
           @click="closeAll"
         >
           <AppIcon name="delete" class="text-muted-foreground size-3.5" />
-          {{ t('admin.closeAll') }}
+          关闭全部
         </button>
       </div>
     </template>

@@ -9,7 +9,6 @@ defineOptions({ name: 'AuthForgetPassword' })
 
 definePageMeta({ layout: 'auth', middleware: 'guest' })
 
-const { t } = useI18n()
 const auth = useAuthStore()
 const router = useRouter()
 
@@ -25,7 +24,7 @@ const { value: email, errorMessage: emailError } = useField<string>('email')
 async function onSubmit(values: ForgetPasswordFormValues) {
   try {
     await auth.forgetPassword(values.email)
-    ElMessage.success(t('forgetPassword.successTitle'))
+    ElMessage.success('邮件已发送')
   } catch {
     // 错误码已写入 store，由组件内 Alert 展示
   }
@@ -43,9 +42,9 @@ function goToLogin(): void {
 <template>
   <div>
     <AuthTitle>
-      {{ t('forgetPassword.title') }} 🤦🏻‍♂️
+      重置密码 🤦🏻‍♂️
       <template #desc>
-        {{ t('forgetPassword.subtitle') }}
+        输入注册邮箱，我们将发送重置链接
       </template>
     </AuthTitle>
 
@@ -54,16 +53,16 @@ function goToLogin(): void {
       type="error"
       show-icon
       class="mb-6"
-      :title="t(`errors.${auth.errorCode}`)"
+      :title="authErrorMessage(auth.errorCode)"
     />
 
     <ElForm label-position="top" novalidate class="auth-form" @submit="submitHandler">
-      <ElFormItem :label="t('forgetPassword.email')" :error="emailError">
+      <ElFormItem label="邮箱" :error="emailError">
         <ElInput
           v-model="email"
           type="email"
           size="large"
-          :placeholder="t('forgetPassword.emailPlaceholder')"
+          placeholder="you@example.com"
           autocomplete="email"
         >
           <template #prefix>
@@ -78,12 +77,12 @@ function goToLogin(): void {
         native-type="submit"
         :loading="isSubmitting || auth.status === 'loading'"
       >
-        {{ t('forgetPassword.submit') }}
+        发送重置链接
       </ElButton>
     </ElForm>
 
     <ElButton type="default" plain class="mt-4 w-full" @click="goToLogin()">
-      {{ t('common.back') }}
+      返回
     </ElButton>
   </div>
 </template>

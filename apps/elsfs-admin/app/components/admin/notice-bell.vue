@@ -42,11 +42,9 @@ const NOTICES: Record<'notice' | 'announcement', AppNotice[]> = {
   ],
 }
 
-const { t } = useI18n()
-
 const TABS = [
-  { value: 'notice', label: 'admin.notice' },
-  { value: 'announcement', label: 'admin.announcement' },
+  { value: 'notice', label: '通知' },
+  { value: 'announcement', label: '公告' },
 ] as const
 
 const activeType = ref<'notice' | 'announcement'>('notice')
@@ -61,7 +59,7 @@ const unread = computed(() => NOTICES.notice.length)
         <button
           type="button"
           class="text-muted-foreground hover:bg-accent hover:text-foreground flex size-9 items-center justify-center rounded-lg transition-colors"
-          :aria-label="t('admin.notice')"
+          aria-label="通知"
         >
           <AppIcon name="bell" class="size-4" />
         </button>
@@ -83,7 +81,7 @@ const unread = computed(() => NOTICES.notice.length)
           "
           @click="activeType = tab.value"
         >
-          {{ t(tab.label) }}
+          {{ tab.label }}
         </button>
       </div>
 
@@ -100,7 +98,7 @@ const unread = computed(() => NOTICES.notice.length)
             {{ item.brief }}
           </p>
           <p class="text-muted-foreground/80 mt-1 text-[11px]">
-            {{ t('admin.publishTime') }}：{{ item.time }}
+            发布时间：{{ item.time }}
           </p>
         </div>
 
@@ -109,7 +107,7 @@ const unread = computed(() => NOTICES.notice.length)
           class="text-muted-foreground flex flex-col items-center gap-2 py-10 text-xs"
         >
           <AppIcon name="bell" class="size-6 opacity-40" />
-          {{ t('admin.noData') }}
+          暂无相关数据
         </div>
       </div>
     </div>

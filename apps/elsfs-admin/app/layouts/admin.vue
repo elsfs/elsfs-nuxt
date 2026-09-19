@@ -5,8 +5,6 @@
  * 顶栏：左「主页 + 全部菜单 + 平台名」、中「多页签」、右「消息 + 设置 + 用户」；
  * 下面再分左侧收藏夹窄栏与内容区。
  */
-const { t, locale, locales, setLocale } = useI18n()
-
 const menuStore = useMenuStore()
 const tabsStore = useTabsStore()
 const auth = useAuthStore()
@@ -62,23 +60,12 @@ function toggleTheme(): void {
   colorMode.preference = isDark.value ? 'light' : 'dark'
 }
 
-/* ---------- 语言 ---------- */
-const localeItems = computed(() =>
-  locales.value.map((item) => ({ label: item.name || item.code, value: item.code })),
-)
-
-async function switchLocale(code: string): Promise<void> {
-  if (code && code !== locale.value) {
-    await setLocale(code as typeof locale.value)
-  }
-}
-
 /* ---------- 用户 ---------- */
 const userName = computed(() => auth.user?.name || auth.user?.email?.split('@')[0] || 'user')
 const userInitial = computed(() => userName.value[0]?.toUpperCase() ?? 'U')
 
 function handleComingSoon(): void {
-  ElMessage.info(t('admin.comingSoon'))
+  ElMessage.info('该功能正在建设中')
 }
 
 function clearCache(): void {
@@ -87,7 +74,7 @@ function clearCache(): void {
   }
   localStorage.clear()
   sessionStorage.clear()
-  ElMessage.success(t('admin.cacheCleared'))
+  ElMessage.success('缓存已清除')
 }
 
 async function handleUserCommand(command: string): Promise<void> {
@@ -102,10 +89,6 @@ async function handleUserCommand(command: string): Promise<void> {
   }
   if (command === 'clearCache') {
     clearCache()
-    return
-  }
-  if (command.startsWith('locale:')) {
-    await switchLocale(command.slice('locale:'.length))
     return
   }
   // 个人信息 / 修改密码等暂未实现
@@ -131,11 +114,11 @@ function browseFromMobile(): void {
       <!-- 左：主页 / 全部菜单 / 平台名 -->
       <ul class="flex shrink-0 items-center gap-1">
         <li>
-          <ElTooltip :content="t('admin.home')" placement="bottom" :show-after="500">
+          <ElTooltip content="主页" placement="bottom" :show-after="500">
             <button
               type="button"
               class="text-muted-foreground hover:bg-accent hover:text-foreground flex size-9 items-center justify-center rounded-lg transition-colors"
-              :aria-label="t('admin.home')"
+              aria-label="主页"
               @click="goHome"
             >
               <AppIcon name="house" class="size-4" />
@@ -143,12 +126,12 @@ function browseFromMobile(): void {
           </ElTooltip>
         </li>
         <li>
-          <ElTooltip :content="t('admin.allMenus')" placement="bottom" :show-after="500">
+          <ElTooltip content="全部菜单" placement="bottom" :show-after="500">
             <button
               type="button"
               class="hover:bg-accent hover:text-foreground flex size-9 items-center justify-center rounded-lg transition-colors"
               :class="showMenuDrawer ? 'bg-accent text-primary' : 'text-muted-foreground'"
-              :aria-label="t('admin.allMenus')"
+              aria-label="全部菜单"
               @click="showMenuDrawer = !showMenuDrawer"
             >
               <AppIcon :name="showMenuDrawer ? 'expand' : 'menu'" class="size-4" />
@@ -159,7 +142,7 @@ function browseFromMobile(): void {
           <button
             type="button"
             class="text-muted-foreground hover:bg-accent hover:text-foreground flex size-9 items-center justify-center rounded-lg transition-colors"
-            :aria-label="t('admin.openFavorites')"
+            aria-label="展开收藏菜单"
             @click="showMobileFavorites = true"
           >
             <AppIcon name="star-filled" class="size-4" />
@@ -171,7 +154,7 @@ function browseFromMobile(): void {
             class="text-foreground max-w-40 cursor-pointer truncate px-1 text-base"
             @click="showMenuDrawer = true"
           >
-            {{ t('common.appName') }}
+            ELSFS
           </button>
         </li>
       </ul>
@@ -185,11 +168,11 @@ function browseFromMobile(): void {
           <AdminNoticeBell />
         </li>
         <li>
-          <ElTooltip :content="t('admin.settings')" placement="bottom" :show-after="500">
+          <ElTooltip content="系统设置" placement="bottom" :show-after="500">
             <button
               type="button"
               class="text-muted-foreground hover:bg-accent hover:text-foreground flex size-9 items-center justify-center rounded-lg transition-colors"
-              :aria-label="t('admin.settings')"
+              aria-label="系统设置"
               @click="handleComingSoon"
             >
               <AppIcon name="setting" class="size-4" />
@@ -209,7 +192,7 @@ function browseFromMobile(): void {
               <span class="hidden flex-col leading-tight sm:flex">
                 <span class="text-foreground flex items-center gap-1 text-xs">
                   {{ userName }}
-                  <span class="text-muted-foreground">{{ t('admin.roleAdmin') }}</span>
+                  <span class="text-muted-foreground">管理员</span>
                 </span>
                 <span class="text-muted-foreground max-w-40 truncate text-[11px]">{{
                   auth.user?.email
@@ -220,42 +203,24 @@ function browseFromMobile(): void {
             <template #dropdown>
               <ElDropdownMenu>
                 <ElDropdownItem command="profile">
-                  {{ t('admin.profile') }}
+                  个人信息
                 </ElDropdownItem>
                 <ElDropdownItem command="password">
-                  {{ t('admin.changePassword') }}
+                  修改密码
                 </ElDropdownItem>
                 <ElDropdownItem command="clearCache">
-                  {{ t('admin.clearCache') }}
+                  清除缓存
                 </ElDropdownItem>
                 <ElDropdownItem divided command="theme">
                   <span class="flex items-center gap-2">
                     <AppIcon :name="showDarkIcon ? 'sun' : 'moon'" class="size-4" />
-                    {{ t('common.theme') }}：{{
-                      showDarkIcon ? t('admin.themeDark') : t('admin.themeLight')
-                    }}
-                  </span>
-                </ElDropdownItem>
-                <ElDropdownItem
-                  v-for="item in localeItems"
-                  :key="item.value"
-                  :command="`locale:${item.value}`"
-                >
-                  <span class="flex items-center gap-2">
-                    <AppIcon
-                      v-if="locale === item.value"
-                      name="check"
-                      class="text-primary size-4"
-                    />
-                    <span :class="locale === item.value ? 'text-primary' : ''">{{
-                      item.label
-                    }}</span>
+                    主题：{{ showDarkIcon ? '深色' : '浅色' }}
                   </span>
                 </ElDropdownItem>
                 <ElDropdownItem divided command="logout">
                   <span class="flex items-center gap-2">
                     <AppIcon name="switch-button" class="size-4" />
-                    {{ t('common.logout') }}
+                    退出登录
                   </span>
                 </ElDropdownItem>
               </ElDropdownMenu>
@@ -275,10 +240,10 @@ function browseFromMobile(): void {
           type="button"
           class="text-muted-foreground hover:text-primary flex shrink-0 cursor-pointer items-center justify-center gap-0.5 py-2 text-[11px] transition-colors"
           :class="favoritesCollapsed ? 'flex-col gap-2' : 'flex-row'"
-          :aria-label="favoritesCollapsed ? t('admin.myFavorites') : t('admin.collapse')"
+          :aria-label="favoritesCollapsed ? '我的收藏' : '收起'"
           @click="favoritesCollapsed = !favoritesCollapsed"
         >
-          <span v-if="!favoritesCollapsed" class="leading-none">{{ t('admin.collapse') }}</span>
+          <span v-if="!favoritesCollapsed" class="leading-none">收起</span>
           <AppIcon
             :name="favoritesCollapsed ? 'd-arrow-right' : 'd-arrow-left'"
             class="size-3.5 shrink-0"
@@ -286,7 +251,7 @@ function browseFromMobile(): void {
           <span
             v-if="favoritesCollapsed"
             class="text-[11px] leading-none tracking-widest [writing-mode:vertical-rl]"
-            >{{ t('admin.myFavorites') }}</span
+            >我的收藏</span
           >
         </button>
         <div
@@ -309,7 +274,7 @@ function browseFromMobile(): void {
     <!-- 移动端收藏菜单 -->
     <ElDrawer v-model="showMobileFavorites" direction="ltr" size="72%">
       <template #header>
-        <span class="text-foreground text-base font-semibold">{{ t('admin.title') }}</span>
+        <span class="text-foreground text-base font-semibold">后台管理</span>
       </template>
       <AdminFavoriteMenus wide @select="showMobileFavorites = false" @browse="browseFromMobile" />
     </ElDrawer>

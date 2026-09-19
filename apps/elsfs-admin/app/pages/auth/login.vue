@@ -47,7 +47,6 @@ withDefaults(defineProps<Props>(), {
 
 definePageMeta({ layout: 'auth', middleware: 'guest' })
 
-const { t } = useI18n()
 const auth = useAuthStore()
 const router = useRouter()
 const route = useRoute()
@@ -64,23 +63,22 @@ const ruleForm = reactive<LoginFormValues>({
 
 /**
  * 基于 async-validator（Element Plus 表单校验引擎）的校验规则。
- * 用 computed 包裹，切换语言时消息即时刷新。
  */
 const rules = computed<FormRules<LoginFormValues>>(() => ({
   username: [
-    { required: true, message: t('validation.required'), trigger: 'blur' },
-    { min: 3, message: t('validation.usernameMin', { min: 3 }), trigger: 'blur' },
-    { max: 20, message: t('validation.usernameMax', { max: 20 }), trigger: 'blur' },
+    { required: true, message: '此项为必填项', trigger: 'blur' },
+    { min: 3, message: '用户名至少需要 3 个字符', trigger: 'blur' },
+    { max: 20, message: '用户名不能超过 20 个字符', trigger: 'blur' },
   ],
   password: [
-    { required: true, message: t('validation.required'), trigger: 'blur' },
-    { min: 8, message: t('validation.passwordMin', { min: 8 }), trigger: 'blur' },
+    { required: true, message: '此项为必填项', trigger: 'blur' },
+    { min: 8, message: '密码至少需要 8 个字符', trigger: 'blur' },
   ],
 }))
 
 const showPassword = ref(false)
 
-const errorMessages = computed(() => (auth.errorCode ? t(`errors.${auth.errorCode}`) : ''))
+const errorMessages = computed(() => authErrorMessage(auth.errorCode))
 const isSubmitting = computed(() => auth.status === 'loading')
 
 /** 提交：先跑 async-validator 校验，通过后再登录 */
@@ -138,11 +136,11 @@ async function onSocial(provider: string) {
   <div>
     <AuthTitle>
       <slot name="title">
-        {{ title || `${t('login.welcomeBack')} 👋🏻` }}
+        {{ title || `欢迎回来 👋🏻` }}
       </slot>
       <template #desc>
         <slot name="subTitle">
-          {{ subTitle || t('login.subtitle') }}
+          {{ subTitle || '登录你的账号以继续' }}
         </slot>
       </template>
     </AuthTitle>
@@ -157,12 +155,12 @@ async function onSocial(provider: string) {
       class="auth-form"
       @submit.prevent="onSubmit"
     >
-      <ElFormItem :label="t('login.username')" prop="username">
+      <ElFormItem label="用户名" prop="username">
         <ElInput
           v-model="ruleForm.username"
           type="text"
           size="large"
-          :placeholder="t('login.usernamePlaceholder')"
+          placeholder="请输入用户名"
           autocomplete="username"
         >
           <template #prefix>
@@ -171,12 +169,12 @@ async function onSocial(provider: string) {
         </ElInput>
       </ElFormItem>
 
-      <ElFormItem :label="t('login.password')" prop="password">
+      <ElFormItem label="密码" prop="password">
         <ElInput
           v-model="ruleForm.password"
           size="large"
           :type="showPassword ? 'text' : 'password'"
-          :placeholder="t('login.passwordPlaceholder')"
+          placeholder="请输入你的密码"
           autocomplete="current-password"
         >
           <template #prefix>
@@ -198,14 +196,14 @@ async function onSocial(provider: string) {
       <!-- 记住我 / 忘记密码 -->
       <div class="flex items-center justify-between">
         <ElCheckbox v-if="showRememberMe" v-model="ruleForm.remember">
-          {{ t('login.rememberMe') }}
+          记住我
         </ElCheckbox>
         <span
           v-if="showForgetPassword"
           class="vben-link text-sm font-normal"
           @click="goTo(forgetPasswordPath)"
         >
-          {{ t('login.forgotPassword') }}
+          忘记密码？
         </span>
       </div>
 
@@ -215,7 +213,7 @@ async function onSocial(provider: string) {
         native-type="submit"
         :loading="isSubmitting || loading"
       >
-        {{ submitButtonText || t('common.login') }}
+        {{ submitButtonText || '登录' }}
       </ElButton>
     </ElForm>
 
@@ -232,7 +230,7 @@ async function onSocial(provider: string) {
         @click="goTo(codeLoginPath)"
       >
         <AppIcon name="key" class="mr-1 size-4" />
-        {{ t('login.mobileLogin') }}
+        手机验证码登录
       </ElButton>
       <ElButton
         v-if="showQrcodeLogin"
@@ -242,7 +240,7 @@ async function onSocial(provider: string) {
         @click="goTo(qrcodeLoginPath)"
       >
         <AppIcon name="monitor" class="mr-1 size-4" />
-        {{ t('login.qrcodeLogin') }}
+        扫码登录
       </ElButton>
     </div>
 
@@ -254,9 +252,9 @@ async function onSocial(provider: string) {
     <!-- 注册引导 -->
     <slot name="to-register">
       <div v-if="showRegister" class="text-muted-foreground mt-4 text-center text-sm">
-        {{ t('login.noAccountTip') }}
+        还没有账号？
         <span class="vben-link text-sm font-normal" @click="goTo(registerPath)">
-          {{ t('login.createAccount') }}
+          立即注册
         </span>
       </div>
     </slot>

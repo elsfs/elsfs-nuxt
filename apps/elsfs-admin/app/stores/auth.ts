@@ -13,7 +13,7 @@ import { fetchUserInfoApi, loginApi } from 'api-types/elsfs'
 
 import { useApi } from '~/composables/useApi'
 
-/** 接口错误码 -> i18n key；未识别的落到兜底值 */
+/** 接口错误 -> 归一化的错误码；未识别的落到兜底值 */
 function resolveErrorCode(error: unknown, scene?: 'login'): string {
   const apiError = error as Partial<ApiError> | undefined
   if (apiError?.name === 'ApiError' && apiError.code) {
@@ -32,7 +32,7 @@ function resolveErrorCode(error: unknown, scene?: 'login'): string {
  * - token 通过 cookie 持久化（SSR 安全），由 `plugins/api.ts` 注入的 `$authToken` 持有；
  * - 登录 / 用户信息走真实后端（`NUXT_PUBLIC_USE_MOCK=true` 时回落到本地 mock）；
  * - 状态机：idle -> loading -> success | error；
- * - errorCode 为错误码，UI 层结合 i18n 翻译。
+ * - errorCode 为错误码，UI 层用 `authErrorMessage` 映射成中文提示。
  */
 export const useAuthStore = defineStore('auth', () => {
   const nuxtApp = useNuxtApp()

@@ -4,18 +4,10 @@ import { fallbackMenuPath } from '~/utils/admin-menu'
 /**
  * 菜单标题解析。
  *
- * 后端下发的 `meta.title` 既可能是 i18n key（`demos.title`），也可能是字面文案，
- * 这里统一处理：语言包里找得到 key 就用翻译，否则原样显示。
+ * 后端下发的 `meta.title` 直接作为展示文案，这里只做空值兼容。
  */
 export function useMenuTitle() {
-  const { t, te } = useI18n()
-
-  return (title?: string): string => {
-    if (!title) {
-      return ''
-    }
-    return te(title) ? t(title) : title
-  }
+  return (title?: string): string => title ?? ''
 }
 
 /**

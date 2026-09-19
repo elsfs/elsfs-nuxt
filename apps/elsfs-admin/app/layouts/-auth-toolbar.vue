@@ -1,5 +1,5 @@
 <script setup lang="ts">
-type ToolbarType = 'color' | 'language' | 'layout' | 'theme'
+type ToolbarType = 'color' | 'layout' | 'theme'
 
 type AuthPanelMode = 'left' | 'center' | 'right'
 
@@ -11,7 +11,7 @@ interface Props {
 defineOptions({ name: 'AuthToolbar' })
 
 const props = withDefaults(defineProps<Props>(), {
-  toolbarList: () => ['color', 'language', 'layout', 'theme'],
+  toolbarList: () => ['color', 'layout', 'theme'],
   panel: 'left',
 })
 
@@ -19,27 +19,21 @@ const emit = defineEmits<{ 'change-panel': [mode: AuthPanelMode] }>()
 
 const showColor = computed(() => props.toolbarList.includes('color'))
 const showLayout = computed(() => props.toolbarList.includes('layout'))
-const showLanguage = computed(() => props.toolbarList.includes('language'))
 const showTheme = computed(() => props.toolbarList.includes('theme'))
-
-/* ---------- i18n ---------- */
-const { t, locale, setLocale } = useI18n()
-const { locales } = useI18n()
-
-const localeItems = computed(() =>
-  locales.value.map((l) => ({ label: l.name || l.code, value: l.code })),
-)
-
-async function switchLocale(code: string): Promise<void> {
-  if (code && code !== locale.value) {
-    await setLocale(code as typeof locale.value)
-  }
-}
 
 /* ---------- 主题色 ---------- */
 interface ColorPreset {
   light: { primary: string; hover: string; active: string; foreground: string }
   dark: { primary: string; hover: string; active: string; foreground: string }
+}
+
+const COLOR_LABELS: Record<string, string> = {
+  violet: '紫罗兰',
+  blue: '蓝色',
+  green: '绿色',
+  amber: '琥珀',
+  rose: '玫瑰',
+  cyan: '青色',
 }
 
 const COLOR_PRESETS: Record<string, ColorPreset> = {
@@ -190,7 +184,7 @@ function switchPanel(mode: AuthPanelMode): void {
     <!-- color + layout：仅 md 及以上显示 -->
     <div class="hidden items-center md:flex">
       <ElDropdown v-if="showColor" trigger="click" @command="switchColor">
-        <ElButton circle text :aria-label="t('toolbar.color')">
+        <ElButton circle text aria-label="主题色">
           <AppIcon name="brush" class="size-4" />
         </ElButton>
         <template #dropdown>
@@ -201,7 +195,7 @@ function switchPanel(mode: AuthPanelMode): void {
                   class="mr-2 size-4 rounded-full ring-1 ring-black/10 ring-inset"
                   :style="{ backgroundColor: `hsl(${preset.light.primary})` }"
                 />
-                {{ t(`toolbar.colors.${key}`) }}
+                {{ COLOR_LABELS[key] }}
                 <AppIcon v-if="colorKey === key" name="check" class="text-primary ml-2 size-3.5" />
               </span>
             </ElDropdownItem>
@@ -210,43 +204,27 @@ function switchPanel(mode: AuthPanelMode): void {
       </ElDropdown>
 
       <ElDropdown v-if="showLayout" trigger="click" @command="switchPanel">
-        <ElButton circle text :aria-label="t('layoutMode.label')">
+        <ElButton circle text aria-label="布局">
           <AppIcon name="grid" class="size-4" />
         </ElButton>
         <template #dropdown>
           <ElDropdownMenu>
             <ElDropdownItem command="left" :disabled="panel === 'left'">
-              {{ t('layoutMode.left') }}
+              左侧面板
             </ElDropdownItem>
             <ElDropdownItem command="center" :disabled="panel === 'center'">
-              {{ t('layoutMode.center') }}
+              居中面板
             </ElDropdownItem>
             <ElDropdownItem command="right" :disabled="panel === 'right'">
-              {{ t('layoutMode.right') }}
+              右侧面板
             </ElDropdownItem>
           </ElDropdownMenu>
         </template>
       </ElDropdown>
     </div>
 
-    <!-- 语言：常显 -->
-    <ElDropdown v-if="showLanguage" trigger="click" @command="switchLocale">
-      <ElButton circle text :aria-label="t('common.language')">
-        <AppIcon name="message" class="size-4" />
-      </ElButton>
-      <template #dropdown>
-        <ElDropdownMenu>
-          <ElDropdownItem v-for="item in localeItems" :key="item.value" :command="item.value">
-            <span :class="{ 'text-primary': locale === item.value }">
-              {{ item.label }}
-            </span>
-          </ElDropdownItem>
-        </ElDropdownMenu>
-      </template>
-    </ElDropdown>
-
     <!-- 主题：常显 -->
-    <ElButton v-if="showTheme" circle text :aria-label="t('common.theme')" @click="toggleTheme">
+    <ElButton v-if="showTheme" circle text aria-label="主题" @click="toggleTheme">
       <AppIcon :name="showDarkIcon ? 'sun' : 'moon'" class="size-4" />
     </ElButton>
   </div>

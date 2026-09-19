@@ -3,7 +3,6 @@ import AuthToolbar from './-auth-toolbar.vue'
 import AuthenticationFormView from './-authentication-form-view.vue'
 
 type AuthPanelMode = 'left' | 'center' | 'right'
-const { t } = useI18n()
 
 /** 认证面板形态：默认左侧表单 + 右侧 slogan；可切换居中或镜像 */
 const authPanel = ref<AuthPanelMode>('left')
@@ -33,7 +32,7 @@ const currentYear = new Date().getFullYear()
       </template>
       <template #copyright>
         <div class="text-muted-foreground">
-          © {{ currentYear }} {{ t('common.appName') }} · {{ t('common.rights') }}
+          © {{ currentYear }} ELSFS · 保留所有权利
         </div>
       </template>
     </AuthenticationFormView>
@@ -48,7 +47,7 @@ const currentYear = new Date().getFullYear()
             <AppIcon name="medal" class="size-5" />
           </div>
           <p class="m-0 text-xl font-semibold">
-            {{ t('common.appName') }}
+            ELSFS
           </p>
         </div>
       </div>
@@ -67,10 +66,10 @@ const currentYear = new Date().getFullYear()
             <AppIcon name="lucide--shield-check" class="text-primary size-28 drop-shadow-2xl" />
           </div>
           <h1 class="text-foreground mt-6 text-center text-2xl font-semibold lg:text-3xl">
-            {{ t('common.brandTagline') }}
+            安全、简单、可靠的认证体验
           </h1>
           <p class="text-muted-foreground mt-3 max-w-md text-center text-sm lg:text-base">
-            {{ t('common.brandDescription') }}
+            为你的应用提供开箱即用的身份认证方案，支持登录、注册、社交账号等多种方式。
           </p>
         </div>
       </div>
@@ -83,7 +82,7 @@ const currentYear = new Date().getFullYear()
       </template>
       <template #copyright>
         <div class="text-muted-foreground">
-          © {{ currentYear }} {{ t('common.appName') }} · {{ t('common.rights') }}
+          © {{ currentYear }} ELSFS · 保留所有权利
         </div>
       </template>
     </AuthenticationFormView>
@@ -100,7 +99,7 @@ const currentYear = new Date().getFullYear()
         </template>
         <template #copyright>
           <div class="text-muted-foreground">
-            © {{ currentYear }} {{ t('common.appName') }} · {{ t('common.rights') }}
+            © {{ currentYear }} ELSFS · 保留所有权利
           </div>
         </template>
       </AuthenticationFormView>

@@ -17,14 +17,12 @@ function calculateScore(password: string): number {
 }
 
 export function usePasswordStrength() {
-  const { t } = useI18n()
-
   const LEVELS = {
-    0: { labelKey: 'register.strength_0', bar: 'bg-red-500', text: 'text-red-500' },
-    1: { labelKey: 'register.strength_1', bar: 'bg-red-500', text: 'text-red-500' },
-    2: { labelKey: 'register.strength_2', bar: 'bg-yellow-500', text: 'text-yellow-500' },
-    3: { labelKey: 'register.strength_3', bar: 'bg-green-500', text: 'text-green-500' },
-    4: { labelKey: 'register.strength_4', bar: 'bg-emerald-500', text: 'text-emerald-500' },
+    0: { label: '太弱', bar: 'bg-red-500', text: 'text-red-500' },
+    1: { label: '弱', bar: 'bg-red-500', text: 'text-red-500' },
+    2: { label: '中等', bar: 'bg-yellow-500', text: 'text-yellow-500' },
+    3: { label: '强', bar: 'bg-green-500', text: 'text-green-500' },
+    4: { label: '非常强', bar: 'bg-emerald-500', text: 'text-emerald-500' },
   } as const
 
   /** 返回某个密码对应的强度元信息（颜色、文案），供进度条渲染 */
@@ -33,7 +31,7 @@ export function usePasswordStrength() {
     const level = LEVELS[score as keyof typeof LEVELS]
     return {
       score,
-      label: password ? t(level.labelKey) : '',
+      label: password ? level.label : '',
       bar: level.bar,
       text: level.text,
     }

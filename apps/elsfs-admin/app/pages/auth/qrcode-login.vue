@@ -33,7 +33,6 @@ const props = withDefaults(defineProps<Props>(), {
   qrcodeText: 'elsfs://login',
 })
 
-const { t } = useI18n()
 const router = useRouter()
 
 /**
@@ -69,11 +68,11 @@ function goToLogin(): void {
   <div>
     <AuthTitle>
       <slot name="title">
-        {{ title || `${t('login.welcomeBack')} 📱` }}
+        {{ title || `欢迎回来 📱` }}
       </slot>
       <template #desc>
         <slot name="subTitle">
-          {{ subTitle || t('qrcodeLogin.subtitle') }}
+          {{ subTitle || '打开手机 App 扫码即可登录' }}
         </slot>
       </template>
     </AuthTitle>
@@ -93,13 +92,13 @@ function goToLogin(): void {
 
       <p class="text-muted-foreground mt-4 text-sm">
         <slot name="description">
-          {{ description || t('qrcodeLogin.prompt') }}
+          {{ description || '请使用手机扫描二维码' }}
         </slot>
       </p>
     </div>
 
     <ElButton v-if="showBack" type="default" plain class="mt-4 w-full" @click="goToLogin()">
-      {{ t('common.back') }}
+      返回
     </ElButton>
   </div>
 </template>

@@ -10,7 +10,6 @@ definePageMeta({
   middleware: 'auth',
 })
 
-const { t } = useI18n()
 const route = useRoute()
 const menuStore = useMenuStore()
 const menuTitle = useMenuTitle()
@@ -33,7 +32,7 @@ const breadcrumb = computed(() => {
 <template>
   <div class="mx-auto max-w-3xl p-6 sm:p-8">
     <h1 class="text-xl font-bold sm:text-2xl">
-      {{ menu ? menuTitle(menu.title) : t('admin.menuNotFound') }}
+      {{ menu ? menuTitle(menu.title) : '菜单不存在' }}
     </h1>
     <p v-if="menu" class="text-muted-foreground mt-2 text-sm">
       {{ breadcrumb }}
@@ -48,10 +47,10 @@ const breadcrumb = computed(() => {
         class="text-muted-foreground size-8"
       />
       <div class="text-foreground text-sm">
-        {{ t('admin.comingSoon') }}
+        该功能正在建设中
       </div>
       <p class="text-muted-foreground text-xs leading-relaxed">
-        {{ t('admin.comingSoonHint') }}
+        菜单已经接好路由，替换成真实页面即可。
       </p>
     </div>
   </div>

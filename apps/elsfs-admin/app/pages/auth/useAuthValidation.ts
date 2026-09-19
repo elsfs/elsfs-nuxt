@@ -29,11 +29,11 @@ export interface ForgetPasswordFormValues {
  */
 export function createLoginSchema() {
   return z.object({
-    username: z.string().min(1, { message: $t('validation.required') }),
+    username: z.string().min(1, { message: '此项为必填项' }),
     password: z
       .string()
-      .min(1, { message: $t('validation.required') })
-      .min(8, { message: $t('validation.passwordMin', { min: 8 }) }),
+      .min(1, { message: '此项为必填项' })
+      .min(8, { message: '密码至少需要 8 个字符' }),
     remember: z.boolean(),
   })
 }
@@ -47,36 +47,36 @@ export function createRegisterSchema() {
     .object({
       username: z
         .string()
-        .min(1, { message: $t('validation.required') })
-        .min(3, { message: $t('validation.usernameMin', { min: 3 }) })
-        .max(20, { message: $t('validation.usernameMax', { max: 20 }) }),
+        .min(1, { message: '此项为必填项' })
+        .min(3, { message: '用户名至少需要 3 个字符' })
+        .max(20, { message: '用户名不能超过 20 个字符' }),
       email: z
         .string()
-        .min(1, { message: $t('validation.required') })
-        .email({ message: $t('validation.emailInvalid') }),
+        .min(1, { message: '此项为必填项' })
+        .email({ message: '请输入有效的邮箱地址' }),
       password: z
         .string()
-        .min(1, { message: $t('validation.required') })
-        .min(8, { message: $t('validation.passwordMin', { min: 8 }) })
+        .min(1, { message: '此项为必填项' })
+        .min(8, { message: '密码至少需要 8 个字符' })
         .regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/, {
-          message: $t('validation.passwordPattern'),
+          message: '密码需包含大写字母、小写字母和数字',
         }),
-      confirmPassword: z.string().min(1, { message: $t('validation.required') }),
-      agree: z.boolean().refine((val) => val === true, { message: $t('validation.termsRequired') }),
+      confirmPassword: z.string().min(1, { message: '此项为必填项' }),
+      agree: z.boolean().refine((val) => val === true, { message: '请先同意服务条款与隐私政策' }),
     })
     .superRefine((data, ctx) => {
       if (data.password !== data.confirmPassword) {
         ctx.addIssue({
           code: 'custom',
           path: ['confirmPassword'],
-          message: $t('validation.confirmMismatch'),
+          message: '两次输入的密码不一致',
         })
       }
     })
 }
 
 /**
- * 返回绑定当前 i18n 实例的 vee-validate 类型化 Schema。
+ * 返回 vee-validate 类型化 Schema。
  */
 export function useAuthValidation() {
   return {
@@ -95,12 +95,12 @@ export function createCodeLoginSchema() {
   return z.object({
     email: z
       .string()
-      .min(1, { message: $t('validation.required') })
-      .email({ message: $t('validation.emailInvalid') }),
+      .min(1, { message: '此项为必填项' })
+      .email({ message: '请输入有效的邮箱地址' }),
     code: z
       .string()
-      .min(1, { message: $t('validation.required') })
-      .regex(/^\d{6}$/, { message: $t('validation.codeInvalid') }),
+      .min(1, { message: '此项为必填项' })
+      .regex(/^\d{6}$/, { message: '请输入 6 位数字验证码' }),
   })
 }
 
@@ -111,7 +111,7 @@ export function createForgetPasswordSchema() {
   return z.object({
     email: z
       .string()
-      .min(1, { message: $t('validation.required') })
-      .email({ message: $t('validation.emailInvalid') }),
+      .min(1, { message: '此项为必填项' })
+      .email({ message: '请输入有效的邮箱地址' }),
   })
 }

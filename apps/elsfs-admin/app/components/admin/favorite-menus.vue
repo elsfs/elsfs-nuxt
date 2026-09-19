@@ -15,7 +15,6 @@ const emit = defineEmits<{
   browse: []
 }>()
 
-const { t } = useI18n()
 const route = useRoute()
 const menuStore = useMenuStore()
 const menuTitle = useMenuTitle()
@@ -71,13 +70,13 @@ function resetDrag(): void {
     <!-- 移动端标题栏 -->
     <div v-if="wide" class="flex items-center justify-between px-3 py-2">
       <span class="text-muted-foreground text-xs font-medium tracking-wide uppercase">
-        {{ t('admin.myFavorites') }}
+        我的收藏
       </span>
       <span
         v-if="menuStore.favoriteCount"
         class="bg-accent text-muted-foreground rounded-full px-1.5 py-0.5 text-[11px]"
       >
-        {{ t('admin.favoriteCount', { count: menuStore.favoriteCount }) }}
+        {{ `已收藏 ${menuStore.favoriteCount} 项` }}
       </span>
     </div>
 
@@ -132,9 +131,9 @@ function resetDrag(): void {
 
           <!-- hover 出现：取消收藏（二次确认，避免误删） -->
           <ElPopconfirm
-            :title="t('admin.confirmRemoveFavorite')"
-            :confirm-button-text="t('common.confirm')"
-            :cancel-button-text="t('common.cancel')"
+            title="是否取消收藏？"
+            confirm-button-text="确定"
+            cancel-button-text="取消"
             :width="180"
             @confirm="menuStore.removeFavorite(item.id)"
           >
@@ -146,8 +145,8 @@ function resetDrag(): void {
                 :class="
                   wide ? 'top-1/2 right-1 size-5 -translate-y-1/2' : 'top-0.5 right-0.5 size-4'
                 "
-                :title="t('admin.removeFavorite')"
-                :aria-label="t('admin.removeFavorite')"
+                title="取消收藏"
+                aria-label="取消收藏"
                 @click.prevent.stop
                 @keydown.enter.prevent.stop
               >
@@ -165,10 +164,10 @@ function resetDrag(): void {
       >
         <AppIcon name="star" class="text-muted-foreground/60 size-6" />
         <div class="text-foreground text-sm" :class="wide ? '' : 'text-xs'">
-          {{ t('admin.emptyFavorites') }}
+          还没有收藏菜单
         </div>
         <p v-if="wide" class="text-muted-foreground text-xs leading-relaxed">
-          {{ t('admin.emptyFavoritesHint') }}
+          点击左上角「全部菜单」，把常用功能收进收藏栏
         </p>
         <button
           type="button"
@@ -176,7 +175,7 @@ function resetDrag(): void {
           :class="wide ? 'mt-1 text-xs' : 'text-[11px]'"
           @click="emit('browse')"
         >
-          {{ t('admin.allMenus') }}
+          全部菜单
         </button>
       </div>
     </div>

@@ -10,7 +10,6 @@ definePageMeta({ layout: 'auth', middleware: 'guest' })
 
 defineOptions({ name: 'AuthCodeLogin' })
 
-const { t } = useI18n()
 const auth = useAuthStore()
 const route = useRoute()
 const router = useRouter()
@@ -32,9 +31,9 @@ let timer: ReturnType<typeof setInterval> | undefined
 
 const getCodeText = computed(() => {
   if (countdown.value > 0) {
-    return t('codeLogin.resendAfter', { s: countdown.value })
+    return `${countdown.value}s 后重新获取`
   }
-  return t('codeLogin.getCode')
+  return '获取验证码'
 })
 
 const canSend = computed(() => countdown.value <= 0 && !sendingCode.value)
@@ -48,7 +47,7 @@ async function handleSendCode(): Promise<void> {
   sendingCode.value = true
   try {
     await auth.sendCode({ email: target, scene: 'login' })
-    ElMessage.success(t('codeLogin.sendSuccess'))
+    ElMessage.success('验证码已发送（演示：123456）')
     startCountdown()
   } catch {
     // 错误码已写入 store，由模板内 Alert 展示
@@ -91,10 +90,10 @@ onBeforeUnmount(() => {
 <template>
   <div>
     <AuthTitle>
-      <slot name="title"> {{ t('login.welcomeBack') }} 📲 </slot>
+      <slot name="title"> 欢迎回来 📲 </slot>
       <template #desc>
         <slot name="subTitle">
-          {{ t('codeLogin.subtitle') }}
+          输入注册邮箱并获取验证码
         </slot>
       </template>
     </AuthTitle>
@@ -104,16 +103,16 @@ onBeforeUnmount(() => {
       type="error"
       show-icon
       class="mb-6"
-      :title="t(`errors.${auth.errorCode}`)"
+      :title="authErrorMessage(auth.errorCode)"
     />
 
     <ElForm label-position="top" novalidate class="auth-form" @submit="onSubmit">
-      <ElFormItem :label="t('codeLogin.email')" :error="emailError">
+      <ElFormItem label="邮箱" :error="emailError">
         <ElInput
           v-model="email"
           type="email"
           size="large"
-          :placeholder="t('codeLogin.emailPlaceholder')"
+          placeholder="you@example.com"
           autocomplete="email"
         >
           <template #prefix>
@@ -122,13 +121,13 @@ onBeforeUnmount(() => {
         </ElInput>
       </ElFormItem>
 
-      <ElFormItem :label="t('codeLogin.code')" :error="codeError">
+      <ElFormItem label="验证码" :error="codeError">
         <ElInput
           v-model="code"
           inputmode="numeric"
           size="large"
           maxlength="6"
-          :placeholder="t('codeLogin.codePlaceholder')"
+          placeholder="请输入 6 位验证码"
           autocomplete="one-time-code"
         >
           <template #prefix>
@@ -153,12 +152,12 @@ onBeforeUnmount(() => {
         native-type="submit"
         :loading="isSubmitting || auth.status === 'loading'"
       >
-        {{ t('codeLogin.submit') }}
+        登录
       </ElButton>
     </ElForm>
 
     <ElButton type="default" plain class="mt-4 w-full" @click="goToLogin()">
-      {{ t('common.back') }}
+      返回
     </ElButton>
   </div>
 </template>

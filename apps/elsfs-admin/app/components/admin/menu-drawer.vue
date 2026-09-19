@@ -12,7 +12,6 @@ import { countMenuLeaves, filterMenuTree } from '~/utils/admin-menu'
  */
 const show = defineModel<boolean>({ required: true })
 
-const { t } = useI18n()
 const menuStore = useMenuStore()
 const router = useRouter()
 const menuTitle = useMenuTitle()
@@ -89,14 +88,14 @@ async function handleSelect(item: AdminMenuItem): Promise<void> {
             <input
               v-model="keyword"
               type="text"
-              :placeholder="t('admin.searchPlaceholder')"
+              placeholder="请输入要搜索的菜单名称"
               class="border-border bg-background text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20 h-10 w-full rounded-lg border pr-9 pl-9 text-sm transition-colors outline-none focus:ring-2"
             />
             <button
               v-if="keyword"
               type="button"
               class="text-muted-foreground hover:bg-accent hover:text-foreground absolute inset-y-0 right-2 my-auto flex size-6 items-center justify-center rounded-full transition-colors"
-              :aria-label="t('admin.clearSearch')"
+              aria-label="清空搜索"
               @click="keyword = ''"
             >
               <AppIcon name="close" class="size-3.5" />
@@ -106,7 +105,7 @@ async function handleSelect(item: AdminMenuItem): Promise<void> {
           <button
             type="button"
             class="text-muted-foreground hover:text-foreground flex size-6 shrink-0 cursor-pointer items-center justify-center transition-colors"
-            :aria-label="t('admin.closeMenuList')"
+            aria-label="关闭菜单"
             @click="show = false"
           >
             <AppIcon name="close" class="size-5" />
@@ -143,11 +142,7 @@ async function handleSelect(item: AdminMenuItem): Promise<void> {
                     </button>
 
                     <ElTooltip
-                      :content="
-                        menuStore.isFavorite(child.id)
-                          ? t('admin.removeFavorite')
-                          : t('admin.addFavorite')
-                      "
+                      :content="menuStore.isFavorite(child.id) ? '取消收藏' : '加入收藏'"
                       placement="bottom-start"
                       :show-after="0"
                     >
@@ -159,11 +154,7 @@ async function handleSelect(item: AdminMenuItem): Promise<void> {
                             ? 'text-primary opacity-100'
                             : 'text-muted-foreground/70 hover:text-primary opacity-0 group-hover/row:opacity-100 focus-visible:opacity-100'
                         "
-                        :aria-label="
-                          menuStore.isFavorite(child.id)
-                            ? t('admin.removeFavorite')
-                            : t('admin.addFavorite')
-                        "
+                        :aria-label="menuStore.isFavorite(child.id) ? '取消收藏' : '加入收藏'"
                         @click="menuStore.toggleFavorite(child.id)"
                       >
                         <AppIcon name="star-filled" class="size-4" />
@@ -180,7 +171,7 @@ async function handleSelect(item: AdminMenuItem): Promise<void> {
             class="text-muted-foreground flex flex-col items-center justify-center gap-2 py-20 text-sm"
           >
             <AppIcon name="search" class="size-8 opacity-40" />
-            {{ t('admin.searchEmpty') }}
+            没有找到匹配的菜单
           </div>
         </div>
       </div>

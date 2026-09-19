@@ -9,7 +9,6 @@ overrides:
 catalog:
   vue: ^3.5.40
   vue-eslint-parser: ^10.4.1
-  vue-i18n: ^11.4.10
   vue-json-pretty: ^2.6.0
   vue-router: ^5.2.0
   vue-tippy: ^6.7.1
@@ -24,7 +23,6 @@ catalog:
   vite: ^8.2.2
   nuxt: ^4.5.0
   "@pinia/nuxt": ^1.0.2
-  '@nuxtjs/i18n': ^10.6.0
   '@nuxt/eslint': "^1.17.0"
   # ---------css 相关-------------#
   '@nuxtjs/tailwindcss': ^7.0.0-beta.1
