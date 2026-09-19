@@ -3,7 +3,7 @@
 <template>
   <!-- 首屏加载动画：位于根模板，SSR 首帧 HTML 即可见，
        由 plugins/loading.client.ts 在 Nuxt 就绪（onNuxtReady）后 fade 并移除 -->
-  <div id="__app-loading__" class="loading">
+  <div id="__app-loading__">
     <div class="loader" />
     <div class="title">应用名称</div>
   </div>
@@ -110,16 +110,5 @@
   50% {
     transform: scale(1.2, 1);
   }
-}
-
-/* ================= 布局过渡动画 ================= */
-.layout-enter-active,
-.layout-leave-active {
-  transition: all 0.4s;
-}
-
-.layout-enter-from,
-.layout-leave-to {
-  filter: grayscale(1);
 }
 </style>

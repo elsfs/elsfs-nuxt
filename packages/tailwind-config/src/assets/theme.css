@@ -36,8 +36,8 @@
 }
 
 @theme inline {
-  /* Font */
-  --font-sans: var(--font-family);
+  /* Font（--font-family 由宿主主题层注入，未注入时回退系统默认字体栈） */
+  --font-sans: var(--font-family, ui-sans-serif, system-ui, sans-serif);
 
   /* Border Radius */
   --radius-sm: calc(var(--radius) - 4px);
@@ -48,13 +48,6 @@
   /* Box Shadow */
   --shadow-float:
     0 6px 16px 0 rgb(0 0 0 / 8%), 0 3px 6px -4px rgb(0 0 0 / 12%), 0 9px 28px 8px rgb(0 0 0 / 5%);
-
-  /* Animations */
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
-  --animate-collapsible-down: collapsible-down 0.2s ease-in-out;
-  --animate-collapsible-up: collapsible-up 0.2s ease-in-out;
-  --animate-float: float 5s linear 0ms infinite;
 
   /*
    * 兜底调色板通道变量：
@@ -111,120 +104,29 @@
   --color-muted-foreground: hsl(var(--muted-foreground));
   --color-accent: hsl(var(--accent));
   --color-accent-foreground: hsl(var(--accent-foreground));
-  --color-accent-hover: hsl(var(--accent-hover));
-  --color-accent-lighter: hsl(var(--accent-lighter));
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
-  --color-input-background: hsl(var(--input-background));
   --color-ring: hsl(var(--ring));
   --color-secondary: hsl(var(--secondary));
-  --color-secondary-desc: hsl(var(--secondary-desc));
   --color-secondary-foreground: hsl(var(--secondary-foreground));
-
-  /* ===== Custom Semantic Colors ===== */
-
-  --color-header: hsl(var(--header));
-  --color-heavy: hsl(var(--heavy));
-  --color-heavy-foreground: hsl(var(--heavy-foreground));
-  --color-main: hsl(var(--main));
-  --color-overlay: hsl(var(--overlay));
-  --color-overlay-content: hsl(var(--overlay-content));
-  --color-sidebar: hsl(var(--sidebar));
-  --color-sidebar-deep: hsl(var(--sidebar-deep));
 
   /* ===== Primary Palette ===== */
 
   --color-primary: hsl(var(--primary));
   --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-primary-50: hsl(var(--primary-50));
-  --color-primary-100: hsl(var(--primary-100));
-  --color-primary-200: hsl(var(--primary-200));
-  --color-primary-300: hsl(var(--primary-300));
-  --color-primary-400: hsl(var(--primary-400));
-  --color-primary-500: hsl(var(--primary-500));
-  --color-primary-600: hsl(var(--primary-600));
-  --color-primary-700: hsl(var(--primary-700));
-  --color-primary-active: hsl(var(--primary-700));
-  --color-primary-background-light: hsl(var(--primary-200));
-  --color-primary-background-lighter: hsl(var(--primary-100));
-  --color-primary-background-lightest: hsl(var(--primary-50));
-  --color-primary-border: hsl(var(--primary-400));
-  --color-primary-border-light: hsl(var(--primary-300));
-  --color-primary-hover: hsl(var(--primary-600));
-  --color-primary-text: hsl(var(--primary-500));
-  --color-primary-text-active: hsl(var(--primary-700));
-  --color-primary-text-hover: hsl(var(--primary-600));
+  --color-primary-hover: hsl(var(--primary-hover));
+  --color-primary-active: hsl(var(--primary-active));
 
-  /* ===== Destructive Palette ===== */
+  /* ===== Destructive / Success / Warning ===== */
 
   --color-destructive: hsl(var(--destructive));
   --color-destructive-foreground: hsl(var(--destructive-foreground));
-  --color-destructive-50: hsl(var(--destructive-50));
-  --color-destructive-100: hsl(var(--destructive-100));
-  --color-destructive-200: hsl(var(--destructive-200));
-  --color-destructive-300: hsl(var(--destructive-300));
-  --color-destructive-400: hsl(var(--destructive-400));
-  --color-destructive-500: hsl(var(--destructive-500));
-  --color-destructive-600: hsl(var(--destructive-600));
-  --color-destructive-700: hsl(var(--destructive-700));
-  --color-destructive-active: hsl(var(--destructive-700));
-  --color-destructive-background-light: hsl(var(--destructive-200));
-  --color-destructive-background-lighter: hsl(var(--destructive-100));
-  --color-destructive-background-lightest: hsl(var(--destructive-50));
-  --color-destructive-border: hsl(var(--destructive-400));
-  --color-destructive-border-light: hsl(var(--destructive-300));
-  --color-destructive-hover: hsl(var(--destructive-600));
-  --color-destructive-text: hsl(var(--destructive-500));
-  --color-destructive-text-active: hsl(var(--destructive-700));
-  --color-destructive-text-hover: hsl(var(--destructive-600));
-
-  /* ===== Success Palette ===== */
-
   --color-success: hsl(var(--success));
   --color-success-foreground: hsl(var(--success-foreground));
-  --color-success-50: hsl(var(--success-50));
-  --color-success-100: hsl(var(--success-100));
-  --color-success-200: hsl(var(--success-200));
-  --color-success-300: hsl(var(--success-300));
-  --color-success-400: hsl(var(--success-400));
-  --color-success-500: hsl(var(--success-500));
-  --color-success-600: hsl(var(--success-600));
-  --color-success-700: hsl(var(--success-700));
-  --color-success-active: hsl(var(--success-700));
-  --color-success-background-light: hsl(var(--success-200));
-  --color-success-background-lighter: hsl(var(--success-100));
-  --color-success-background-lightest: hsl(var(--success-50));
-  --color-success-border: hsl(var(--success-400));
-  --color-success-border-light: hsl(var(--success-300));
-  --color-success-hover: hsl(var(--success-600));
-  --color-success-text: hsl(var(--success-500));
-  --color-success-text-active: hsl(var(--success-700));
-  --color-success-text-hover: hsl(var(--success-600));
-
-  /* ===== Warning Palette ===== */
-
   --color-warning: hsl(var(--warning));
   --color-warning-foreground: hsl(var(--warning-foreground));
-  --color-warning-50: hsl(var(--warning-50));
-  --color-warning-100: hsl(var(--warning-100));
-  --color-warning-200: hsl(var(--warning-200));
-  --color-warning-300: hsl(var(--warning-300));
-  --color-warning-400: hsl(var(--warning-400));
-  --color-warning-500: hsl(var(--warning-500));
-  --color-warning-600: hsl(var(--warning-600));
-  --color-warning-700: hsl(var(--warning-700));
-  --color-warning-active: hsl(var(--warning-700));
-  --color-warning-background-light: hsl(var(--warning-200));
-  --color-warning-background-lighter: hsl(var(--warning-100));
-  --color-warning-background-lightest: hsl(var(--warning-50));
-  --color-warning-border: hsl(var(--warning-400));
-  --color-warning-border-light: hsl(var(--warning-300));
-  --color-warning-hover: hsl(var(--warning-600));
-  --color-warning-text: hsl(var(--warning-500));
-  --color-warning-text-active: hsl(var(--warning-700));
-  --color-warning-text-hover: hsl(var(--warning-600));
 
-  /* ===== Green Palette (alias for success shades) ===== */
+  /* ===== Green Palette（基于下方兜底通道变量覆盖 Tailwind 默认 green） ===== */
 
   --color-green-50: hsl(var(--green-50));
   --color-green-100: hsl(var(--green-100));
@@ -246,7 +148,7 @@
   --color-green-text-active: hsl(var(--green-700));
   --color-green-text-hover: hsl(var(--green-600));
 
-  /* ===== Red Palette (alias for destructive shades) ===== */
+  /* ===== Red Palette（基于兜底通道变量覆盖 Tailwind 默认 red） ===== */
 
   --color-red-50: hsl(var(--red-50));
   --color-red-100: hsl(var(--red-100));
@@ -268,7 +170,7 @@
   --color-red-text-active: hsl(var(--red-700));
   --color-red-text-hover: hsl(var(--red-600));
 
-  /* ===== Yellow Palette (alias for warning shades) ===== */
+  /* ===== Yellow Palette（基于兜底通道变量覆盖 Tailwind 默认 yellow） ===== */
 
   --color-yellow-50: hsl(var(--yellow-50));
   --color-yellow-100: hsl(var(--yellow-100));
@@ -291,61 +193,6 @@
   --color-yellow-text-hover: hsl(var(--yellow-600));
 }
 
-/* Keyframes */
-@keyframes accordion-down {
-  from {
-    height: 0;
-  }
-
-  to {
-    height: var(--reka-accordion-content-height);
-  }
-}
-
-@keyframes accordion-up {
-  from {
-    height: var(--reka-accordion-content-height);
-  }
-
-  to {
-    height: 0;
-  }
-}
-
-@keyframes collapsible-down {
-  from {
-    height: 0;
-  }
-
-  to {
-    height: var(--reka-collapsible-content-height);
-  }
-}
-
-@keyframes collapsible-up {
-  from {
-    height: var(--reka-collapsible-content-height);
-  }
-
-  to {
-    height: 0;
-  }
-}
-
-@keyframes float {
-  0% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-20px);
-  }
-
-  100% {
-    transform: translateY(0);
-  }
-}
-
 /* Base styles */
 @layer base {
   *,
@@ -359,8 +206,6 @@
   }
 
   html {
-    --vben-viewport-height: 100vh;
-
     @apply bg-background text-foreground font-sans;
 
     scroll-behavior: smooth;
@@ -371,13 +216,8 @@
     text-rendering: optimizelegibility;
     text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
-
-    @supports (height: 1dvh) {
-      --vben-viewport-height: 100dvh;
-    }
   }
 
-  #app,
   body,
   html {
     @apply size-full;
@@ -470,174 +310,7 @@
 /* Tailwind v4 的 utilities 在 @layer 内；组件样式若留在 layer 外，会按层叠规则压过 py-4 等工具类。
  * 见：https://tailwindcss.com/docs/adding-custom-styles#using-css-and-layering */
 @layer components {
-  .outline-box {
-    @apply outline-border relative cursor-pointer rounded-md p-1 outline-1;
-  }
-
-  .outline-box::after {
-    @apply absolute top-1/2 left-1/2 z-20 h-0 w-px rounded-sm opacity-0 outline-2 outline-transparent transition-all duration-300 content-[""];
-  }
-
-  .outline-box.outline-box-active {
-    @apply outline-primary outline-2;
-  }
-
-  .outline-box.outline-box-active::after {
-    display: none;
-  }
-
-  .outline-box:not(.outline-box-active):hover::after {
-    @apply outline-primary top-0 left-0 h-full w-full p-1 opacity-100;
-  }
-
   .vben-link {
     @apply text-primary hover:text-primary-hover active:text-primary-active cursor-pointer;
   }
-
-  .card-box {
-    @apply border-border bg-card text-card-foreground rounded-xl border;
-  }
-}
-
-/* Enter animations (converted from enterAnimationPlugin) */
-@keyframes enter-x-animation {
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes enter-y-animation {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.enter-x:nth-child(1) {
-  opacity: 0;
-  transform: translateX(50px);
-  animation: enter-x-animation 0.3s ease-in-out 0.1s forwards;
-}
-
-.enter-x:nth-child(2) {
-  opacity: 0;
-  transform: translateX(50px);
-  animation: enter-x-animation 0.3s ease-in-out 0.2s forwards;
-}
-
-.enter-x:nth-child(3) {
-  opacity: 0;
-  transform: translateX(50px);
-  animation: enter-x-animation 0.3s ease-in-out 0.3s forwards;
-}
-
-.enter-x:nth-child(4) {
-  opacity: 0;
-  transform: translateX(50px);
-  animation: enter-x-animation 0.3s ease-in-out 0.4s forwards;
-}
-
-.enter-x:nth-child(5) {
-  opacity: 0;
-  transform: translateX(50px);
-  animation: enter-x-animation 0.3s ease-in-out 0.5s forwards;
-}
-
-.enter-y:nth-child(1) {
-  opacity: 0;
-  transform: translateY(50px);
-  animation: enter-y-animation 0.3s ease-in-out 0.1s forwards;
-}
-
-.enter-y:nth-child(2) {
-  opacity: 0;
-  transform: translateY(50px);
-  animation: enter-y-animation 0.3s ease-in-out 0.2s forwards;
-}
-
-.enter-y:nth-child(3) {
-  opacity: 0;
-  transform: translateY(50px);
-  animation: enter-y-animation 0.3s ease-in-out 0.3s forwards;
-}
-
-.enter-y:nth-child(4) {
-  opacity: 0;
-  transform: translateY(50px);
-  animation: enter-y-animation 0.3s ease-in-out 0.4s forwards;
-}
-
-.enter-y:nth-child(5) {
-  opacity: 0;
-  transform: translateY(50px);
-  animation: enter-y-animation 0.3s ease-in-out 0.5s forwards;
-}
-
-.-enter-x:nth-child(1) {
-  opacity: 0;
-  transform: translateX(-50px);
-  animation: enter-x-animation 0.3s ease-in-out 0.1s forwards;
-}
-
-.-enter-x:nth-child(2) {
-  opacity: 0;
-  transform: translateX(-50px);
-  animation: enter-x-animation 0.3s ease-in-out 0.2s forwards;
-}
-
-.-enter-x:nth-child(3) {
-  opacity: 0;
-  transform: translateX(-50px);
-  animation: enter-x-animation 0.3s ease-in-out 0.3s forwards;
-}
-
-.-enter-x:nth-child(4) {
-  opacity: 0;
-  transform: translateX(-50px);
-  animation: enter-x-animation 0.3s ease-in-out 0.4s forwards;
-}
-
-.-enter-x:nth-child(5) {
-  opacity: 0;
-  transform: translateX(-50px);
-  animation: enter-x-animation 0.3s ease-in-out 0.5s forwards;
-}
-
-.-enter-y:nth-child(1) {
-  opacity: 0;
-  transform: translateY(-50px);
-  animation: enter-y-animation 0.3s ease-in-out 0.1s forwards;
-}
-
-.-enter-y:nth-child(2) {
-  opacity: 0;
-  transform: translateY(-50px);
-  animation: enter-y-animation 0.3s ease-in-out 0.2s forwards;
-}
-
-.-enter-y:nth-child(3) {
-  opacity: 0;
-  transform: translateY(-50px);
-  animation: enter-y-animation 0.3s ease-in-out 0.3s forwards;
-}
-
-.-enter-y:nth-child(4) {
-  opacity: 0;
-  transform: translateY(-50px);
-  animation: enter-y-animation 0.3s ease-in-out 0.4s forwards;
-}
-
-.-enter-y:nth-child(5) {
-  opacity: 0;
-  transform: translateY(-50px);
-  animation: enter-y-animation 0.3s ease-in-out 0.5s forwards;
-}
-
-html.invert-mode {
-  @apply invert;
-}
-
-html.grayscale-mode {
-  @apply grayscale;
 }
