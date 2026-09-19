@@ -42,8 +42,8 @@ const ruleFormRef = ref<FormInstance>()
 
 /** 登录表单数据模型 */
 const ruleForm = reactive<LoginFormValues>({
-  username: '',
-  password: '',
+  username: 'admin',
+  password: 'Elsfs.2023',
   remember: false,
 })
 

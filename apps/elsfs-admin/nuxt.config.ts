@@ -32,7 +32,7 @@ export default defineNuxtConfig({
   // 后端地址与 mock 开关（可用 NUXT_PUBLIC_API_BASE / NUXT_PUBLIC_USE_MOCK 覆盖，见 .env.example）
   runtimeConfig: {
     public: {
-      apiBase: 'http://192.168.0.102:6002',
+      apiBase: 'http://127.0.0.1:6002',
       useMock: false,
     },
   },
