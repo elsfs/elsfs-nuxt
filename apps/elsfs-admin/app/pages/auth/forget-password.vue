@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { useField, useForm } from 'vee-validate'
+import type { FormInstance, FormRules } from 'element-plus'
 
 import AuthTitle from './-auth-title.vue'
 import type { ForgetPasswordFormValues } from './useAuthValidation.ts'
-import { useAuthValidation,loginPath } from './useAuthValidation.ts'
+import { loginPath } from './useAuthValidation.ts'
 
 defineOptions({ name: 'AuthForgetPassword' })
 
@@ -12,27 +12,48 @@ definePageMeta({ layout: 'auth', middleware: 'guest' })
 const auth = useAuthStore()
 const router = useRouter()
 
-const { forgetPasswordSchema } = useAuthValidation()
+/** ElForm 实例，用于触发校验与重置 */
+const ruleFormRef = ref<FormInstance>()
 
-const { handleSubmit, isSubmitting } = useForm<ForgetPasswordFormValues>({
-  validationSchema: forgetPasswordSchema,
-  initialValues: { email: '' },
+/** 忘记密码表单数据模型 */
+const ruleForm = reactive<ForgetPasswordFormValues>({
+  email: '',
 })
 
-const { value: email, errorMessage: emailError } = useField<string>('email')
+/**
+ * 基于 async-validator（Element Plus 表单校验引擎）的校验规则。
+ */
+const rules = computed<FormRules<ForgetPasswordFormValues>>(() => ({
+  email: [
+    { required: true, message: '此项为必填项', trigger: 'blur' },
+    { type: 'email', message: '请输入有效的邮箱地址', trigger: ['blur', 'change'] },
+  ],
+}))
 
-async function onSubmit(values: ForgetPasswordFormValues) {
+const submitting = ref(false)
+
+const errorMessage = computed(() => authErrorMessage(auth.errorCode))
+
+/** 提交：先跑 async-validator 校验，通过后再发送重置邮件 */
+async function onSubmit(): Promise<void> {
+  const formEl = ruleFormRef.value
+  if (!formEl) return
   try {
-    await auth.forgetPassword(values.email)
+    await formEl.validate()
+  } catch {
+    // 校验未通过，错误信息由 ElFormItem 内联展示
+    return
+  }
+  submitting.value = true
+  try {
+    await auth.forgetPassword(ruleForm.email)
     ElMessage.success('邮件已发送')
   } catch {
     // 错误码已写入 store，由组件内 Alert 展示
+  } finally {
+    submitting.value = false
   }
 }
-
-const submitHandler = handleSubmit((values) => {
-  onSubmit(values)
-})
 
 function goToLogin(): void {
   router.push(loginPath.login)
@@ -48,18 +69,19 @@ function goToLogin(): void {
       </template>
     </AuthTitle>
 
-    <ElAlert
-      v-if="auth.errorCode"
-      type="error"
-      show-icon
-      class="mb-6"
-      :title="authErrorMessage(auth.errorCode)"
-    />
+    <ElAlert v-if="errorMessage" type="error" show-icon class="mb-6" :title="errorMessage" />
 
-    <ElForm label-position="top" novalidate class="auth-form" @submit="submitHandler">
-      <ElFormItem label="邮箱" :error="emailError">
+    <ElForm
+      ref="ruleFormRef"
+      label-position="top"
+      :model="ruleForm"
+      :rules="rules"
+      class="auth-form"
+      @submit.prevent="onSubmit"
+    >
+      <ElFormItem label="邮箱" prop="email">
         <ElInput
-          v-model="email"
+          v-model="ruleForm.email"
           type="email"
           size="large"
           placeholder="you@example.com"
@@ -75,7 +97,7 @@ function goToLogin(): void {
         type="primary"
         class="auth-submit w-full"
         native-type="submit"
-        :loading="isSubmitting || auth.status === 'loading'"
+        :loading="submitting || auth.status === 'loading'"
       >
         发送重置链接
       </ElButton>

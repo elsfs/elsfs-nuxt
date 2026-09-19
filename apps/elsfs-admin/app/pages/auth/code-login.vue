@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useField, useForm } from 'vee-validate'
+import type { FormInstance, FormRules } from 'element-plus'
 import { onBeforeUnmount } from 'vue'
 
 import AuthTitle from './-auth-title.vue'
 import type { CodeLoginFormValues } from './useAuthValidation'
-import { useAuthValidation,loginPath } from './useAuthValidation'
+import { loginPath } from './useAuthValidation'
 
 definePageMeta({ layout: 'auth', middleware: 'guest' })
 
@@ -14,15 +14,28 @@ const auth = useAuthStore()
 const route = useRoute()
 const router = useRouter()
 
-const { codeLoginSchema } = useAuthValidation()
+/** ElForm 实例，用于触发校验与重置 */
+const ruleFormRef = ref<FormInstance>()
 
-const { handleSubmit, isSubmitting } = useForm<CodeLoginFormValues>({
-  validationSchema: codeLoginSchema,
-  initialValues: { email: '', code: '' },
+/** 验证码登录表单数据模型 */
+const ruleForm = reactive<CodeLoginFormValues>({
+  email: '',
+  code: '',
 })
 
-const { value: email, errorMessage: emailError } = useField<string>('email')
-const { value: code, errorMessage: codeError } = useField<string>('code')
+/**
+ * 基于 async-validator（Element Plus 表单校验引擎）的校验规则。
+ */
+const rules = computed<FormRules<CodeLoginFormValues>>(() => ({
+  email: [
+    { required: true, message: '此项为必填项', trigger: 'blur' },
+    { type: 'email', message: '请输入有效的邮箱地址', trigger: ['blur', 'change'] },
+  ],
+  code: [
+    { required: true, message: '此项为必填项', trigger: 'blur' },
+    { pattern: /^\d{6}$/, message: '请输入 6 位数字验证码', trigger: 'blur' },
+  ],
+}))
 
 /** 验证码发送倒计时 */
 const countdown = ref(0)
@@ -38,15 +51,21 @@ const getCodeText = computed(() => {
 
 const canSend = computed(() => countdown.value <= 0 && !sendingCode.value)
 
+const errorMessage = computed(() => authErrorMessage(auth.errorCode))
+
 async function handleSendCode(): Promise<void> {
   if (!canSend.value) return
-  const target = email.value.trim()
-  if (!target) {
+  // 发送前先跑 async-validator 校验邮箱字段
+  const formEl = ruleFormRef.value
+  if (!formEl) return
+  try {
+    await formEl.validateField('email')
+  } catch {
     return
   }
   sendingCode.value = true
   try {
-    await auth.sendCode({ email: target, scene: 'login' })
+    await auth.sendCode({ email: ruleForm.email.trim(), scene: 'login' })
     ElMessage.success('验证码已发送（演示：123456）')
     startCountdown()
   } catch {
@@ -68,15 +87,29 @@ function startCountdown(): void {
   }, 1000)
 }
 
-const onSubmit = handleSubmit(async (values) => {
+const submitting = ref(false)
+
+/** 提交：先跑 async-validator 校验，通过后再登录 */
+async function onSubmit(): Promise<void> {
+  const formEl = ruleFormRef.value
+  if (!formEl) return
   try {
-    await auth.codeLogin(values)
+    await formEl.validate()
+  } catch {
+    // 校验未通过，错误信息由 ElFormItem 内联展示
+    return
+  }
+  submitting.value = true
+  try {
+    await auth.codeLogin({ ...ruleForm })
     const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
     await router.push(redirect)
   } catch {
     // 错误码已写入 store，由模板内 Alert 展示
+  } finally {
+    submitting.value = false
   }
-})
+}
 
 function goToLogin(): void {
   router.push(loginPath.login)
@@ -98,18 +131,19 @@ onBeforeUnmount(() => {
       </template>
     </AuthTitle>
 
-    <ElAlert
-      v-if="auth.errorCode"
-      type="error"
-      show-icon
-      class="mb-6"
-      :title="authErrorMessage(auth.errorCode)"
-    />
+    <ElAlert v-if="errorMessage" type="error" show-icon class="mb-6" :title="errorMessage" />
 
-    <ElForm label-position="top" novalidate class="auth-form" @submit="onSubmit">
-      <ElFormItem label="邮箱" :error="emailError">
+    <ElForm
+      ref="ruleFormRef"
+      label-position="top"
+      :model="ruleForm"
+      :rules="rules"
+      class="auth-form"
+      @submit.prevent="onSubmit"
+    >
+      <ElFormItem label="邮箱" prop="email">
         <ElInput
-          v-model="email"
+          v-model="ruleForm.email"
           type="email"
           size="large"
           placeholder="you@example.com"
@@ -121,9 +155,9 @@ onBeforeUnmount(() => {
         </ElInput>
       </ElFormItem>
 
-      <ElFormItem label="验证码" :error="codeError">
+      <ElFormItem label="验证码" prop="code">
         <ElInput
-          v-model="code"
+          v-model="ruleForm.code"
           inputmode="numeric"
           size="large"
           maxlength="6"
@@ -150,7 +184,7 @@ onBeforeUnmount(() => {
         type="primary"
         class="auth-submit w-full"
         native-type="submit"
-        :loading="isSubmitting || auth.status === 'loading'"
+        :loading="submitting || auth.status === 'loading'"
       >
         登录
       </ElButton>
