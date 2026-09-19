@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { useField, useForm } from 'vee-validate'
-import { z } from 'zod'
+import type { FormInstance, FormRules } from 'element-plus'
 
 import AuthTitle from './-auth-title.vue'
 import AuthThirdPartyLogin from './-third-party-login.vue'
@@ -53,46 +52,55 @@ const auth = useAuthStore()
 const router = useRouter()
 const route = useRoute()
 
-/**
- * 登录表单校验 Schema
- * 校验消息使用函数形式，在「校验发生时」才调用 t()，因此语言切换后消息即时生效。
- */
- function validationSchema() {
-  return z.object({
-    username: z.string().min(1, { message: $t('validation.required') }),
-    password: z
-      .string('bn')
-      .min(1, { message: $t('validation.required') })
-      .min(8, { message: $t('validation.passwordMin', { min: 8 }) }),
-    remember: z.boolean(),
-  })
-}
-const { handleSubmit, isSubmitting } = useForm<LoginFormValues>({
-  validationSchema,
-  initialValues: {
-    username: '',
-    password: '',
-    remember: false
-  },
+/** ElForm 实例，用于触发校验与重置 */
+const ruleFormRef = ref<FormInstance>()
+
+/** 登录表单数据模型 */
+const ruleForm = reactive<LoginFormValues>({
+  username: '',
+  password: '',
+  remember: false,
 })
 
-const { value: username, errorMessage: usernameError } = useField<string>('username')
-const { value: password, errorMessage: passwordError } = useField<string>('password')
-const { value: remember } = useField<boolean>('remember')
+/**
+ * 基于 async-validator（Element Plus 表单校验引擎）的校验规则。
+ * 用 computed 包裹，切换语言时消息即时刷新。
+ */
+const rules = computed<FormRules<LoginFormValues>>(() => ({
+  username: [
+    { required: true, message: t('validation.required'), trigger: 'blur' },
+    { min: 3, message: t('validation.usernameMin', { min: 3 }), trigger: 'blur' },
+    { max: 20, message: t('validation.usernameMax', { max: 20 }), trigger: 'blur' },
+  ],
+  password: [
+    { required: true, message: t('validation.required'), trigger: 'blur' },
+    { min: 8, message: t('validation.passwordMin', { min: 8 }), trigger: 'blur' },
+  ],
+}))
 
 const showPassword = ref(false)
 
-const errorMessage = computed(() => (auth.errorCode ? t(`errors.${auth.errorCode}`) : ''))
+const errorMessages = computed(() => (auth.errorCode ? t(`errors.${auth.errorCode}`) : ''))
+const isSubmitting = computed(() => auth.status === 'loading')
 
-const onSubmit = handleSubmit(async (values:LoginFormValues,s ) => {
+/** 提交：先跑 async-validator 校验，通过后再登录 */
+async function onSubmit(): Promise<void> {
+  const formEl = ruleFormRef.value
+  if (!formEl) return
+  try {
+    await formEl.validate()
+  } catch {
+    // 校验未通过，错误信息由 ElFormItem 内联展示
+    return
+  }
   // 记住账号（仅浏览器环境）
-  if (values.remember) {
-    localStorage.setItem('elsfs_remember_username', values.username)
+  if (ruleForm.remember) {
+    localStorage.setItem('elsfs_remember_username', ruleForm.username)
   } else {
     localStorage.removeItem('elsfs_remember_username')
   }
-  await onLogin(values)
-})
+  await onLogin({ ...ruleForm })
+}
 
 async function handleSocial(provider: string): Promise<void> {
   await onSocial(provider)
@@ -139,12 +147,19 @@ async function onSocial(provider: string) {
       </template>
     </AuthTitle>
 
-    <ElAlert v-if="errorMessage" type="error" show-icon class="mb-6" :title="errorMessage" />
+    <ElAlert v-if="errorMessages" type="error" show-icon class="mb-6" :title="errorMessages" />
 
-    <ElForm label-position="top" novalidate class="auth-form" @submit="onSubmit">
-      <ElFormItem :label="t('login.username')" :error="usernameError">
+    <ElForm
+      ref="ruleFormRef"
+      label-position="top"
+      :model="ruleForm"
+      :rules="rules"
+      class="auth-form"
+      @submit.prevent="onSubmit"
+    >
+      <ElFormItem :label="t('login.username')" prop="username">
         <ElInput
-          v-model="username"
+          v-model="ruleForm.username"
           type="text"
           size="large"
           :placeholder="t('login.usernamePlaceholder')"
@@ -156,9 +171,9 @@ async function onSocial(provider: string) {
         </ElInput>
       </ElFormItem>
 
-      <ElFormItem :label="t('login.password')" :error="passwordError">
+      <ElFormItem :label="t('login.password')" prop="password">
         <ElInput
-          v-model="password"
+          v-model="ruleForm.password"
           size="large"
           :type="showPassword ? 'text' : 'password'"
           :placeholder="t('login.passwordPlaceholder')"
@@ -182,7 +197,7 @@ async function onSocial(provider: string) {
 
       <!-- 记住我 / 忘记密码 -->
       <div class="flex items-center justify-between">
-        <ElCheckbox v-if="showRememberMe" v-model="remember">
+        <ElCheckbox v-if="showRememberMe" v-model="ruleForm.remember">
           {{ t('login.rememberMe') }}
         </ElCheckbox>
         <span

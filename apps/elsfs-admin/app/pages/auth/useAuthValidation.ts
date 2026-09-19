@@ -24,10 +24,19 @@ export interface ForgetPasswordFormValues {
   email: string
 }
 
-/** i18n 翻译函数（vue-i18n 的 t 的简化签名） */
-type Translate = (key: string, params?: Record<string, unknown>) => string
-
-
+/**
+ * 登录表单校验 Schema
+ */
+export function createLoginSchema() {
+  return z.object({
+    username: z.string().min(1, { message: $t('validation.required') }),
+    password: z
+      .string()
+      .min(1, { message: $t('validation.required') })
+      .min(8, { message: $t('validation.passwordMin', { min: 8 }) }),
+    remember: z.boolean(),
+  })
+}
 
 /**
  * 注册表单校验 Schema
@@ -50,7 +59,7 @@ export function createRegisterSchema() {
         .min(1, { message: $t('validation.required') })
         .min(8, { message: $t('validation.passwordMin', { min: 8 }) })
         .regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/, {
-          message: t('validation.passwordPattern'),
+          message: $t('validation.passwordPattern'),
         }),
       confirmPassword: z.string().min(1, { message: $t('validation.required') }),
       agree: z.boolean().refine((val) => val === true, { message: $t('validation.termsRequired') }),
@@ -70,11 +79,8 @@ export function createRegisterSchema() {
  * 返回绑定当前 i18n 实例的 vee-validate 类型化 Schema。
  */
 export function useAuthValidation() {
-  const { t } = useI18n()
-  const translate: Translate = (key, params) => (params ? t(key, params) : t(key))
-
   return {
-    loginSchema: loginSchema(),
+    loginSchema: createLoginSchema(),
     registerSchema: createRegisterSchema(),
     codeLoginSchema: createCodeLoginSchema(),
     forgetPasswordSchema: createForgetPasswordSchema(),

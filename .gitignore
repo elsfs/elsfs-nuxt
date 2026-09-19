@@ -12,6 +12,7 @@ node_modules
 # pnpm store (project-local, sandbox-friendly)
 .pnpm-store
 
+.pycharm_plugin
 # Logs
 logs
 *.log
