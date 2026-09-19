@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import AuthTitle from './-auth-title.vue'
+import { loginPath } from './useAuthValidation.ts'
 
 definePageMeta({ layout: 'auth', middleware: 'guest' })
 
 interface Props {
   /** 是否处于加载处理状态 */
   loading?: boolean
-  /** 登录路径 */
-  loginPath?: string
-  /** 标题 */
   title?: string
   /** 描述 */
   subTitle?: string
@@ -26,7 +24,6 @@ const props = withDefaults(defineProps<Props>(), {
   description: '',
   loading: false,
   showBack: true,
-  loginPath: '/auth/login',
   submitButtonText: '',
   subTitle: '',
   title: '',
@@ -60,7 +57,7 @@ const cells = computed(() => {
 })
 
 function goToLogin(): void {
-  router.push(props.loginPath)
+  router.push(loginPath.login)
 }
 </script>
 

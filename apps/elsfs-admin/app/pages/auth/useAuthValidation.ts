@@ -13,6 +13,15 @@ export interface RegisterFormValues {
   agree: boolean
 }
 
+export const loginPath = {
+  login: '/login',
+  register: '/register',
+  codeLoginPath: '/auth/code-login',
+  qrcodeLoginPath: '/auth/qrcode-login',
+  registerPath: '/auth/register',
+  forgetPasswordPath: '/auth/forget-password',
+
+}
 /** 手机号 / 邮箱 + 验证码登录 */
 export interface CodeLoginFormValues {
   email: string

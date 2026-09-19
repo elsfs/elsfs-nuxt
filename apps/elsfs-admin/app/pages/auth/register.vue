@@ -3,7 +3,7 @@ import { useField, useForm } from 'vee-validate'
 
 import AuthTitle from './-auth-title.vue'
 import type { RegisterFormValues } from './useAuthValidation.ts'
-import { useAuthValidation } from './useAuthValidation.ts'
+import { useAuthValidation,loginPath } from './useAuthValidation.ts'
 import { usePasswordStrength } from './usePasswordStrength.ts'
 
 definePageMeta({ layout: 'auth', middleware: 'guest' })
@@ -56,7 +56,7 @@ const onSubmit = handleSubmit(async (values) => {
 })
 
 function goToLogin(): void {
-  router.push('/auth/login')
+  router.push(loginPath.login)
 }
 </script>
 

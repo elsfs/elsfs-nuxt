@@ -4,7 +4,7 @@ import { onBeforeUnmount } from 'vue'
 
 import AuthTitle from './-auth-title.vue'
 import type { CodeLoginFormValues } from './useAuthValidation'
-import { useAuthValidation } from './useAuthValidation'
+import { useAuthValidation,loginPath } from './useAuthValidation'
 
 definePageMeta({ layout: 'auth', middleware: 'guest' })
 
@@ -79,7 +79,7 @@ const onSubmit = handleSubmit(async (values) => {
 })
 
 function goToLogin(): void {
-  router.push('/auth/login')
+  router.push(loginPath.login)
 }
 
 onBeforeUnmount(() => {

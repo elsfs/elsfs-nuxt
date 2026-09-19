@@ -4,20 +4,10 @@ import type { FormInstance, FormRules } from 'element-plus'
 import AuthTitle from './-auth-title.vue'
 import AuthThirdPartyLogin from './-third-party-login.vue'
 import type { LoginFormValues } from './useAuthValidation.ts'
-
+import {loginPath} from './useAuthValidation.ts'
 interface Props {
   /** 是否处于提交加载状态 */
   loading?: boolean
-  /** 标题 */
-  title?: string
-  /** 描述 */
-  subTitle?: string
-  /** 主按钮文本 */
-  submitButtonText?: string
-  codeLoginPath?: string
-  qrcodeLoginPath?: string
-  registerPath?: string
-  forgetPasswordPath?: string
   showRememberMe?: boolean
   showForgetPassword?: boolean
   showCodeLogin?: boolean
@@ -27,16 +17,12 @@ interface Props {
 }
 
 defineOptions({ name: 'AuthLogin' })
-
+definePageMeta({ layout: 'auth',
+  middleware: 'guest',
+  alias: [loginPath.login]
+})
 withDefaults(defineProps<Props>(), {
   loading: false,
-  title: '',
-  subTitle: '',
-  submitButtonText: '',
-  codeLoginPath: '/auth/code-login',
-  qrcodeLoginPath: '/auth/qrcode-login',
-  registerPath: '/auth/register',
-  forgetPasswordPath: '/auth/forget-password',
   showRememberMe: true,
   showForgetPassword: true,
   showCodeLogin: true,
@@ -45,7 +31,7 @@ withDefaults(defineProps<Props>(), {
   showRegister: true,
 })
 
-definePageMeta({ layout: 'auth', middleware: 'guest' })
+
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -136,11 +122,11 @@ async function onSocial(provider: string) {
   <div>
     <AuthTitle>
       <slot name="title">
-        {{ title || `欢迎回来 👋🏻` }}
+        欢迎回来 👋🏻
       </slot>
       <template #desc>
         <slot name="subTitle">
-          {{ subTitle || '登录你的账号以继续' }}
+          登录你的账号以继续
         </slot>
       </template>
     </AuthTitle>
@@ -201,7 +187,7 @@ async function onSocial(provider: string) {
         <span
           v-if="showForgetPassword"
           class="vben-link text-sm font-normal"
-          @click="goTo(forgetPasswordPath)"
+          @click="goTo(loginPath.forgetPasswordPath)"
         >
           忘记密码？
         </span>
@@ -213,7 +199,7 @@ async function onSocial(provider: string) {
         native-type="submit"
         :loading="isSubmitting || loading"
       >
-        {{ submitButtonText || '登录' }}
+        登录
       </ElButton>
     </ElForm>
 
@@ -227,7 +213,7 @@ async function onSocial(provider: string) {
         class="flex-1"
         type="default"
         plain
-        @click="goTo(codeLoginPath)"
+        @click="goTo(loginPath.codeLoginPath)"
       >
         <AppIcon name="key" class="mr-1 size-4" />
         手机验证码登录
@@ -237,7 +223,7 @@ async function onSocial(provider: string) {
         class="flex-1"
         type="default"
         plain
-        @click="goTo(qrcodeLoginPath)"
+        @click="goTo(loginPath.qrcodeLoginPath)"
       >
         <AppIcon name="monitor" class="mr-1 size-4" />
         扫码登录
@@ -253,7 +239,7 @@ async function onSocial(provider: string) {
     <slot name="to-register">
       <div v-if="showRegister" class="text-muted-foreground mt-4 text-center text-sm">
         还没有账号？
-        <span class="vben-link text-sm font-normal" @click="goTo(registerPath)">
+        <span class="vben-link text-sm font-normal" @click="goTo(loginPath.register)">
           立即注册
         </span>
       </div>

@@ -3,7 +3,7 @@ import { useField, useForm } from 'vee-validate'
 
 import AuthTitle from './-auth-title.vue'
 import type { ForgetPasswordFormValues } from './useAuthValidation.ts'
-import { useAuthValidation } from './useAuthValidation.ts'
+import { useAuthValidation,loginPath } from './useAuthValidation.ts'
 
 defineOptions({ name: 'AuthForgetPassword' })
 
@@ -35,7 +35,7 @@ const submitHandler = handleSubmit((values) => {
 })
 
 function goToLogin(): void {
-  router.push('/auth/login')
+  router.push(loginPath.login)
 }
 </script>
 
