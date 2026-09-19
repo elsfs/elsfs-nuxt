@@ -11,7 +11,7 @@ const ERROR_MESSAGES: Record<string, string> = {
   UNAUTHORIZED: '登录状态已失效，请重新登录',
   REQUEST_FAILED: '请求失败，请稍后重试',
   NETWORK_ERROR: '网络异常，请稍后重试',
-  NOT_SUPPORTED: '该功能暂未接入后端接口，请开启 mock 模式后使用',
+  NOT_SUPPORTED: '该功能暂未接入后端接口',
 }
 
 /** 按错误码返回中文提示，未知错误码兜底为通用失败文案。 */

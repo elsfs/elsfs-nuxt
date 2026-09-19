@@ -1,7 +1,6 @@
 // 接口出入参类型集中在 api-types（`api-types/elsfs`），应用侧只保留状态与流程
 import type {
   ApiError,
-  AuthResponse,
   AuthStatus,
   AuthUser,
   CodeLoginPayload,
@@ -22,15 +21,13 @@ function resolveErrorCode(error: unknown, scene?: 'login'): string {
       ? 'INVALID_CREDENTIALS'
       : apiError.code
   }
-  // mock 路由抛的 `{ data: { message: 'CODE' } }`
-  const mockCode = (error as { data?: { message?: string } } | undefined)?.data?.message
-  return mockCode || 'NETWORK_ERROR'
+  return 'NETWORK_ERROR'
 }
 
 /**
  * 认证状态管理（Pinia）
  * - token 通过 cookie 持久化（SSR 安全），由 `plugins/api.ts` 注入的 `$authToken` 持有；
- * - 登录 / 用户信息走真实后端（`NUXT_PUBLIC_USE_MOCK=true` 时回落到本地 mock）；
+ * - 登录 / 用户信息走真实后端；
  * - 状态机：idle -> loading -> success | error；
  * - errorCode 为错误码，UI 层用 `authErrorMessage` 映射成中文提示。
  */
@@ -58,10 +55,10 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   /**
-   * 演示功能（验证码 / 二维码 / 社交 / 注册）目前只有本地 mock，
-   * 真实后端模式下直接拒绝，避免拿到 mock 令牌后又被真实接口登出。
+   * 注册 / 验证码登录 / 发送验证码 / 找回密码 / 社交登录：后端暂未提供接口。
+   * 页面保留，提交时统一以 NOT_SUPPORTED 拒绝，UI 通过 `authErrorMessage` 给出提示。
    */
-  function requireMock(): void {
+  function rejectNotSupported(): never {
     const error: ApiError = { name: 'ApiError', code: 'NOT_SUPPORTED', message: '' }
     fail(error)
     throw error
@@ -77,25 +74,6 @@ export const useAuthStore = defineStore('auth', () => {
       email: info.email ?? '',
       avatar: info.avatar,
       authorities: info.authorities ?? [],
-    }
-  }
-
-  /** mock 认证接口共用的请求包装（登录 / 注册 / 验证码登录 / 社交登录） */
-  async function handleMockAuthRequest(
-    request: Promise<AuthResponse>,
-    scene?: 'login',
-  ): Promise<AuthResponse> {
-    status.value = 'loading'
-    errorCode.value = null
-    try {
-      const data = await request
-      token.value = data.token
-      user.value = data.user
-      status.value = 'success'
-      return data
-    } catch (e: unknown) {
-      fail(e, scene)
-      throw e
     }
   }
 
@@ -116,78 +94,29 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  /**
-   * 验证码登录（演示）。
-   * 真实后端对应 `/login/phone/sms`，本仓库暂未接入，这里只在 mock 模式可用。
-   */
-  async function codeLogin(payload: CodeLoginPayload): Promise<AuthResponse> {
-    requireMock()
-    return handleMockAuthRequest(
-      $fetch<AuthResponse>('/api/auth/login', {
-        method: 'POST',
-        body: { username: payload.email, password: payload.code, remember: false },
-      }),
-      'login',
-    )
+  /** 验证码登录：后端暂未提供接口 */
+  async function codeLogin(_payload: CodeLoginPayload): Promise<never> {
+    rejectNotSupported()
   }
 
-  /**
-   * 发送验证码（演示）。
-   * - 不真实发送短信/邮件，仅模拟等待并成功返回；
-   * - 返回的 mock 验证码固定为 123456，可在 UI 上作为提示展示。
-   */
-  async function sendCode(payload: SendCodePayload): Promise<string> {
-    requireMock()
-    status.value = 'loading'
-    errorCode.value = null
-    try {
-      await $fetch('/api/auth/send-code', {
-        method: 'POST',
-        body: payload,
-      })
-      status.value = 'success'
-      return '123456'
-    } catch (e: unknown) {
-      fail(e)
-      throw e
-    }
+  /** 发送验证码：后端暂未提供接口 */
+  async function sendCode(_payload: SendCodePayload): Promise<never> {
+    rejectNotSupported()
   }
 
-  /** 发送密码重置邮件（演示） */
-  async function forgetPassword(email: string): Promise<void> {
-    requireMock()
-    errorCode.value = null
-    status.value = 'loading'
-    try {
-      await $fetch('/api/auth/forget-password', {
-        method: 'POST',
-        body: { email },
-      })
-      status.value = 'success'
-    } catch (e: unknown) {
-      fail(e)
-      throw e
-    }
+  /** 发送密码重置邮件：后端暂未提供接口 */
+  async function forgetPassword(_email: string): Promise<never> {
+    rejectNotSupported()
   }
 
-  async function register(payload: RegisterPayload): Promise<AuthResponse> {
-    requireMock()
-    return handleMockAuthRequest(
-      $fetch<AuthResponse>('/api/auth/register', {
-        method: 'POST',
-        body: payload,
-      }),
-    )
+  /** 注册：后端暂未提供接口 */
+  async function register(_payload: RegisterPayload): Promise<never> {
+    rejectNotSupported()
   }
 
-  async function socialLogin(provider: string): Promise<AuthResponse> {
-    requireMock()
-    return handleMockAuthRequest(
-      $fetch<AuthResponse>('/api/auth/social', {
-        method: 'POST',
-        body: { provider },
-      }),
-    )
+  /** 社交登录：后端暂未提供接口 */
+  async function socialLogin(_provider: string): Promise<never> {
+    rejectNotSupported()
   }
 
   /** 拉取当前用户信息（刷新页面后恢复登录态） */

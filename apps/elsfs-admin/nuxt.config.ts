@@ -29,11 +29,10 @@ export default defineNuxtConfig({
     viewTransition: true,
   },
   compatibilityDate: 'latest',
-  // 后端地址与 mock 开关（可用 NUXT_PUBLIC_API_BASE / NUXT_PUBLIC_USE_MOCK 覆盖，见 .env.example）
+  // 后端地址（可用 NUXT_PUBLIC_API_BASE 覆盖，见 .env.example）
   runtimeConfig: {
     public: {
       apiBase: 'http://127.0.0.1:6002',
-      useMock: false,
     },
   },
   nitro: {
