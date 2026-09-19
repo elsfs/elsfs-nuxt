@@ -31,8 +31,6 @@ withDefaults(defineProps<Props>(), {
   showRegister: true,
 })
 
-
-
 const auth = useAuthStore()
 const router = useRouter()
 const route = useRoute()
@@ -83,24 +81,8 @@ async function onSubmit(): Promise<void> {
   } else {
     localStorage.removeItem('elsfs_remember_username')
   }
-  await onLogin({ ...ruleForm })
-}
-
-async function handleSocial(provider: string): Promise<void> {
-  await onSocial(provider)
-}
-
-function goTo(path: string): void {
-  router.push(path)
-}
-
-async function onLogin(values: LoginFormValues) {
   try {
-    await auth.login({
-      username: values.username,
-      password: values.password,
-      remember: values.remember,
-    })
+    await auth.login(ruleForm)
     const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
     await router.push(redirect)
   } catch {
@@ -108,7 +90,7 @@ async function onLogin(values: LoginFormValues) {
   }
 }
 
-async function onSocial(provider: string) {
+async function handleSocial(provider: string): Promise<void> {
   try {
     await auth.socialLogin(provider)
     await router.push('/')
@@ -116,6 +98,7 @@ async function onSocial(provider: string) {
     // 错误码已写入 store，由组件内 Alert 展示
   }
 }
+
 </script>
 
 <template>
@@ -187,7 +170,7 @@ async function onSocial(provider: string) {
         <span
           v-if="showForgetPassword"
           class="vben-link text-sm font-normal"
-          @click="goTo(loginPath.forgetPasswordPath)"
+          @click="router.push(loginPath.forgetPasswordPath)"
         >
           忘记密码？
         </span>
@@ -213,7 +196,7 @@ async function onSocial(provider: string) {
         class="flex-1"
         type="default"
         plain
-        @click="goTo(loginPath.codeLoginPath)"
+        @click="router.push(loginPath.codeLoginPath)"
       >
         <AppIcon name="key" class="mr-1 size-4" />
         手机验证码登录
@@ -223,7 +206,7 @@ async function onSocial(provider: string) {
         class="flex-1"
         type="default"
         plain
-        @click="goTo(loginPath.qrcodeLoginPath)"
+        @click="router.push(loginPath.qrcodeLoginPath)"
       >
         <AppIcon name="monitor" class="mr-1 size-4" />
         扫码登录
@@ -239,7 +222,7 @@ async function onSocial(provider: string) {
     <slot name="to-register">
       <div v-if="showRegister" class="text-muted-foreground mt-4 text-center text-sm">
         还没有账号？
-        <span class="vben-link text-sm font-normal" @click="goTo(loginPath.register)">
+        <span class="vben-link text-sm font-normal" @click="router.push(loginPath.register)">
           立即注册
         </span>
       </div>

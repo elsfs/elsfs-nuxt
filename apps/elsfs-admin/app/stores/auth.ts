@@ -36,7 +36,6 @@ function resolveErrorCode(error: unknown, scene?: 'login'): string {
  */
 export const useAuthStore = defineStore('auth', () => {
   const nuxtApp = useNuxtApp()
-  const { public: publicConfig } = useRuntimeConfig()
   const api = useApi()
   const token = nuxtApp.$authToken
 
@@ -45,7 +44,6 @@ export const useAuthStore = defineStore('auth', () => {
   const errorCode = ref<string | null>(null)
 
   const isAuthenticated = computed(() => Boolean(token.value))
-  const useMock = computed(() => Boolean(publicConfig.useMock))
 
   function fail(error: unknown, scene?: 'login'): void {
     status.value = 'error'
@@ -64,9 +62,6 @@ export const useAuthStore = defineStore('auth', () => {
    * 真实后端模式下直接拒绝，避免拿到 mock 令牌后又被真实接口登出。
    */
   function requireMock(): void {
-    if (useMock.value) {
-      return
-    }
     const error: ApiError = { name: 'ApiError', code: 'NOT_SUPPORTED', message: '' }
     fail(error)
     throw error
@@ -105,17 +100,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function login(payload: LoginPayload): Promise<void> {
-    if (useMock.value) {
-      await handleMockAuthRequest(
-        $fetch<AuthResponse>('/api/auth/login', {
-          method: 'POST',
-          body: payload,
-        }),
-        'login',
-      )
-      return
-    }
-
     status.value = 'loading'
     errorCode.value = null
     try {
@@ -212,7 +196,7 @@ export const useAuthStore = defineStore('auth', () => {
       return
     }
     try {
-      user.value = useMock.value ? await $fetch<AuthUser>('/api/auth/me') : await loadRealUser()
+      user.value =  await loadRealUser()
     } catch (e: unknown) {
       // 只有确认登录态失效才清本地状态；网络异常保留 token，下次再拉
       if ((e as Partial<ApiError> | undefined)?.code === 'UNAUTHORIZED') {
@@ -222,10 +206,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function logout(): Promise<void> {
-    if (useMock.value) {
-      // 尽力通知 mock 服务端，失败不影响本地登出
-      await $fetch('/api/auth/logout', { method: 'POST' }).catch(() => {})
-    }
     // 真实后端未提供登出接口，清除本地令牌即可
     clearAuth()
   }
@@ -242,7 +222,6 @@ export const useAuthStore = defineStore('auth', () => {
     status,
     errorCode,
     isAuthenticated,
-    useMock,
     login,
     register,
     codeLogin,
