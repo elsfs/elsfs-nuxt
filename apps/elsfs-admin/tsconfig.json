@@ -2,5 +2,7 @@
   // https://nuxt.com/docs/guide/concepts/typescript
   // 只继承 Nuxt 生成的配置：`.nuxt/tsconfig.*.json` 是 noEmit 且未开 composite，
   // 根配置一旦用 project references 引用它们，`pnpm typecheck` 必然报 TS6305/TS6306。
+  // `api-types/*` 深路径靠 api-types 的 package.json `exports`（含 `types`）解析，
+  // moduleResolution 已是 Bundler，无需再在此写 paths/baseUrl（写了反而会覆盖 Nuxt 注入的别名）。
   "extends": "./.nuxt/tsconfig.json"
 }
