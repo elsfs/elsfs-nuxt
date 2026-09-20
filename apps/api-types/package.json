@@ -26,8 +26,7 @@
       "types": "./dist/types.d.mts",
       "default": "./dist/module.mjs"
     },
-    "./request": "./dist/runtime/request.js",
-    "./*": "./dist/runtime/*/index.js"
+    "./*": "./dist/*.js"
   },
   "scripts": {
     "postinstall": "nuxt-module-build build",

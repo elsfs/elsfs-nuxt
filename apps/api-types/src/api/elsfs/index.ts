@@ -7,7 +7,7 @@
  * import type { ApiError, AuthUser } from 'api-types/elsfs'
  * ```
  */
-export * from './auth'
-export * from './authMock'
-export * from './client'
-export * from './menu'
+export * from './auth.ts'
+export * from './authMock.ts'
+export * from './client.ts'
+export * from './menu.ts'

@@ -1,6 +1,0 @@
-export * from './genDatasourceConf'
-export * from './genFieldType'
-export * from './genGroup'
-export * from './genTemplate'
-export * from './generator'
-export * from './table'

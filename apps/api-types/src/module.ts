@@ -21,6 +21,6 @@ export default defineNuxtModule<ModuleOptions>({
     // - 旧的 `src/api`（vben 迁入层）引用了仓库中不存在的 `@vben/types`、
     //   `lodash/debounce`，无法编译，不能纳入自动导入，这里改指向可编译的
     //   `runtime/elsfs`。
-    addImportsDir(resolver.resolve('./runtime'))
+    addImportsDir(resolver.resolve('./api'))
   },
 })
