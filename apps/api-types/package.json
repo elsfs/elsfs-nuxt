@@ -33,6 +33,38 @@
     "./request": {
       "types": "./dist/runtime/request.d.ts",
       "default": "./dist/runtime/request.js"
+    },
+    "./ai": {
+      "types": "./dist/runtime/ai/index.d.ts",
+      "default": "./dist/runtime/ai/index.js"
+    },
+    "./cms": {
+      "types": "./dist/runtime/cms/index.d.ts",
+      "default": "./dist/runtime/cms/index.js"
+    },
+    "./core": {
+      "types": "./dist/runtime/core/index.d.ts",
+      "default": "./dist/runtime/core/index.js"
+    },
+    "./developer": {
+      "types": "./dist/runtime/developer/index.d.ts",
+      "default": "./dist/runtime/developer/index.js"
+    },
+    "./devOps": {
+      "types": "./dist/runtime/devOps/index.d.ts",
+      "default": "./dist/runtime/devOps/index.js"
+    },
+    "./domain": {
+      "types": "./dist/runtime/domain/index.d.ts",
+      "default": "./dist/runtime/domain/index.js"
+    },
+    "./school": {
+      "types": "./dist/runtime/school/index.d.ts",
+      "default": "./dist/runtime/school/index.js"
+    },
+    "./system": {
+      "types": "./dist/runtime/system/index.d.ts",
+      "default": "./dist/runtime/system/index.js"
     }
   },
   "scripts": {
