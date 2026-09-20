@@ -1,6 +1,6 @@
 import debounce from 'lodash/debounce'
 
-import { requestClient } from '../request'
+import { requestClient } from '../../runtime/request.ts'
 
 export interface DuplicateCheckQry {
   schemaName: string // 数据库名

@@ -46,3 +46,4 @@ catalog:
   postcss-html: ^2.0.0
   cspell: ^10.3.3
   publint: ^0.3.24
+  unbuild: ^3.6.1

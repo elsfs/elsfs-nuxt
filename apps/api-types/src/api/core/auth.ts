@@ -1,4 +1,4 @@
-import { baseRequestClient, requestClient } from '../request'
+import { baseRequestClient, requestClient } from '../../runtime/request.ts'
 
 export namespace AuthApi {
   /** 登录接口参数 */

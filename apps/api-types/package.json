@@ -12,6 +12,8 @@
   ],
   "type": "module",
   "main": "./dist/module.mjs",
+  "module": "./dist/module.mjs",
+  "types": "./dist/types.d.mts",
   "typesVersions": {
     "*": {
       ".": [
@@ -20,15 +22,7 @@
     }
   },
   "exports": {
-    ".": {
-      "types": "./dist/types.d.mts",
-      "import": "./dist/module.mjs"
-    },
-    "./elsfs": {
-      "types": "./dist/runtime/elsfs/index.d.ts",
-      "import": "./dist/runtime/elsfs/index.js",
-      "default": "./dist/runtime/elsfs/index.js"
-    }
+    ".": "./dist/module.mjs"
   },
   "scripts": {
     "postinstall": "nuxt-module-build build",
@@ -76,6 +70,7 @@
     "stylelint-config-standard": "catalog:",
     "typescript": "catalog:",
     "vitest": "^4.1.11",
-    "vue-tsc": "catalog:"
+    "vue-tsc": "catalog:",
+    "unbuild": "catalog:"
   }
 }

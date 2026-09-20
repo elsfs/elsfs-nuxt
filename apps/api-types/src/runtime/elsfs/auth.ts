@@ -53,4 +53,3 @@ export function fetchUserInfoApi(client: RequestClient): Promise<BackendUserInfo
   return client.get<BackendUserInfo>('/user/getUserInfo')
 }
 
-// 后端 Swagger 未提供登出接口：登出只需前端清除令牌即可。

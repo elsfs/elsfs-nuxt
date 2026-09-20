@@ -14,11 +14,13 @@ export default defineNuxtModule<ModuleOptions>({
   setup(_options, _nuxt) {
     const resolver = createResolver(import.meta.url)
 
-    // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
-    addPlugin(resolver.resolve('./runtime/plugin'))
-    // 自动导入 src/api 下所有导出的请求方法
-    // 注意：addImports 只接受 Import 对象（`addImports(string)` 会在 unimport 里抛
-    // `Cannot create property 'as' on string`），扫描目录要用 addImportsDir
-    addImportsDir(resolver.resolve('./api'))
+    // 自动导入 elsfs 后台的请求方法与出入参类型（与 `api-types/elsfs` 子路径同源）。
+    // 注意：
+    // - addImports 只接受 Import 对象（`addImports(string)` 会在 unimport 里抛
+    //   `Cannot create property 'as' on string`），扫描目录要用 addImportsDir；
+    // - 旧的 `src/api`（vben 迁入层）引用了仓库中不存在的 `@vben/types`、
+    //   `lodash/debounce`，无法编译，不能纳入自动导入，这里改指向可编译的
+    //   `runtime/elsfs`。
+    addImportsDir(resolver.resolve('./runtime'))
   },
 })

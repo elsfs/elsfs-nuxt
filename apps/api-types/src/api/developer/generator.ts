@@ -1,4 +1,4 @@
-import { requestClient } from '../request'
+import { requestClient } from '../../runtime/request.ts'
 /**
  * ZIP 下载生成代码
  */
