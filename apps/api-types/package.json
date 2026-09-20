@@ -22,7 +22,18 @@
     }
   },
   "exports": {
-    ".": "./dist/module.mjs"
+    ".": {
+      "types": "./dist/types.d.mts",
+      "default": "./dist/module.mjs"
+    },
+    "./elsfs": {
+      "types": "./dist/runtime/elsfs/index.d.ts",
+      "default": "./dist/runtime/elsfs/index.js"
+    },
+    "./request": {
+      "types": "./dist/runtime/request.d.ts",
+      "default": "./dist/runtime/request.js"
+    }
   },
   "scripts": {
     "postinstall": "nuxt-module-build build",
