@@ -1,4 +1,4 @@
-import { requestClient } from '../request.ts'
+import { requestClient } from '../request'
 
 /**
  * 表信息 --列信息

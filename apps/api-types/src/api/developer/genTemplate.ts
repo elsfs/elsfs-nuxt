@@ -1,4 +1,4 @@
-import { useRequest } from '../core/api.ts'
+import { useRequest } from '../core/api'
 
 /**
  * 模板实体类型定义

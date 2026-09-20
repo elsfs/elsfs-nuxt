@@ -1,5 +1,5 @@
-import { useRequest } from '../core/api.ts'
-import { requestClient } from '../request.ts'
+import { useRequest } from '../core/api'
+import { requestClient } from '../request'
 
 export const { useRequestHandle, requestPath } = useRequest('/dmCertificate')
 

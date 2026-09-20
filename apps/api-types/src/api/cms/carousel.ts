@@ -1,3 +1,3 @@
-import { useRequest } from '../core/api.ts'
+import { useRequest } from '../core/api'
 
 export const { useRequestHandle, requestPath } = useRequest('/carousel')

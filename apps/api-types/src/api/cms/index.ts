@@ -1,3 +1,3 @@
-export * from './article.ts'
-export * from './carousel.ts'
-export * from './contentCategory.ts'
+export * from './article'
+export * from './carousel'
+export * from './contentCategory'

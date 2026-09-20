@@ -1,5 +1,5 @@
-import { useRequest } from '../core/api.ts'
-import { requestClient } from '../request.ts'
+import { useRequest } from '../core/api'
+import { requestClient } from '../request'
 
 export enum MenuType {
   BUTTON = '2', //             按钮

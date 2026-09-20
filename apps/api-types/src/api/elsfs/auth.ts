@@ -52,4 +52,3 @@ export function loginApi(client: RequestClient, data: LoginParams): Promise<Logi
 export function fetchUserInfoApi(client: RequestClient): Promise<BackendUserInfo> {
   return client.get<BackendUserInfo>('/user/getUserInfo')
 }
-

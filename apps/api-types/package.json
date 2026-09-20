@@ -26,7 +26,46 @@
       "types": "./dist/types.d.mts",
       "default": "./dist/module.mjs"
     },
-    "./*": "./dist/*.js"
+    "./elsfs": {
+      "types": "./dist/api/elsfs/index.d.ts",
+      "default": "./dist/api/elsfs/index.js"
+    },
+    "./ai": {
+      "types": "./dist/api/ai/index.d.ts",
+      "default": "./dist/api/ai/index.js"
+    },
+    "./cms": {
+      "types": "./dist/api/cms/index.d.ts",
+      "default": "./dist/api/cms/index.js"
+    },
+    "./core": {
+      "types": "./dist/api/core/index.d.ts",
+      "default": "./dist/api/core/index.js"
+    },
+    "./devOps": {
+      "types": "./dist/api/devOps/index.d.ts",
+      "default": "./dist/api/devOps/index.js"
+    },
+    "./developer": {
+      "types": "./dist/api/developer/index.d.ts",
+      "default": "./dist/api/developer/index.js"
+    },
+    "./domain": {
+      "types": "./dist/api/domain/index.d.ts",
+      "default": "./dist/api/domain/index.js"
+    },
+    "./school": {
+      "types": "./dist/api/school/index.d.ts",
+      "default": "./dist/api/school/index.js"
+    },
+    "./system": {
+      "types": "./dist/api/system/index.d.ts",
+      "default": "./dist/api/system/index.js"
+    },
+    "./*": {
+      "types": "./dist/api/*.d.ts",
+      "default": "./dist/api/*.js"
+    }
   },
   "scripts": {
     "postinstall": "nuxt-module-build build",

@@ -1,5 +1,5 @@
-import { useRequest } from '../core/api.ts'
-import type { DuplicateCheckQry } from '../core/duplicateCheck.ts'
+import { useRequest } from '../core/api'
+import type { DuplicateCheckQry } from '../core/duplicateCheck'
 
 export interface SysTenant {
   tenantId: string // 租户ID

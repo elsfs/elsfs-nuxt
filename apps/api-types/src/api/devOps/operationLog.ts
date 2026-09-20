@@ -1,4 +1,4 @@
-import { useRequest } from '../core/api.ts'
+import { useRequest } from '../core/api'
 
 /**
  * 操作日志实体

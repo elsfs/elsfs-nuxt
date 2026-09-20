@@ -1,6 +1,6 @@
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-import { requestClient } from '../request.ts'
+import { requestClient } from '../request'
 
 enum Api {
   getCategoryData = '/sys/category/loadAllData',

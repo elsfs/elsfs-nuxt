@@ -1,1 +1,1 @@
-export * from './SchoolClassInfo.ts'
+export * from './SchoolClassInfo'
