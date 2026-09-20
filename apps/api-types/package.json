@@ -26,46 +26,8 @@
       "types": "./dist/types.d.mts",
       "default": "./dist/module.mjs"
     },
-    "./elsfs": {
-      "types": "./dist/runtime/elsfs/index.d.ts",
-      "default": "./dist/runtime/elsfs/index.js"
-    },
-    "./request": {
-      "types": "./dist/runtime/request.d.ts",
-      "default": "./dist/runtime/request.js"
-    },
-    "./ai": {
-      "types": "./dist/runtime/ai/index.d.ts",
-      "default": "./dist/runtime/ai/index.js"
-    },
-    "./cms": {
-      "types": "./dist/runtime/cms/index.d.ts",
-      "default": "./dist/runtime/cms/index.js"
-    },
-    "./core": {
-      "types": "./dist/runtime/core/index.d.ts",
-      "default": "./dist/runtime/core/index.js"
-    },
-    "./developer": {
-      "types": "./dist/runtime/developer/index.d.ts",
-      "default": "./dist/runtime/developer/index.js"
-    },
-    "./devOps": {
-      "types": "./dist/runtime/devOps/index.d.ts",
-      "default": "./dist/runtime/devOps/index.js"
-    },
-    "./domain": {
-      "types": "./dist/runtime/domain/index.d.ts",
-      "default": "./dist/runtime/domain/index.js"
-    },
-    "./school": {
-      "types": "./dist/runtime/school/index.d.ts",
-      "default": "./dist/runtime/school/index.js"
-    },
-    "./system": {
-      "types": "./dist/runtime/system/index.d.ts",
-      "default": "./dist/runtime/system/index.js"
-    }
+    "./request": "./dist/runtime/request.js",
+    "./*": "./dist/runtime/*/index.js"
   },
   "scripts": {
     "postinstall": "nuxt-module-build build",
@@ -88,8 +50,8 @@
   },
   "dependencies": {
     "@nuxt/kit": "^4.5.2",
-    "nuxt-request": "workspace:*",
-    "element-plus": "^2.14.5"
+    "element-plus": "^2.14.5",
+    "nuxt-request": "workspace:*"
   },
   "devDependencies": {
     "@element-plus/nuxt": "1.1.5",
@@ -112,8 +74,8 @@
     "stylelint": "catalog:",
     "stylelint-config-standard": "catalog:",
     "typescript": "catalog:",
+    "unbuild": "catalog:",
     "vitest": "^4.1.11",
-    "vue-tsc": "catalog:",
-    "unbuild": "catalog:"
+    "vue-tsc": "catalog:"
   }
 }
