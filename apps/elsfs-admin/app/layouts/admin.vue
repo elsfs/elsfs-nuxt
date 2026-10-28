@@ -27,10 +27,11 @@ const favoritesCollapsed = useCookie<boolean>('elsfs_menu_rail_collapsed', {
 watch(
   () => route.path,
   (path) => {
-    const menu = menuStore.leafByPath(path) ?? menuStore.nodeByPath.get(path)
+    const menu = menuStore.menuByPath(path)
+    const metaTitle = typeof route.meta.title === 'string' ? route.meta.title : undefined
     tabsStore.openTab({
       path,
-      title: menu?.title ?? path,
+      title: metaTitle ?? menu?.title ?? path,
       menuId: menu?.id,
       icon: menu?.icon,
       affix: menu?.meta.affixTab,
@@ -202,15 +203,9 @@ function browseFromMobile(): void {
             </div>
             <template #dropdown>
               <ElDropdownMenu>
-                <ElDropdownItem command="profile">
-                  个人信息
-                </ElDropdownItem>
-                <ElDropdownItem command="password">
-                  修改密码
-                </ElDropdownItem>
-                <ElDropdownItem command="clearCache">
-                  清除缓存
-                </ElDropdownItem>
+                <ElDropdownItem command="profile"> 个人信息 </ElDropdownItem>
+                <ElDropdownItem command="password"> 修改密码 </ElDropdownItem>
+                <ElDropdownItem command="clearCache"> 清除缓存 </ElDropdownItem>
                 <ElDropdownItem divided command="theme">
                   <span class="flex items-center gap-2">
                     <AppIcon :name="showDarkIcon ? 'sun' : 'moon'" class="size-4" />

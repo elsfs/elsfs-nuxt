@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import type { SysPost, SysPostForm, SysPostPageQuery } from 'api-types/elsfs'
-import { addPostApi, deletePostsApi, editPostApi, fetchPostPageApi } from 'api-types/elsfs'
-import type { FormInstance, FormRules } from 'element-plus'
+import type { SysPost, SysPostPageQuery } from 'api-types/elsfs'
+import { deletePostsApi, editPostApi, fetchPostPageApi } from 'api-types/elsfs'
 
 import { toErrorMessage } from '~/utils/api-error'
 
 /**
- * 系统管理 - 职位管理。
+ * 系统管理 - 职位管理（列表页）。
  *
- * 分页查询 + 新增 / 编辑 / 删除 + 状态切换（整条记录 edit）。
+ * 分页查询 + 状态切换（整条记录 edit）+ 删除。
+ * 新增 / 编辑拆到独立页面：`/system/SysPost/create`、`/system/SysPost/edit/:id`。
  */
 definePageMeta({
   layout: 'admin',
@@ -39,100 +39,14 @@ onMounted(() => {
   void load()
 })
 
-/* ---------- 新增 / 编辑弹窗 ---------- */
+/* ---------- 跳转新增 / 编辑 ---------- */
 
-/** 弹窗表单模型：所有字段在表单里都必须有值，提交时再交给接口类型 */
-interface PostFormModel {
-  postId?: string
-  postName: string
-  postCode: string
-  postRank: string
-  orderNo: number
-  status: string
-  remark: string
+function goCreate(): void {
+  void navigateTo('/system/SysPost/create')
 }
 
-function createPostForm(): PostFormModel {
-  return {
-    postName: '',
-    postCode: '',
-    postRank: '1',
-    orderNo: 1,
-    status: '0',
-    remark: '',
-  }
-}
-
-const dialogVisible = ref(false)
-const submitting = ref(false)
-const formRef = ref<FormInstance>()
-const editPostId = ref<string | null>(null)
-const form = reactive<PostFormModel>(createPostForm())
-
-const rules: FormRules = {
-  postName: [{ required: true, message: '请输入职务名称', trigger: 'blur' }],
-  postCode: [{ required: true, message: '请输入职务编码', trigger: 'blur' }],
-  postRank: [{ required: true, message: '请输入职级', trigger: 'blur' }],
-}
-
-function openCreate(): void {
-  editPostId.value = null
-  Object.assign(form, createPostForm())
-  dialogVisible.value = true
-}
-
-function openEdit(row: SysPost): void {
-  editPostId.value = row.postId
-  Object.assign(form, createPostForm(), {
-    postId: row.postId,
-    postName: row.postName,
-    postCode: row.postCode,
-    postRank: row.postRank ?? '',
-    orderNo: row.orderNo ?? 1,
-    status: row.status ?? '0',
-    remark: row.remark ?? '',
-  })
-  dialogVisible.value = true
-}
-
-/** 组装提交给后端的表单对象（空字符串转 null，避免把空串写进库） */
-function buildPayload(): SysPostForm {
-  return {
-    postName: form.postName,
-    postCode: form.postCode,
-    postRank: form.postRank || null,
-    orderNo: form.orderNo,
-    status: form.status,
-    remark: form.remark || null,
-  }
-}
-
-async function submitForm(): Promise<void> {
-  const formEl = formRef.value
-  if (!formEl) {
-    return
-  }
-  try {
-    await formEl.validate()
-  } catch {
-    return
-  }
-  submitting.value = true
-  try {
-    if (editPostId.value) {
-      await editPostApi(api, { ...buildPayload(), postId: editPostId.value })
-      ElMessage.success('修改成功')
-    } else {
-      await addPostApi(api, buildPayload())
-      ElMessage.success('添加成功')
-    }
-    dialogVisible.value = false
-    await load()
-  } catch (error) {
-    ElMessage.error(toErrorMessage(error))
-  } finally {
-    submitting.value = false
-  }
+function goEdit(row: SysPost): void {
+  void navigateTo(`/system/SysPost/edit/${row.postId}`)
 }
 
 /* ---------- 状态 / 删除 ---------- */
@@ -176,9 +90,9 @@ async function handleDelete(row: SysPost): Promise<void> {
         <h1 class="text-xl font-bold sm:text-2xl">职位管理</h1>
         <p class="text-muted-foreground mt-1 text-sm">维护职务（岗位）信息，供账号管理分配使用。</p>
       </div>
-      <ElButton type="primary" @click="openCreate">
+      <ElButton type="primary" @click="goCreate">
         <AppIcon name="lucide--plus" class="mr-1 size-4" />
-        新增职务
+        新增职位
       </ElButton>
     </div>
 
@@ -242,7 +156,7 @@ async function handleDelete(row: SysPost): Promise<void> {
         <ElTableColumn prop="createAt" label="创建时间" width="170" />
         <ElTableColumn label="操作" width="140" fixed="right">
           <template #default="{ row }">
-            <ElButton link type="primary" size="small" @click="openEdit(row as SysPost)">
+            <ElButton link type="primary" size="small" @click="goEdit(row as SysPost)">
               编辑
             </ElButton>
             <ElButton link type="danger" size="small" @click="handleDelete(row as SysPost)">
@@ -265,42 +179,5 @@ async function handleDelete(row: SysPost): Promise<void> {
         />
       </div>
     </section>
-
-    <!-- 新增 / 编辑 -->
-    <ElDialog
-      v-model="dialogVisible"
-      :title="editPostId ? '编辑职务' : '新增职务'"
-      width="520px"
-      destroy-on-close
-    >
-      <ElForm ref="formRef" :model="form" :rules="rules" label-width="96px">
-        <ElFormItem label="职务名称" prop="postName">
-          <ElInput v-model="form.postName" placeholder="请输入职务名称" />
-        </ElFormItem>
-        <ElFormItem label="职务编码" prop="postCode">
-          <ElInput v-model="form.postCode" placeholder="请输入职务编码" />
-        </ElFormItem>
-        <ElFormItem label="职级" prop="postRank">
-          <ElInput v-model="form.postRank" placeholder="请输入职级" />
-        </ElFormItem>
-        <ElFormItem label="排序" prop="orderNo">
-          <ElInputNumber v-model="form.orderNo" :min="0" class="w-full" />
-        </ElFormItem>
-        <ElFormItem label="状态" prop="status">
-          <ElRadioGroup v-model="form.status">
-            <ElRadio v-for="option in STATUS_OPTIONS" :key="option.value" :value="option.value">
-              {{ option.label }}
-            </ElRadio>
-          </ElRadioGroup>
-        </ElFormItem>
-        <ElFormItem label="备注" prop="remark">
-          <ElInput v-model="form.remark" type="textarea" :rows="3" placeholder="请输入备注" />
-        </ElFormItem>
-      </ElForm>
-      <template #footer>
-        <ElButton @click="dialogVisible = false"> 取消 </ElButton>
-        <ElButton type="primary" :loading="submitting" @click="submitForm"> 确定 </ElButton>
-      </template>
-    </ElDialog>
   </div>
 </template>

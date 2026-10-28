@@ -97,6 +97,30 @@ export const useMenuStore = defineStore('menu', () => {
     return map
   })
 
+  /**
+   * 按路由地址找菜单：先精确匹配，再逐级向上找最近的一级菜单。
+   * 例如 `/system/role/create` 会命中 `/system/role`，用于多页签标题 / 图标
+   * 与收藏栏高亮（列表页与新增 / 编辑页共享同一个菜单）。
+   */
+  function menuByPath(path: string): AdminMenuLeaf | AdminMenuItem | undefined {
+    const exact = leafByPath(path) ?? nodeByPath.value.get(path)
+    if (exact) {
+      return exact
+    }
+    let parentPath = path
+    while (parentPath.includes('/')) {
+      parentPath = parentPath.slice(0, parentPath.lastIndexOf('/'))
+      if (!parentPath) {
+        break
+      }
+      const parent = nodeByPath.value.get(parentPath)
+      if (parent) {
+        return parent
+      }
+    }
+    return undefined
+  }
+
   /** 收藏项，顺序与收藏时间一致 */
   const favorites = computed<AdminMenuLeaf[]>(() =>
     favoriteIds.value
@@ -148,6 +172,7 @@ export const useMenuStore = defineStore('menu', () => {
     leafMap,
     leafByPath,
     nodeByPath,
+    menuByPath,
     favorites,
     favoriteCount,
     isFavorite,

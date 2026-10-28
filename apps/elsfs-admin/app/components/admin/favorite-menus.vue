@@ -20,8 +20,10 @@ const menuStore = useMenuStore()
 const menuTitle = useMenuTitle()
 const menuPath = useMenuPath()
 
+/** 列表页及其新增 / 编辑子页面都算激活 */
 function isActive(item: AdminMenuLeaf): boolean {
-  return route.path === menuPath(item)
+  const path = menuPath(item)
+  return route.path === path || route.path.startsWith(`${path}/`)
 }
 
 function pathOf(item: AdminMenuLeaf): string {
@@ -163,9 +165,7 @@ function resetDrag(): void {
         class="border-border flex flex-col items-center gap-3 rounded-xl border border-dashed px-2 py-6 text-center"
       >
         <AppIcon name="star" class="text-muted-foreground/60 size-6" />
-        <div class="text-foreground text-sm" :class="wide ? '' : 'text-xs'">
-          还没有收藏菜单
-        </div>
+        <div class="text-foreground text-sm" :class="wide ? '' : 'text-xs'">还没有收藏菜单</div>
         <p v-if="wide" class="text-muted-foreground text-xs leading-relaxed">
           点击左上角「全部菜单」，把常用功能收进收藏栏
         </p>

@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import type { FormInstance, FormRules } from 'element-plus'
 import type { SysMenu, SysRole, SysRolePageQuery } from 'api-types/elsfs'
 import {
-  addRoleApi,
   deleteRolesApi,
   editRoleApi,
   fetchMenuTreeApi,
@@ -14,9 +12,10 @@ import {
 import { toErrorMessage } from '~/utils/api-error'
 
 /**
- * 系统管理 - 角色管理。
+ * 系统管理 - 角色管理（列表页）。
  *
- * 分页查询 + 新增 / 编辑 / 删除 + 状态切换 + 菜单授权（树形勾选）。
+ * 分页查询 + 删除 + 状态切换 + 菜单授权（树形勾选）。
+ * 新增 / 编辑拆到独立页面：`/system/role/create`、`/system/role/edit/:id`。
  * 后端 `editState` 接口对角色不支持，所以状态切换走「整条记录 edit」。
  */
 definePageMeta({
@@ -48,84 +47,14 @@ onMounted(() => {
   void load()
 })
 
-/* ---------- 新增 / 编辑弹窗 ---------- */
+/* ---------- 跳转新增 / 编辑 ---------- */
 
-/** 弹窗表单模型：所有字段在表单里都必须有值，提交时再交给接口类型 */
-interface RoleFormModel {
-  roleId?: string
-  roleName: string
-  roleCode: string
-  roleDesc: string
-  orderNo: number
-  status: string
+function goCreate(): void {
+  void navigateTo('/system/role/create')
 }
 
-function createRoleForm(): RoleFormModel {
-  return {
-    roleName: '',
-    roleCode: '',
-    roleDesc: '',
-    orderNo: 1,
-    status: '0',
-  }
-}
-
-const dialogVisible = ref(false)
-const submitting = ref(false)
-const formRef = ref<FormInstance>()
-const editRoleId = ref<string | null>(null)
-const form = reactive<RoleFormModel>(createRoleForm())
-
-const rules: FormRules = {
-  roleName: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
-  roleCode: [{ required: true, message: '请输入角色编码', trigger: 'blur' }],
-}
-
-function openCreate(): void {
-  editRoleId.value = null
-  Object.assign(form, createRoleForm())
-  dialogVisible.value = true
-}
-
-function openEdit(row: SysRole): void {
-  editRoleId.value = row.roleId
-  Object.assign(form, createRoleForm(), {
-    roleId: row.roleId,
-    roleName: row.roleName,
-    roleCode: row.roleCode,
-    roleDesc: row.roleDesc ?? '',
-    orderNo: row.orderNo ?? 1,
-    status: row.status ?? '0',
-  })
-  dialogVisible.value = true
-}
-
-async function submitForm(): Promise<void> {
-  const formEl = formRef.value
-  if (!formEl) {
-    return
-  }
-  try {
-    await formEl.validate()
-  } catch {
-    return
-  }
-  submitting.value = true
-  try {
-    if (editRoleId.value) {
-      await editRoleApi(api, { ...form })
-      ElMessage.success('修改成功')
-    } else {
-      await addRoleApi(api, { ...form })
-      ElMessage.success('添加成功')
-    }
-    dialogVisible.value = false
-    await load()
-  } catch (error) {
-    ElMessage.error(toErrorMessage(error))
-  } finally {
-    submitting.value = false
-  }
+function goEdit(row: SysRole): void {
+  void navigateTo(`/system/role/edit/${row.roleId}`)
 }
 
 /* ---------- 状态 / 删除 ---------- */
@@ -225,14 +154,10 @@ async function saveMenuAuth(): Promise<void> {
     <!-- 页头 -->
     <div class="flex flex-wrap items-end justify-between gap-3">
       <div>
-        <h1 class="text-xl font-bold sm:text-2xl">
-          角色管理
-        </h1>
-        <p class="text-muted-foreground mt-1 text-sm">
-          维护角色信息，并给角色分配可访问的菜单。
-        </p>
+        <h1 class="text-xl font-bold sm:text-2xl">角色管理</h1>
+        <p class="text-muted-foreground mt-1 text-sm">维护角色信息，并给角色分配可访问的菜单。</p>
       </div>
-      <ElButton type="primary" @click="openCreate">
+      <ElButton type="primary" @click="goCreate">
         <AppIcon name="lucide--plus" class="mr-1 size-4" />
         新增角色
       </ElButton>
@@ -270,12 +195,8 @@ async function saveMenuAuth(): Promise<void> {
           </ElSelect>
         </ElFormItem>
         <ElFormItem class="mb-0">
-          <ElButton type="primary" @click="search">
-            查询
-          </ElButton>
-          <ElButton @click="reset">
-            重置
-          </ElButton>
+          <ElButton type="primary" @click="search"> 查询 </ElButton>
+          <ElButton @click="reset"> 重置 </ElButton>
         </ElFormItem>
       </ElForm>
     </section>
@@ -292,14 +213,16 @@ async function saveMenuAuth(): Promise<void> {
           <template #default="{ row }">
             <ElSwitch
               :model-value="row.status === '0'"
-              @change="(value: string | number | boolean) => toggleStatus(row as SysRole, Boolean(value))"
+              @change="
+                (value: string | number | boolean) => toggleStatus(row as SysRole, Boolean(value))
+              "
             />
           </template>
         </ElTableColumn>
         <ElTableColumn prop="createAt" label="创建时间" width="170" />
         <ElTableColumn label="操作" width="210" fixed="right">
           <template #default="{ row }">
-            <ElButton link type="primary" size="small" @click="openEdit(row as SysRole)">
+            <ElButton link type="primary" size="small" @click="goEdit(row as SysRole)">
               编辑
             </ElButton>
             <ElButton link type="primary" size="small" @click="openMenuDialog(row as SysRole)">
@@ -326,44 +249,6 @@ async function saveMenuAuth(): Promise<void> {
       </div>
     </section>
 
-    <!-- 新增 / 编辑 -->
-    <ElDialog
-      v-model="dialogVisible"
-      :title="editRoleId ? '编辑角色' : '新增角色'"
-      width="520px"
-      destroy-on-close
-    >
-      <ElForm ref="formRef" :model="form" :rules="rules" label-width="96px">
-        <ElFormItem label="角色名称" prop="roleName">
-          <ElInput v-model="form.roleName" placeholder="请输入角色名称" />
-        </ElFormItem>
-        <ElFormItem label="角色编码" prop="roleCode">
-          <ElInput v-model="form.roleCode" placeholder="请输入角色编码" />
-        </ElFormItem>
-        <ElFormItem label="排序" prop="orderNo">
-          <ElInputNumber v-model="form.orderNo" :min="0" class="w-full" />
-        </ElFormItem>
-        <ElFormItem label="状态" prop="status">
-          <ElRadioGroup v-model="form.status">
-            <ElRadio v-for="option in STATUS_OPTIONS" :key="option.value" :value="option.value">
-              {{ option.label }}
-            </ElRadio>
-          </ElRadioGroup>
-        </ElFormItem>
-        <ElFormItem label="角色描述" prop="roleDesc">
-          <ElInput v-model="form.roleDesc" type="textarea" :rows="3" placeholder="请输入角色描述" />
-        </ElFormItem>
-      </ElForm>
-      <template #footer>
-        <ElButton @click="dialogVisible = false">
-          取消
-        </ElButton>
-        <ElButton type="primary" :loading="submitting" @click="submitForm">
-          确定
-        </ElButton>
-      </template>
-    </ElDialog>
-
     <!-- 菜单授权 -->
     <ElDialog
       v-model="menuDialogVisible"
@@ -383,12 +268,8 @@ async function saveMenuAuth(): Promise<void> {
         />
       </div>
       <template #footer>
-        <ElButton @click="menuDialogVisible = false">
-          取消
-        </ElButton>
-        <ElButton type="primary" :loading="menuSaving" @click="saveMenuAuth">
-          保存授权
-        </ElButton>
+        <ElButton @click="menuDialogVisible = false"> 取消 </ElButton>
+        <ElButton type="primary" :loading="menuSaving" @click="saveMenuAuth"> 保存授权 </ElButton>
       </template>
     </ElDialog>
   </div>
