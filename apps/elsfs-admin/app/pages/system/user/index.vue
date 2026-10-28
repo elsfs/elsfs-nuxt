@@ -151,31 +151,34 @@ async function handleDelete(row: SysUser): Promise<void> {
     <section class="border-border bg-card rounded-xl border p-4">
       <ElForm inline class="flex flex-wrap items-end gap-3" @submit.prevent="search">
         <ElFormItem label="用户名" class="mb-0">
-          <ElInput
-            v-model="query.username"
-            placeholder="请输入用户名"
-            clearable
-            class="w-40"
-            @keyup.enter="search"
-          />
+          <div class="w-40">
+            <ElInput
+              v-model="query.username"
+              placeholder="请输入用户名"
+              clearable
+              @keyup.enter="search"
+            />
+          </div>
         </ElFormItem>
         <ElFormItem label="昵称" class="mb-0">
-          <ElInput
-            v-model="query.nickname"
-            placeholder="请输入昵称"
-            clearable
-            class="w-40"
-            @keyup.enter="search"
-          />
+          <div class="w-40">
+            <ElInput
+              v-model="query.nickname"
+              placeholder="请输入昵称"
+              clearable
+              @keyup.enter="search"
+            />
+          </div>
         </ElFormItem>
         <ElFormItem label="手机号" class="mb-0">
-          <ElInput
-            v-model="query.phone"
-            placeholder="请输入手机号"
-            clearable
-            class="w-40"
-            @keyup.enter="search"
-          />
+          <div class="w-40">
+            <ElInput
+              v-model="query.phone"
+              placeholder="请输入手机号"
+              clearable
+              @keyup.enter="search"
+            />
+          </div>
         </ElFormItem>
         <ElFormItem label="部门" class="mb-0">
           <div class="w-44">
@@ -192,14 +195,16 @@ async function handleDelete(row: SysUser): Promise<void> {
           </div>
         </ElFormItem>
         <ElFormItem label="状态" class="mb-0">
-          <ElSelect v-model="query.status" placeholder="全部" clearable class="w-32">
-            <ElOption
-              v-for="option in STATUS_OPTIONS"
-              :key="option.value"
-              :label="option.label"
-              :value="option.value"
-            />
-          </ElSelect>
+          <div class="w-32">
+            <ElSelect v-model="query.status" placeholder="全部" clearable>
+              <ElOption
+                v-for="option in STATUS_OPTIONS"
+                :key="option.value"
+                :label="option.label"
+                :value="option.value"
+              />
+            </ElSelect>
+          </div>
         </ElFormItem>
         <ElFormItem class="mb-0">
           <ElButton type="primary" @click="search"> 查询 </ElButton>

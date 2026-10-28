@@ -124,11 +124,13 @@ async function handleDelete(row: SysMenu): Promise<void> {
     <section class="border-border bg-card rounded-xl border p-4">
       <ElForm inline class="flex flex-wrap items-end gap-3" @submit.prevent>
         <ElFormItem label="菜单名称" class="mb-0">
-          <ElInput v-model="keyword" placeholder="请输入菜单名称" clearable class="w-56">
-            <template #prefix>
-              <AppIcon name="lucide--search" class="size-4" />
-            </template>
-          </ElInput>
+          <div class="w-56">
+            <ElInput v-model="keyword" placeholder="请输入菜单名称" clearable>
+              <template #prefix>
+                <AppIcon name="lucide--search" class="size-4" />
+              </template>
+            </ElInput>
+          </div>
         </ElFormItem>
         <ElFormItem class="mb-0">
           <ElButton @click="keyword = ''"> 重置 </ElButton>

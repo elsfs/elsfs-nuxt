@@ -119,7 +119,9 @@ async function handleDelete(row: SysDept): Promise<void> {
     <section class="border-border bg-card rounded-xl border p-4">
       <ElForm inline class="flex flex-wrap items-end gap-3">
         <ElFormItem label="部门名称" class="mb-0">
-          <ElInput v-model="keyword" placeholder="请输入部门名称" clearable class="w-52" />
+          <div class="w-52">
+            <ElInput v-model="keyword" placeholder="请输入部门名称" clearable />
+          </div>
         </ElFormItem>
         <ElFormItem class="mb-0">
           <ElButton :loading="loading" @click="loadTree">
