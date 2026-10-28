@@ -115,20 +115,6 @@ async function handleDelete(row: SysDept): Promise<void> {
 
 <template>
   <div class="mx-auto max-w-7xl space-y-4 p-6 sm:p-8">
-    <!-- 页头 -->
-    <div class="flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <h1 class="text-xl font-bold sm:text-2xl">部门管理</h1>
-        <p class="text-muted-foreground mt-1 text-sm">
-          维护组织架构中的部门信息，支持树形层级与启停用。
-        </p>
-      </div>
-      <ElButton type="primary" @click="goCreate">
-        <AppIcon name="lucide--plus" class="mr-1 size-4" />
-        新增部门
-      </ElButton>
-    </div>
-
     <!-- 本地过滤 -->
     <section class="border-border bg-card rounded-xl border p-4">
       <ElForm inline class="flex flex-wrap items-end gap-3">
@@ -143,7 +129,12 @@ async function handleDelete(row: SysDept): Promise<void> {
         </ElFormItem>
       </ElForm>
     </section>
-
+    <div class="flex justify-start">
+      <ElButton type="primary" @click="goCreate">
+        <AppIcon name="lucide--plus" class="mr-1 size-4" />
+        新增部门
+      </ElButton>
+    </div>
     <!-- 树形列表 -->
     <section class="border-border bg-card rounded-xl border p-4">
       <ElTable

@@ -84,18 +84,6 @@ async function handleDelete(row: SysPost): Promise<void> {
 
 <template>
   <div class="mx-auto max-w-7xl space-y-4 p-6 sm:p-8">
-    <!-- 页头 -->
-    <div class="flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <h1 class="text-xl font-bold sm:text-2xl">职位管理</h1>
-        <p class="text-muted-foreground mt-1 text-sm">维护职务（岗位）信息，供账号管理分配使用。</p>
-      </div>
-      <ElButton type="primary" @click="goCreate">
-        <AppIcon name="lucide--plus" class="mr-1 size-4" />
-        新增职位
-      </ElButton>
-    </div>
-
     <!-- 查询条件 -->
     <section class="border-border bg-card rounded-xl border p-4">
       <ElForm inline class="flex flex-wrap items-end gap-3" @submit.prevent="search">
@@ -133,7 +121,12 @@ async function handleDelete(row: SysPost): Promise<void> {
         </ElFormItem>
       </ElForm>
     </section>
-
+    <div class="flex justify-start">
+      <ElButton type="primary" @click="goCreate">
+        <AppIcon name="lucide--plus" class="mr-1 size-4" />
+        新增职位
+      </ElButton>
+    </div>
     <!-- 列表 -->
     <section class="border-border bg-card rounded-xl border p-4">
       <ElTable v-loading="loading" :data="rows" row-key="postId" stripe class="w-full">
