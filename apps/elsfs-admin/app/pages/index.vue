@@ -1,26 +1,15 @@
 <script setup lang="ts">
-import { useWebsiteStore } from '~/stores/website.ts'
-
-const website = useWebsiteStore()
-
-await callOnce(website.fetch)
-const res = await useFetch('/api/demo', {
-  onResponse({ response }) {
-    // 所有响应都会经过这里，包括成功和失败的
-    console.log('状态码:', response.status) // 200, 404, 500...
-  },
+/**
+ * 首页只做跳转：统一进入后台分析页。
+ *
+ * 未登录时由全局认证中间件接管（先跳登录页，登录后再回到目标页面），
+ * 因此这里不需要再判断登录态。
+ */
+definePageMeta({
+  redirect: '/analytics',
 })
 </script>
 
 <template>
-  <main>
-    <h2>请求的数据：{{ res.data }}</h2>
-    <h2>请求的数据：{{ res.status }}</h2>
-    <h2>请求的数据：{{ res.error }}</h2>
-
-    <h1>{{ website.name }}</h1>
-    <p>{{ website.description }}</p>
-    <h1>首页</h1>
-    <NuxtLink to="/about">关于页面</NuxtLink>
-  </main>
+  <div />
 </template>

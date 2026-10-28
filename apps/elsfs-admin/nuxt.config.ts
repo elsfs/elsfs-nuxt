@@ -1,11 +1,6 @@
 export default defineNuxtConfig({
   extends: ['tailwind-config'],
-  modules: [
-    '@nuxt/eslint',
-    '@pinia/nuxt',
-    '@element-plus/nuxt',
-    '@nuxtjs/color-mode',
-  ],
+  modules: ['@nuxt/eslint', '@pinia/nuxt', '@element-plus/nuxt', '@nuxtjs/color-mode'],
   $development: undefined,
   $env: undefined,
   $meta: undefined,
@@ -33,6 +28,14 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: 'http://127.0.0.1:6002',
+    },
+  },
+  // Element Plus 的日期组件依赖 CJS 版 dayjs；应用没把它装成直接依赖时 Vite 解析不到，
+  // 浏览器会直接 import CJS 报 "does not provide an export named 'default'"。
+  // dayjs 已加入 dependencies，这里再显式声明一次，确保进 Vite 依赖预构建。
+  vite: {
+    optimizeDeps: {
+      include: ['dayjs'],
     },
   },
   nitro: {

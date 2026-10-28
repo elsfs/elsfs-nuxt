@@ -34,6 +34,40 @@ const visibleMenus = computed<AdminMenuItem[]>(() => {
 /** 过滤后剩下的叶子菜单数量，用于空状态判断 */
 const visibleCount = computed(() => countMenuLeaves(visibleMenus.value))
 
+/** 抽屉右侧的分组结构：三级菜单是「一级 > 二级分组 > 叶子」，两级菜单直接是「一级 > 叶子」 */
+interface DrawerGroup {
+  id: string
+  title?: string
+  items: AdminMenuItem[]
+}
+
+interface DrawerSection {
+  root: AdminMenuItem
+  groups: DrawerGroup[]
+}
+
+const drawerSections = computed<DrawerSection[]>(() =>
+  visibleMenus.value.map((root) => {
+    const groups: DrawerGroup[] = []
+    const directItems: AdminMenuItem[] = []
+    for (const child of root.children ?? []) {
+      if (child.children?.length) {
+        groups.push({ id: child.id, title: child.title, items: child.children })
+      } else {
+        directItems.push(child)
+      }
+    }
+    // 两级菜单：把二级叶子直接放到一级标题下，不再显示分组标题
+    if (directItems.length) {
+      groups.unshift({ id: `${root.id}-direct`, items: directItems })
+    }
+    if (!groups.length) {
+      groups.push({ id: root.id, items: [root] })
+    }
+    return { root, groups }
+  }),
+)
+
 function selectCategory(index: number): void {
   activeCategory.value = index
   // 和参考项目一致：点一级菜单清空搜索
@@ -114,22 +148,22 @@ async function handleSelect(item: AdminMenuItem): Promise<void> {
 
         <div class="min-h-0 flex-1 overflow-y-auto px-5 pb-6">
           <template v-if="visibleCount">
-            <section v-for="item in visibleMenus" :key="item.id" class="mb-5">
+            <section v-for="section in drawerSections" :key="section.root.id" class="mb-5">
               <!-- 一级：子系统 / 分类（参考项目用主色加粗） -->
               <h4 class="text-primary mb-2 text-sm font-bold">
-                {{ menuTitle(item.title) }}
+                {{ menuTitle(section.root.title) }}
               </h4>
 
-              <!-- 二级：分组 -->
-              <div v-for="group in item.children" :key="group.id" class="mb-3 last:mb-0">
-                <h6 class="text-muted-foreground mb-1 text-xs font-semibold">
+              <!-- 分组：三级菜单显示二级分组标题，两级菜单直接展示叶子 -->
+              <div v-for="group in section.groups" :key="group.id" class="mb-3 last:mb-0">
+                <h6 v-if="group.title" class="text-muted-foreground mb-1 text-xs font-semibold">
                   {{ menuTitle(group.title) }}
                 </h6>
 
-                <!-- 三级：叶子菜单，四列 -->
+                <!-- 叶子菜单，四列 -->
                 <div class="grid grid-cols-2 gap-x-4 md:grid-cols-3 lg:grid-cols-4">
                   <div
-                    v-for="child in group.children"
+                    v-for="child in group.items"
                     :key="child.id"
                     class="group/row hover:bg-accent relative flex h-8 items-center rounded transition-colors"
                   >

@@ -77,6 +77,26 @@ export const useMenuStore = defineStore('menu', () => {
     return leaves.value.find((leaf) => leaf.path === path)
   }
 
+  /**
+   * 全部菜单节点按 path 建索引（含 `/analytics` 这种「一级菜单本身就是页面」的非叶子节点）。
+   * 叶子菜单仍以 `leafByPath` 为准，这里只给多页签兜标题 / 图标用。
+   */
+  const nodeByPath = computed(() => {
+    const map = new Map<string, AdminMenuItem>()
+    const walk = (list: AdminMenuItem[]): void => {
+      for (const item of list) {
+        if (item.path) {
+          map.set(item.path, item)
+        }
+        if (item.children?.length) {
+          walk(item.children)
+        }
+      }
+    }
+    walk(menus.value)
+    return map
+  })
+
   /** 收藏项，顺序与收藏时间一致 */
   const favorites = computed<AdminMenuLeaf[]>(() =>
     favoriteIds.value
@@ -127,6 +147,7 @@ export const useMenuStore = defineStore('menu', () => {
     leaves,
     leafMap,
     leafByPath,
+    nodeByPath,
     favorites,
     favoriteCount,
     isFavorite,

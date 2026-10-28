@@ -1,6 +1,3 @@
-
-
-import { configureRequestClients,requestClient } from 'api-types/request'
+import { configureRequestClients } from 'api-types/request'
 
 configureRequestClients()
-

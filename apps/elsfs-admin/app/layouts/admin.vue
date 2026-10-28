@@ -27,7 +27,7 @@ const favoritesCollapsed = useCookie<boolean>('elsfs_menu_rail_collapsed', {
 watch(
   () => route.path,
   (path) => {
-    const menu = menuStore.leafByPath(path)
+    const menu = menuStore.leafByPath(path) ?? menuStore.nodeByPath.get(path)
     tabsStore.openTab({
       path,
       title: menu?.title ?? path,
@@ -96,7 +96,7 @@ async function handleUserCommand(command: string): Promise<void> {
 }
 
 function goHome(): void {
-  void router.push('/datshboard')
+  void router.push('/analytics')
 }
 
 function browseFromMobile(): void {

@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware((to) => {
   const auth = useAuthStore()
 
   if (auth.isAuthenticated) {
-    const redirect = typeof to.query.redirect === 'string' ? to.query.redirect : '/'
+    const redirect = typeof to.query.redirect === 'string' ? to.query.redirect : '/analytics'
     return navigateTo(redirect)
   }
 })

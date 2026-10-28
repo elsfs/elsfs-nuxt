@@ -83,7 +83,7 @@ async function onSubmit(): Promise<void> {
   }
   try {
     await auth.login(ruleForm)
-    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/'
+    const redirect = typeof route.query.redirect === 'string' ? route.query.redirect : '/analytics'
     await router.push(redirect)
   } catch {
     // 错误码已写入 store，由组件内 Alert 展示
