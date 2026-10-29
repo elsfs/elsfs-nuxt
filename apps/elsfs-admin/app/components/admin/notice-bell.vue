@@ -1,6 +1,5 @@
 <script setup lang="ts">
 /**
- * 顶栏消息铃铛（参考 onehip-frontend 的 navbar message）。
  * 未读数取 mock 数据长度，点条目暂未接详情页。
  */
 interface AppNotice {

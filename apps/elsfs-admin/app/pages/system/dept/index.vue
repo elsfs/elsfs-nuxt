@@ -2,6 +2,7 @@
 import type { SysDept } from 'api-types/elsfs'
 import { deleteDeptsApi, editDeptApi, fetchDeptTreeApi } from 'api-types/elsfs'
 
+import type { SearchFormField } from '~/types/search-form'
 import { toErrorMessage } from '~/utils/api-error'
 
 import DeptForm from './-dept-form.vue'
@@ -24,7 +25,14 @@ const api = useApi()
 
 const deptTree = ref<SysDept[]>([])
 const loading = ref(false)
-const keyword = ref('')
+
+/* ---------- 查询条件（前端本地过滤，不请求后端） ---------- */
+
+const query = reactive({ keyword: '' })
+
+const SEARCH_FIELDS: SearchFormField[] = [
+  { type: 'input', label: '部门名称', prop: 'keyword', width: '208px' },
+]
 
 async function loadTree(): Promise<void> {
   loading.value = true
@@ -62,7 +70,12 @@ function filterTree(nodes: SysDept[], searchKey: string, isRoot = true): SysDept
   return result
 }
 
-const tableData = computed(() => filterTree(deptTree.value, keyword.value))
+const tableData = computed(() => filterTree(deptTree.value, query.keyword))
+
+/** 重置查询条件：本地过滤即时生效，清空关键词即可（查询按钮 = 重新拉部门树） */
+function handleReset(): void {
+  query.keyword = ''
+}
 
 /* ---------- 弹窗新增 / 编辑 ---------- */
 
@@ -131,31 +144,24 @@ async function handleDelete(row: SysDept): Promise<void> {
 
 <template>
   <AdminContainerCard>
-    <!-- 本地过滤 -->
-    <ElForm inline class="flex flex-wrap items-end gap-3">
-      <ElFormItem label="部门名称" class="mb-0">
-        <div class="w-52">
-          <ElInput v-model="keyword" placeholder="请输入部门名称" clearable />
-        </div>
-      </ElFormItem>
-      <ElFormItem class="mb-0">
-        <ElButton :loading="loading" @click="loadTree">
-          <AppIcon name="lucide--refresh" class="mr-1 size-4" />
-          刷新
+    <AdminSearchForm
+      :fields="SEARCH_FIELDS"
+      :form="query"
+      :loading="loading"
+      @search="loadTree"
+      @reset="handleReset"
+    >
+      <template #button>
+        <ElButton type="primary" @click="openCreate">
+          <AppIcon name="lucide--plus" class="mr-1 size-4" />
+          新增部门
         </ElButton>
-      </ElFormItem>
-    </ElForm>
-
-    <div class="flex justify-start">
-      <ElButton type="primary" @click="openCreate">
-        <AppIcon name="lucide--plus" class="mr-1 size-4" />
-        新增部门
-      </ElButton>
-    </div>
+      </template>
+    </AdminSearchForm>
     <!-- 树形列表 -->
     <section class="border-border bg-card rounded-xl border p-4">
       <ElTable
-        :key="keyword"
+        :key="query.keyword"
         v-loading="loading"
         :data="tableData"
         row-key="id"

@@ -8,6 +8,7 @@ import {
   fetchUserPageApi,
 } from 'api-types/elsfs'
 
+import type { SearchFormField } from '~/types/search-form'
 import { toErrorMessage } from '~/utils/api-error'
 
 import UserForm from './-user-form.vue'
@@ -78,6 +79,26 @@ onMounted(() => {
   // 筛选树加载失败只提示，不影响主列表
   void loadDeptOptions()
 })
+
+/* ---------- 查询字段 ---------- */
+
+/** 部门树是 shallowRef，必须在 computed 里取 `.value` 后传入组件 */
+const SEARCH_FIELDS = computed<SearchFormField[]>(() => [
+  { type: 'input', label: '用户名', prop: 'username' },
+  { type: 'input', label: '昵称', prop: 'nickname' },
+  { type: 'input', label: '手机号', prop: 'phone' },
+  {
+    type: 'tree-select',
+    label: '部门',
+    prop: 'deptId',
+    data: deptTree.value,
+    props: { label: 'label', children: 'children' },
+    nodeKey: 'value',
+    filterable: true,
+    placeholder: '全部',
+  },
+  { type: 'select', label: '状态', prop: 'status', option: STATUS_OPTIONS, placeholder: '全部' },
+])
 
 /* ---------- 新增 / 编辑弹窗 ---------- */
 
@@ -158,76 +179,20 @@ async function handleDelete(row: SysUser): Promise<void> {
 
 <template>
   <AdminContainerCard>
-    <!-- 查询条件 -->
-    <ElForm inline class="flex flex-wrap items-end gap-3" @submit.prevent="search">
-      <ElFormItem label="用户名" class="mb-0">
-        <div class="w-40">
-          <ElInput
-            v-model="query.username"
-            placeholder="请输入用户名"
-            clearable
-            @keyup.enter="search"
-          />
-        </div>
-      </ElFormItem>
-      <ElFormItem label="昵称" class="mb-0">
-        <div class="w-40">
-          <ElInput
-            v-model="query.nickname"
-            placeholder="请输入昵称"
-            clearable
-            @keyup.enter="search"
-          />
-        </div>
-      </ElFormItem>
-      <ElFormItem label="手机号" class="mb-0">
-        <div class="w-40">
-          <ElInput
-            v-model="query.phone"
-            placeholder="请输入手机号"
-            clearable
-            @keyup.enter="search"
-          />
-        </div>
-      </ElFormItem>
-      <ElFormItem label="部门" class="mb-0">
-        <div class="w-44">
-          <ElTreeSelect
-            v-model="query.deptId"
-            :data="deptTree"
-            :props="{ label: 'label', children: 'children' }"
-            node-key="value"
-            placeholder="全部"
-            clearable
-            filterable
-            :render-after-expand="false"
-          />
-        </div>
-      </ElFormItem>
-      <ElFormItem label="状态" class="mb-0">
-        <div class="w-32">
-          <ElSelect v-model="query.status" placeholder="全部" clearable>
-            <ElOption
-              v-for="option in STATUS_OPTIONS"
-              :key="option.value"
-              :label="option.label"
-              :value="option.value"
-            />
-          </ElSelect>
-        </div>
-      </ElFormItem>
-      <ElFormItem class="mb-0">
-        <ElButton type="primary" @click="search"> 查询 </ElButton>
-        <ElButton @click="reset"> 重置 </ElButton>
-      </ElFormItem>
-    </ElForm>
-
-    <div class="flex justify-start">
-      <ElButton type="primary" @click="openCreate">
-        <AppIcon name="lucide--plus" class="mr-1 size-4" />
-        新增账号
-      </ElButton>
-    </div>
+    <AdminSearchForm
+      :fields="SEARCH_FIELDS"
+      :form="query"
+      :loading="loading"
+      @search="search"
+      @reset="reset"
+    >
+      <template #button>
+        <ElButton type="primary" @click="openCreate">
+          <AppIcon name="lucide--plus" class="mr-1 size-4" />
+          新增账号
+        </ElButton>
+      </template>
+    </AdminSearchForm>
     <!-- 列表 -->
     <section class="border-border bg-card rounded-xl border p-4">
       <ElTable v-loading="loading" :data="rows" row-key="userId" stripe class="w-full">

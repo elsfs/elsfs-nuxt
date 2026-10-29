@@ -2,6 +2,7 @@
 import type { SysMenu, SysMenuForm } from 'api-types/elsfs'
 import { deleteMenusApi, editMenuApi, fetchMenuTreeApi } from 'api-types/elsfs'
 
+import type { SearchFormField } from '~/types/search-form'
 import { toErrorMessage } from '~/utils/api-error'
 
 import MenuForm from './-menu-form.vue'
@@ -22,8 +23,18 @@ const api = useApi()
 /* ---------- 菜单树 ---------- */
 
 const loading = ref(false)
-const keyword = ref('')
+const query = reactive({ keyword: '' })
 const menuTree = shallowRef<SysMenu[]>([])
+
+/** 顶部搜索字段：菜单名称（本地过滤，不请求后端） */
+const SEARCH_FIELDS: SearchFormField[] = [
+  { type: 'input', label: '菜单名称', prop: 'keyword', width: '224px' },
+]
+
+/** 重置查询条件：清空关键词即可，本地过滤会即时生效 */
+function handleReset(): void {
+  query.keyword = ''
+}
 
 /**
  * 本地过滤菜单树。
@@ -51,7 +62,7 @@ function filterTree(nodes: SysMenu[], searchText: string): SysMenu[] {
   return result
 }
 
-const filteredMenus = computed(() => filterTree(menuTree.value, keyword.value.trim()))
+const filteredMenus = computed(() => filterTree(menuTree.value, query.keyword.trim()))
 
 async function load(): Promise<void> {
   loading.value = true
@@ -136,28 +147,20 @@ async function handleDelete(row: SysMenu): Promise<void> {
 
 <template>
   <AdminContainerCard>
-    <!-- 查询条件（本地过滤） -->
-    <ElForm inline class="flex flex-wrap items-end gap-3" @submit.prevent>
-      <ElFormItem label="菜单名称" class="mb-0">
-        <div class="w-56">
-          <ElInput v-model="keyword" placeholder="请输入菜单名称" clearable>
-            <template #prefix>
-              <AppIcon name="lucide--search" class="size-4" />
-            </template>
-          </ElInput>
-        </div>
-      </ElFormItem>
-      <ElFormItem class="mb-0">
-        <ElButton @click="keyword = ''"> 重置 </ElButton>
-        <ElButton :loading="loading" @click="load"> 刷新 </ElButton>
-      </ElFormItem>
-    </ElForm>
-    <div class="flex justify-start">
-      <ElButton type="primary" @click="openCreate">
-        <AppIcon name="lucide--plus" class="mr-1 size-4" />
-        新增菜单
-      </ElButton>
-    </div>
+    <AdminSearchForm
+      :fields="SEARCH_FIELDS"
+      :form="query"
+      :loading="loading"
+      @search="load"
+      @reset="handleReset"
+    >
+      <template #button>
+        <ElButton type="primary" @click="openCreate">
+          <AppIcon name="lucide--plus" class="mr-1 size-4" />
+          新增菜单
+        </ElButton>
+      </template>
+    </AdminSearchForm>
 
     <!-- 菜单树 -->
     <section class="border-border bg-card rounded-xl border p-4">

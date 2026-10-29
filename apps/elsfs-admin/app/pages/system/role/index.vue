@@ -9,6 +9,7 @@ import {
   saveRoleMenuApi,
 } from 'api-types/elsfs'
 
+import type { SearchFormField } from '~/types/search-form'
 import { toErrorMessage } from '~/utils/api-error'
 
 import RoleForm from './-role-form.vue'
@@ -25,6 +26,14 @@ definePageMeta({
 })
 
 const api = useApi()
+
+/* ---------- 查询字段 ---------- */
+
+const SEARCH_FIELDS: SearchFormField[] = [
+  { type: 'input', label: '角色名称', prop: 'roleName' },
+  { type: 'input', label: '角色编码', prop: 'roleCode' },
+  { type: 'select', label: '状态', prop: 'status', option: STATUS_OPTIONS, placeholder: '全部' },
+]
 
 /* ---------- 列表 ---------- */
 
@@ -162,51 +171,20 @@ async function saveMenuAuth(): Promise<void> {
 
 <template>
   <AdminContainerCard>
-    <!-- 查询条件 -->
-    <ElForm inline class="flex flex-wrap items-end gap-3" @submit.prevent="search">
-      <ElFormItem label="角色名称" class="mb-0">
-        <div class="w-44">
-          <ElInput
-            v-model="query.roleName"
-            placeholder="请输入角色名称"
-            clearable
-            @keyup.enter="search"
-          />
-        </div>
-      </ElFormItem>
-      <ElFormItem label="角色编码" class="mb-0">
-        <div class="w-44">
-          <ElInput
-            v-model="query.roleCode"
-            placeholder="请输入角色编码"
-            clearable
-            @keyup.enter="search"
-          />
-        </div>
-      </ElFormItem>
-      <ElFormItem label="状态" class="mb-0">
-        <div class="w-32">
-          <ElSelect v-model="query.status" placeholder="全部" clearable>
-            <ElOption
-              v-for="option in STATUS_OPTIONS"
-              :key="option.value"
-              :label="option.label"
-              :value="option.value"
-            />
-          </ElSelect>
-        </div>
-      </ElFormItem>
-      <ElFormItem class="mb-0">
-        <ElButton type="primary" @click="search"> 查询 </ElButton>
-        <ElButton @click="reset"> 重置 </ElButton>
-      </ElFormItem>
-    </ElForm>
-    <div class="flex justify-start">
-      <ElButton type="primary" @click="openCreate">
-        <AppIcon name="lucide--plus" class="mr-1 size-4" />
-        新增角色
-      </ElButton>
-    </div>
+    <AdminSearchForm
+      :fields="SEARCH_FIELDS"
+      :form="query"
+      :loading="loading"
+      @search="search"
+      @reset="reset"
+    >
+      <template #button>
+        <ElButton type="primary" @click="openCreate">
+          <AppIcon name="lucide--plus" class="mr-1 size-4" />
+          新增角色
+        </ElButton>
+      </template>
+    </AdminSearchForm>
     <!-- 列表 -->
     <section class="border-border bg-card rounded-xl border p-4">
       <ElTable v-loading="loading" :data="rows" row-key="roleId" stripe class="w-full">
