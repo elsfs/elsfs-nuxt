@@ -194,7 +194,7 @@ async function handleDelete(row: SysUser): Promise<void> {
     <!-- 列表 -->
     <section class="border-border bg-card flex min-h-0 flex-1 flex-col rounded-xl border p-4">
       <AdminTable :loading="loading" :data="rows" row-key="userId">
-        <ElTableColumn prop="username" label="用户名" min-width="120" />
+        <ElTableColumn prop="username" label="用户名" min-width="120" show-overflow-tooltip  />
         <ElTableColumn prop="nickname" label="昵称" min-width="110" show-overflow-tooltip />
         <ElTableColumn prop="phone" label="手机号" width="130" />
         <ElTableColumn prop="email" label="邮箱" min-width="180" show-overflow-tooltip />
