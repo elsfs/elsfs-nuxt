@@ -99,12 +99,23 @@ const tableAttrs = computed(() => {
 </template>
 
 <style scoped>
-/* 表头与每一行数据保持同一高度（默认 40px），行内内容垂直居中；
- * 单元格上下 padding 归零，否则表头 40px 而含 ElSwitch/按钮的数据行会被撑到 48px 左右。 */
+/* 表头与每一行数据保持同一高度（默认 35px），行内内容垂直居中；
+ * 单元格上下 padding 归零，否则表头 35px 而含 ElSwitch/按钮的数据行会被撑到 48px 左右。 */
 .admin-table {
-  --admin-table-row-height: 40px;
+  --admin-table-row-height: 35px;
 }
 
+/* 表头文字加粗 */
+.admin-table :deep(.el-table__header-wrapper th.el-table__cell) {
+  font-weight: 700;
+  /* 表头常态背景色 */
+  background-color: #f0f5ff;   /* 极浅蓝，清爽 */
+  color: #1f2d3d;              /* 深蓝灰，与浅蓝底协调 */
+}
+/**
+选中表头的单元格 th
+选中表体数据行的单元格 td
+ */
 .admin-table :deep(.el-table__header-wrapper th.el-table__cell),
 .admin-table :deep(.el-table__body-wrapper .el-table__row > td.el-table__cell) {
   height: var(--admin-table-row-height);
