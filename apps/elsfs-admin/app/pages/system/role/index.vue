@@ -150,48 +150,46 @@ async function saveMenuAuth(): Promise<void> {
 </script>
 
 <template>
-  <div class="mx-auto max-w-7xl space-y-4 p-6 sm:p-8">
+  <AdminContainerCard>
     <!-- 查询条件 -->
-    <section class="border-border bg-card rounded-xl border p-4">
-      <ElForm inline class="flex flex-wrap items-end gap-3" @submit.prevent="search">
-        <ElFormItem label="角色名称" class="mb-0">
-          <div class="w-44">
-            <ElInput
-              v-model="query.roleName"
-              placeholder="请输入角色名称"
-              clearable
-              @keyup.enter="search"
+    <ElForm inline class="flex flex-wrap items-end gap-3" @submit.prevent="search">
+      <ElFormItem label="角色名称" class="mb-0">
+        <div class="w-44">
+          <ElInput
+            v-model="query.roleName"
+            placeholder="请输入角色名称"
+            clearable
+            @keyup.enter="search"
+          />
+        </div>
+      </ElFormItem>
+      <ElFormItem label="角色编码" class="mb-0">
+        <div class="w-44">
+          <ElInput
+            v-model="query.roleCode"
+            placeholder="请输入角色编码"
+            clearable
+            @keyup.enter="search"
+          />
+        </div>
+      </ElFormItem>
+      <ElFormItem label="状态" class="mb-0">
+        <div class="w-32">
+          <ElSelect v-model="query.status" placeholder="全部" clearable>
+            <ElOption
+              v-for="option in STATUS_OPTIONS"
+              :key="option.value"
+              :label="option.label"
+              :value="option.value"
             />
-          </div>
-        </ElFormItem>
-        <ElFormItem label="角色编码" class="mb-0">
-          <div class="w-44">
-            <ElInput
-              v-model="query.roleCode"
-              placeholder="请输入角色编码"
-              clearable
-              @keyup.enter="search"
-            />
-          </div>
-        </ElFormItem>
-        <ElFormItem label="状态" class="mb-0">
-          <div class="w-32">
-            <ElSelect v-model="query.status" placeholder="全部" clearable>
-              <ElOption
-                v-for="option in STATUS_OPTIONS"
-                :key="option.value"
-                :label="option.label"
-                :value="option.value"
-              />
-            </ElSelect>
-          </div>
-        </ElFormItem>
-        <ElFormItem class="mb-0">
-          <ElButton type="primary" @click="search"> 查询 </ElButton>
-          <ElButton @click="reset"> 重置 </ElButton>
-        </ElFormItem>
-      </ElForm>
-    </section>
+          </ElSelect>
+        </div>
+      </ElFormItem>
+      <ElFormItem class="mb-0">
+        <ElButton type="primary" @click="search"> 查询 </ElButton>
+        <ElButton @click="reset"> 重置 </ElButton>
+      </ElFormItem>
+    </ElForm>
     <div class="flex justify-start">
       <ElButton type="primary" @click="goCreate">
         <AppIcon name="lucide--plus" class="mr-1 size-4" />
@@ -269,5 +267,5 @@ async function saveMenuAuth(): Promise<void> {
         <ElButton type="primary" :loading="menuSaving" @click="saveMenuAuth"> 保存授权 </ElButton>
       </template>
     </ElDialog>
-  </div>
+  </AdminContainerCard>
 </template>

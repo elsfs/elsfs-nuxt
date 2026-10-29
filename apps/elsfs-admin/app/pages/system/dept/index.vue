@@ -114,23 +114,22 @@ async function handleDelete(row: SysDept): Promise<void> {
 </script>
 
 <template>
-  <div class="mx-auto max-w-7xl space-y-4 p-6 sm:p-8">
+  <AdminContainerCard>
     <!-- 本地过滤 -->
-    <section class="border-border bg-card rounded-xl border p-4">
-      <ElForm inline class="flex flex-wrap items-end gap-3">
-        <ElFormItem label="部门名称" class="mb-0">
-          <div class="w-52">
-            <ElInput v-model="keyword" placeholder="请输入部门名称" clearable />
-          </div>
-        </ElFormItem>
-        <ElFormItem class="mb-0">
-          <ElButton :loading="loading" @click="loadTree">
-            <AppIcon name="lucide--refresh" class="mr-1 size-4" />
-            刷新
-          </ElButton>
-        </ElFormItem>
-      </ElForm>
-    </section>
+    <ElForm inline class="flex flex-wrap items-end gap-3">
+      <ElFormItem label="部门名称" class="mb-0">
+        <div class="w-52">
+          <ElInput v-model="keyword" placeholder="请输入部门名称" clearable />
+        </div>
+      </ElFormItem>
+      <ElFormItem class="mb-0">
+        <ElButton :loading="loading" @click="loadTree">
+          <AppIcon name="lucide--refresh" class="mr-1 size-4" />
+          刷新
+        </ElButton>
+      </ElFormItem>
+    </ElForm>
+
     <div class="flex justify-start">
       <ElButton type="primary" @click="goCreate">
         <AppIcon name="lucide--plus" class="mr-1 size-4" />
@@ -185,5 +184,5 @@ async function handleDelete(row: SysDept): Promise<void> {
         暂无部门数据
       </p>
     </section>
-  </div>
+    </AdminContainerCard>
 </template>
