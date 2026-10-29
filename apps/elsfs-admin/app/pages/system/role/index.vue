@@ -37,19 +37,10 @@ const SEARCH_FIELDS: SearchFormField[] = [
 
 /* ---------- 列表 ---------- */
 
-const {
-  query,
-  rows,
-  loading,
-  total,
-  current,
-  size,
-  load,
-  search,
-  reset,
-  handlePageChange,
-  handleSizeChange,
-} = usePagedList<SysRole, SysRolePageQuery>({
+const { query, rows, loading, total, current, size, load, search, reset } = usePagedList<
+  SysRole,
+  SysRolePageQuery
+>({
   createQuery: () => ({ roleName: '', roleCode: '', status: '' }),
   fetcher: (params) => fetchRolePageApi(api, params),
 })
@@ -57,6 +48,13 @@ const {
 onMounted(() => {
   void load()
 })
+
+/* ---------- 分页 ---------- */
+
+/** 页码 / 每页条数已由 v-model 同步到 current / size，这里只需重新查询 */
+function handlePaginationChange(): void {
+  void load()
+}
 
 /* ---------- 新增 / 编辑弹窗 ---------- */
 
@@ -220,15 +218,12 @@ async function saveMenuAuth(): Promise<void> {
       </ElTable>
 
       <div class="mt-3 flex justify-end">
-        <ElPagination
-          v-model:current-page="current"
-          v-model:page-size="size"
+        <AdminPagination
+          v-model:page="current"
+          v-model:rows="size"
           :total="total"
           :page-sizes="[10, 20, 50, 100]"
-          layout="total, sizes, prev, pager, next, jumper"
-          background
-          @current-change="handlePageChange"
-          @size-change="handleSizeChange"
+          @change="handlePaginationChange"
         />
       </div>
     </section>

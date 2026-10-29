@@ -28,19 +28,10 @@ const api = useApi()
 
 /* ---------- 列表 ---------- */
 
-const {
-  query,
-  rows,
-  loading,
-  total,
-  current,
-  size,
-  load,
-  search,
-  reset,
-  handlePageChange,
-  handleSizeChange,
-} = usePagedList<SysUser, SysUserPageQuery>({
+const { query, rows, loading, total, current, size, load, search, reset } = usePagedList<
+  SysUser,
+  SysUserPageQuery
+>({
   createQuery: () => ({ username: '', nickname: '', phone: '', deptId: '', status: '' }),
   fetcher: (params) => fetchUserPageApi(api, params),
 })
@@ -79,6 +70,13 @@ onMounted(() => {
   // 筛选树加载失败只提示，不影响主列表
   void loadDeptOptions()
 })
+
+/* ---------- 分页 ---------- */
+
+/** 页码 / 每页条数已由 v-model 同步到 current / size，这里只需重新查询 */
+function handlePaginationChange(): void {
+  void load()
+}
 
 /* ---------- 查询字段 ---------- */
 
@@ -232,15 +230,12 @@ async function handleDelete(row: SysUser): Promise<void> {
       </ElTable>
 
       <div class="mt-3 flex justify-end">
-        <ElPagination
-          v-model:current-page="current"
-          v-model:page-size="size"
+        <AdminPagination
+          v-model:page="current"
+          v-model:rows="size"
           :total="total"
           :page-sizes="[10, 20, 50, 100]"
-          layout="total, sizes, prev, pager, next, jumper"
-          background
-          @current-change="handlePageChange"
-          @size-change="handleSizeChange"
+          @change="handlePaginationChange"
         />
       </div>
     </section>
