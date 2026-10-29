@@ -97,3 +97,22 @@ const tableAttrs = computed(() => {
     </ElTable>
   </div>
 </template>
+
+<style scoped>
+/* 表头与每一行数据保持同一高度（默认 40px），行内内容垂直居中；
+ * 单元格上下 padding 归零，否则表头 40px 而含 ElSwitch/按钮的数据行会被撑到 48px 左右。 */
+.admin-table {
+  --admin-table-row-height: 40px;
+}
+
+.admin-table :deep(.el-table__header-wrapper th.el-table__cell),
+.admin-table :deep(.el-table__body-wrapper .el-table__row > td.el-table__cell) {
+  height: var(--admin-table-row-height);
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.admin-table :deep(.el-table__body-wrapper .el-table__row) {
+  height: var(--admin-table-row-height);
+}
+</style>
