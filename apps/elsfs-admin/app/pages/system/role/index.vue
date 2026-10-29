@@ -185,7 +185,7 @@ async function saveMenuAuth(): Promise<void> {
     </AdminSearchForm>
     <!-- 列表 -->
     <section class="border-border bg-card rounded-xl border p-4">
-      <ElTable v-loading="loading" :data="rows" row-key="roleId" stripe class="w-full">
+      <AdminTable :loading="loading" :data="rows" row-key="roleId">
         <ElTableColumn type="index" label="#" width="56" align="center" />
         <ElTableColumn prop="roleName" label="角色名称" min-width="140" />
         <ElTableColumn prop="roleCode" label="角色编码" min-width="140" />
@@ -215,7 +215,7 @@ async function saveMenuAuth(): Promise<void> {
             </ElButton>
           </template>
         </ElTableColumn>
-      </ElTable>
+      </AdminTable>
 
       <div class="mt-3 flex justify-end">
         <AdminPagination

@@ -193,7 +193,7 @@ async function handleDelete(row: SysUser): Promise<void> {
     </AdminSearchForm>
     <!-- 列表 -->
     <section class="border-border bg-card rounded-xl border p-4">
-      <ElTable v-loading="loading" :data="rows" row-key="userId" stripe class="w-full">
+      <AdminTable :loading="loading" :data="rows" row-key="userId">
         <ElTableColumn prop="username" label="用户名" min-width="120" />
         <ElTableColumn prop="nickname" label="昵称" min-width="110" show-overflow-tooltip />
         <ElTableColumn prop="phone" label="手机号" width="130" />
@@ -227,7 +227,7 @@ async function handleDelete(row: SysUser): Promise<void> {
             </ElButton>
           </template>
         </ElTableColumn>
-      </ElTable>
+      </AdminTable>
 
       <div class="mt-3 flex justify-end">
         <AdminPagination

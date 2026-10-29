@@ -160,15 +160,13 @@ async function handleDelete(row: SysDept): Promise<void> {
     </AdminSearchForm>
     <!-- 树形列表 -->
     <section class="border-border bg-card rounded-xl border p-4">
-      <ElTable
+      <AdminTable
         :key="query.keyword"
-        v-loading="loading"
+        :loading="loading"
         :data="tableData"
         row-key="id"
         :tree-props="{ children: 'children' }"
         default-expand-all
-        stripe
-        class="w-full"
       >
         <ElTableColumn prop="deptName" label="部门名称" min-width="220" />
         <ElTableColumn prop="orgCode" label="机构编码" min-width="140" />
@@ -197,8 +195,7 @@ async function handleDelete(row: SysDept): Promise<void> {
             </ElButton>
           </template>
         </ElTableColumn>
-      </ElTable>
-
+      </AdminTable>
       <p
         v-if="!loading && !tableData.length"
         class="text-muted-foreground mt-3 text-center text-sm"

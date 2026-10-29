@@ -118,7 +118,7 @@ async function handleDelete(row: SysPost): Promise<void> {
     </AdminSearchForm>
     <!-- 列表 -->
     <section class="border-border bg-card rounded-xl border p-4">
-      <ElTable v-loading="loading" :data="rows" row-key="postId" stripe class="w-full">
+      <AdminTable :loading="loading" :data="rows" row-key="postId">
         <ElTableColumn type="index" label="#" width="56" align="center" />
         <ElTableColumn prop="postName" label="职务名称" min-width="140" />
         <ElTableColumn prop="postCode" label="职务编码" min-width="140" />
@@ -146,7 +146,7 @@ async function handleDelete(row: SysPost): Promise<void> {
             </ElButton>
           </template>
         </ElTableColumn>
-      </ElTable>
+      </AdminTable>
 
       <div class="mt-3 flex justify-end">
         <AdminPagination

@@ -164,15 +164,13 @@ async function handleDelete(row: SysMenu): Promise<void> {
 
     <!-- 菜单树 -->
     <section class="border-border bg-card rounded-xl border p-4">
-      <ElTable
-        v-loading="loading"
+      <AdminTable
+        :loading="loading"
         :data="filteredMenus"
         row-key="id"
         :tree-props="{ children: 'children' }"
         default-expand-all
-        stripe
         empty-text="暂无菜单数据"
-        class="w-full"
       >
         <ElTableColumn prop="menuName" label="菜单名称" min-width="220">
           <template #default="{ row }">
@@ -215,7 +213,7 @@ async function handleDelete(row: SysMenu): Promise<void> {
             </ElButton>
           </template>
         </ElTableColumn>
-      </ElTable>
+      </AdminTable>
     </section>
     <MenuForm
       v-model:visible="formVisible"
