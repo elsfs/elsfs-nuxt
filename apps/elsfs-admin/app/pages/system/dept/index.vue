@@ -4,13 +4,14 @@ import { deleteDeptsApi, editDeptApi, fetchDeptTreeApi } from 'api-types/elsfs'
 
 import { toErrorMessage } from '~/utils/api-error'
 
+import DeptForm from './-dept-form.vue'
+
 /**
  * 系统管理 - 部门管理（列表页）。
  *
  * 树形表格（数据来自 `/dept/tree`）+ 删除 + 状态切换 + 本地名称过滤。
  * 查询条件里只有部门名称，且是**前端本地过滤**，不会请求后端。
- * 新增 / 编辑拆到独立页面：`/system/dept/create`、`/system/dept/edit/:id`；
- * 行内「新增子部门」通过 `?parentId=<deptId>` 预填上级部门。
+ * 新增 / 编辑用弹窗表单（`-dept-form.vue`），行内「新增子部门」通过 `parentId` prop 预填上级部门。
  * 后端 `editState` 对部门不支持，所以状态切换走「整条记录 edit」。
  */
 definePageMeta({
@@ -63,19 +64,34 @@ function filterTree(nodes: SysDept[], searchKey: string, isRoot = true): SysDept
 
 const tableData = computed(() => filterTree(deptTree.value, keyword.value))
 
-/* ---------- 跳转新增 / 编辑 ---------- */
+/* ---------- 弹窗新增 / 编辑 ---------- */
 
-function goCreate(): void {
-  void navigateTo('/system/dept/create')
+const formVisible = ref(false)
+const editingId = ref<string>()
+const editingParentId = ref<string>()
+
+/** 新增部门：不传上级，表单里默认顶级部门 */
+function openCreate(): void {
+  editingId.value = undefined
+  editingParentId.value = undefined
+  formVisible.value = true
 }
 
 /** 行内新增子部门：把当前行 deptId 作为上级部门预填 */
-function goCreateChild(row: SysDept): void {
-  void navigateTo({ path: '/system/dept/create', query: { parentId: row.deptId } })
+function openCreateChild(row: SysDept): void {
+  editingId.value = undefined
+  editingParentId.value = row.deptId
+  formVisible.value = true
 }
 
-function goEdit(row: SysDept): void {
-  void navigateTo(`/system/dept/edit/${row.deptId}`)
+function openEdit(row: SysDept): void {
+  editingId.value = row.deptId
+  editingParentId.value = undefined
+  formVisible.value = true
+}
+
+function handleSaved(): void {
+  void loadTree()
 }
 
 /* ---------- 状态 / 删除 ---------- */
@@ -131,7 +147,7 @@ async function handleDelete(row: SysDept): Promise<void> {
     </ElForm>
 
     <div class="flex justify-start">
-      <ElButton type="primary" @click="goCreate">
+      <ElButton type="primary" @click="openCreate">
         <AppIcon name="lucide--plus" class="mr-1 size-4" />
         新增部门
       </ElButton>
@@ -164,10 +180,10 @@ async function handleDelete(row: SysDept): Promise<void> {
         <ElTableColumn prop="createAt" label="创建时间" width="170" />
         <ElTableColumn label="操作" width="240" fixed="right">
           <template #default="{ row }">
-            <ElButton link type="primary" size="small" @click="goCreateChild(row as SysDept)">
+            <ElButton link type="primary" size="small" @click="openCreateChild(row as SysDept)">
               新增子部门
             </ElButton>
-            <ElButton link type="primary" size="small" @click="goEdit(row as SysDept)">
+            <ElButton link type="primary" size="small" @click="openEdit(row as SysDept)">
               编辑
             </ElButton>
             <ElButton link type="danger" size="small" @click="handleDelete(row as SysDept)">
@@ -184,5 +200,12 @@ async function handleDelete(row: SysDept): Promise<void> {
         暂无部门数据
       </p>
     </section>
-    </AdminContainerCard>
+
+    <DeptForm
+      v-model:visible="formVisible"
+      :dept-id="editingId"
+      :parent-id="editingParentId"
+      @success="handleSaved"
+    />
+  </AdminContainerCard>
 </template>

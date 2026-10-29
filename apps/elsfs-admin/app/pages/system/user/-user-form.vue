@@ -16,17 +16,22 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { toErrorMessage } from '~/utils/api-error'
 
 /**
- * 账号新增 / 编辑表单（独立新增 / 编辑页共用）。
+ * 账号新增 / 编辑弹窗表单（由账号列表页打开）。
  *
- * 传 `userId` 表示编辑：并行拉取详情与已绑定的角色 / 部门 / 职务后回填；不传表示新增。
- * 提交成功后回到账号列表 `/system/user`。
+ * 传 `userId` 表示编辑：每次打开弹窗先重置表单，再并行拉取详情与已绑定的角色 / 部门 / 职务后回填；
+ * 不传表示新增。提交成功后关闭弹窗并通知列表刷新。
  */
+const visible = defineModel<boolean>('visible', { default: false })
+
 const props = defineProps<{
   userId?: string
 }>()
 
+const emit = defineEmits<{
+  success: []
+}>()
+
 const api = useApi()
-const router = useRouter()
 
 const isEdit = computed(() => Boolean(props.userId))
 const title = computed(() => (isEdit.value ? '编辑账号' : '新增账号'))
@@ -129,22 +134,22 @@ const rules: FormRules = {
   email: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur' }],
 }
 
-onMounted(async () => {
-  // 选项加载失败只提示，不影响表单
-  void loadDeptOptions()
-  void loadRoleOptions()
-  void loadPostOptions()
-  if (!props.userId) {
-    return
-  }
+/** 重置为新增态：清空所有字段与校验状态（选项不重复清空） */
+function resetForm(): void {
+  Object.assign(form, createUserForm())
+  formRef.value?.clearValidate()
+}
+
+/** 编辑态：拉取详情与已绑定的角色 / 部门 / 职务并回填 */
+async function loadDetail(userId: string): Promise<void> {
   loading.value = true
   try {
     // 详情与已绑定的角色 / 部门 / 职务并行加载
     const [detail, roleIds, deptIds, postIds] = await Promise.all([
-      fetchUserByIdApi(api, props.userId),
-      fetchUserRoleIdsApi(api, props.userId),
-      fetchUserDeptIdsApi(api, props.userId),
-      fetchUserPostIdsApi(api, props.userId),
+      fetchUserByIdApi(api, userId),
+      fetchUserRoleIdsApi(api, userId),
+      fetchUserDeptIdsApi(api, userId),
+      fetchUserPostIdsApi(api, userId),
     ])
     Object.assign(form, createUserForm(), {
       userId: detail.userId,
@@ -164,11 +169,24 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
-})
-
-function backToList(): void {
-  void router.push('/system/user')
 }
+
+watch(visible, async (opened) => {
+  if (!opened) {
+    return
+  }
+  resetForm()
+  // 选项加载失败只提示，不影响表单
+  void loadDeptOptions()
+  void loadRoleOptions()
+  void loadPostOptions()
+  const userId = props.userId
+  if (userId) {
+    await loadDetail(userId)
+  }
+  await nextTick()
+  formRef.value?.clearValidate()
+})
 
 /** 组装提交给后端的对象：角色 / 部门 / 职务用数组，空数组表示清空 */
 function buildUserPayload(): SysUserCreateForm {
@@ -184,6 +202,10 @@ function buildUserPayload(): SysUserCreateForm {
     deptIds: [...form.deptIds],
     postIds: [...form.postIds],
   }
+}
+
+function closeDialog(): void {
+  visible.value = false
 }
 
 async function submitForm(): Promise<void> {
@@ -206,7 +228,8 @@ async function submitForm(): Promise<void> {
       await addUserApi(api, payload)
       ElMessage.success('添加成功')
     }
-    backToList()
+    visible.value = false
+    emit('success')
   } catch (error) {
     ElMessage.error(toErrorMessage(error))
   } finally {
@@ -216,31 +239,14 @@ async function submitForm(): Promise<void> {
 </script>
 
 <template>
-  <div class="mx-auto max-w-3xl space-y-4 p-6 sm:p-8">
-    <!-- 页头 -->
-    <div class="flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <div class="flex items-center gap-2">
-          <ElButton link type="primary" class="!px-0" @click="backToList">
-            <AppIcon name="lucide--arrow-left" class="mr-1 size-4" />
-            返回列表
-          </ElButton>
-        </div>
-        <h1 class="mt-1 text-xl font-bold sm:text-2xl">
-          {{ title }}
-        </h1>
-        <p class="text-muted-foreground mt-1 text-sm">
-          {{
-            isEdit
-              ? '修改账号信息与关联的角色、部门、职务后保存，返回列表即可看到最新数据。'
-              : '填写账号信息并选择关联的角色、部门、职务，保存后自动返回账号列表。'
-          }}
-        </p>
-      </div>
-    </div>
-
-    <!-- 表单 -->
-    <section v-loading="loading" class="border-border bg-card rounded-xl border p-4 sm:p-6">
+  <ElDialog
+    v-model="visible"
+    :title="title"
+    width="720px"
+    :close-on-click-modal="false"
+    append-to-body
+  >
+    <div v-loading="loading" class="max-h-[70vh] overflow-y-auto">
       <ElForm ref="formRef" :model="form" :rules="rules" label-width="88px">
         <ElFormItem label="用户名" prop="username">
           <ElInput v-model="form.username" placeholder="请输入用户名" :disabled="isEdit" />
@@ -324,11 +330,11 @@ async function submitForm(): Promise<void> {
             />
           </ElSelect>
         </ElFormItem>
-        <ElFormItem>
-          <ElButton @click="backToList"> 取消 </ElButton>
-          <ElButton type="primary" :loading="submitting" @click="submitForm"> 保存 </ElButton>
-        </ElFormItem>
       </ElForm>
-    </section>
-  </div>
+    </div>
+    <template #footer>
+      <ElButton @click="closeDialog"> 取消 </ElButton>
+      <ElButton type="primary" :loading="submitting" @click="submitForm"> 保存 </ElButton>
+    </template>
+  </ElDialog>
 </template>

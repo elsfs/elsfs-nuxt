@@ -11,11 +11,13 @@ import {
 
 import { toErrorMessage } from '~/utils/api-error'
 
+import RoleForm from './-role-form.vue'
+
 /**
  * 系统管理 - 角色管理（列表页）。
  *
  * 分页查询 + 删除 + 状态切换 + 菜单授权（树形勾选）。
- * 新增 / 编辑拆到独立页面：`/system/role/create`、`/system/role/edit/:id`。
+ * 新增 / 编辑用弹窗表单（`./-role-form.vue`），保存成功后刷新列表。
  * 后端 `editState` 接口对角色不支持，所以状态切换走「整条记录 edit」。
  */
 definePageMeta({
@@ -47,14 +49,23 @@ onMounted(() => {
   void load()
 })
 
-/* ---------- 跳转新增 / 编辑 ---------- */
+/* ---------- 新增 / 编辑弹窗 ---------- */
 
-function goCreate(): void {
-  void navigateTo('/system/role/create')
+const formVisible = ref(false)
+const editingId = ref<string>()
+
+function openCreate(): void {
+  editingId.value = undefined
+  formVisible.value = true
 }
 
-function goEdit(row: SysRole): void {
-  void navigateTo(`/system/role/edit/${row.roleId}`)
+function openEdit(row: SysRole): void {
+  editingId.value = row.roleId
+  formVisible.value = true
+}
+
+function handleSaved(): void {
+  void load()
 }
 
 /* ---------- 状态 / 删除 ---------- */
@@ -191,7 +202,7 @@ async function saveMenuAuth(): Promise<void> {
       </ElFormItem>
     </ElForm>
     <div class="flex justify-start">
-      <ElButton type="primary" @click="goCreate">
+      <ElButton type="primary" @click="openCreate">
         <AppIcon name="lucide--plus" class="mr-1 size-4" />
         新增角色
       </ElButton>
@@ -217,7 +228,7 @@ async function saveMenuAuth(): Promise<void> {
         <ElTableColumn prop="createAt" label="创建时间" width="170" />
         <ElTableColumn label="操作" width="210" fixed="right">
           <template #default="{ row }">
-            <ElButton link type="primary" size="small" @click="goEdit(row as SysRole)">
+            <ElButton link type="primary" size="small" @click="openEdit(row as SysRole)">
               编辑
             </ElButton>
             <ElButton link type="primary" size="small" @click="openMenuDialog(row as SysRole)">
@@ -243,6 +254,8 @@ async function saveMenuAuth(): Promise<void> {
         />
       </div>
     </section>
+
+    <RoleForm v-model:visible="formVisible" :role-id="editingId" @success="handleSaved" />
 
     <!-- 菜单授权 -->
     <ElDialog

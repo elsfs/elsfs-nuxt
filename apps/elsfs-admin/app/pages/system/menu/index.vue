@@ -4,12 +4,13 @@ import { deleteMenusApi, editMenuApi, fetchMenuTreeApi } from 'api-types/elsfs'
 
 import { toErrorMessage } from '~/utils/api-error'
 
+import MenuForm from './-menu-form.vue'
+
 /**
  * 系统管理 - 菜单管理（列表页）。
  *
  * 树形表格展示完整菜单树 + 本地过滤 + 删除 + 状态切换。
- * 新增 / 编辑拆到独立页面：`/system/menu/create`、`/system/menu/edit/:id`；
- * 行内「新增子菜单」通过 `?parentId=<menuId>` 预填上级菜单。
+ * 新增 / 编辑用弹窗表单（`-menu-form.vue`），行内「新增子菜单」通过 `parentId` prop 预填上级菜单。
  * 后端 `editState` 接口对菜单不支持，所以状态切换走「整条记录 edit」。
  */
 definePageMeta({
@@ -67,20 +68,35 @@ onMounted(() => {
   void load()
 })
 
-/* ---------- 跳转新增 / 编辑 ---------- */
+/* ---------- 新增 / 编辑弹窗 ---------- */
 
-/** 新增根菜单 */
-function goCreate(): void {
-  void navigateTo('/system/menu/create')
+const formVisible = ref(false)
+const editingId = ref<string>()
+const editingParentId = ref<string>()
+
+/** 新增根菜单：清空编辑态与上级菜单 */
+function openCreate(): void {
+  editingId.value = undefined
+  editingParentId.value = undefined
+  formVisible.value = true
 }
 
-/** 行内新增子菜单：把父级 menuId 带过去预填 */
-function goCreateChild(row: SysMenu): void {
-  void navigateTo({ path: '/system/menu/create', query: { parentId: row.menuId } })
+/** 行内新增子菜单：把当前行 menuId 作为 parentId 预填上级菜单 */
+function openCreateChild(row: SysMenu): void {
+  editingParentId.value = row.menuId
+  editingId.value = undefined
+  formVisible.value = true
 }
 
-function goEdit(row: SysMenu): void {
-  void navigateTo(`/system/menu/edit/${row.menuId}`)
+function openEdit(row: SysMenu): void {
+  editingId.value = row.menuId
+  editingParentId.value = undefined
+  formVisible.value = true
+}
+
+/** 弹窗保存成功：刷新菜单树 */
+function handleSaved(): void {
+  void load()
 }
 
 /* ---------- 状态 / 删除 ---------- */
@@ -137,7 +153,7 @@ async function handleDelete(row: SysMenu): Promise<void> {
       </ElFormItem>
     </ElForm>
     <div class="flex justify-start">
-      <ElButton type="primary" @click="goCreate">
+      <ElButton type="primary" @click="openCreate">
         <AppIcon name="lucide--plus" class="mr-1 size-4" />
         新增菜单
       </ElButton>
@@ -185,10 +201,10 @@ async function handleDelete(row: SysMenu): Promise<void> {
         </ElTableColumn>
         <ElTableColumn label="操作" width="240" fixed="right">
           <template #default="{ row }">
-            <ElButton link type="primary" size="small" @click="goCreateChild(row as SysMenu)">
+            <ElButton link type="primary" size="small" @click="openCreateChild(row as SysMenu)">
               新增子菜单
             </ElButton>
-            <ElButton link type="primary" size="small" @click="goEdit(row as SysMenu)">
+            <ElButton link type="primary" size="small" @click="openEdit(row as SysMenu)">
               编辑
             </ElButton>
             <ElButton link type="danger" size="small" @click="handleDelete(row as SysMenu)">
@@ -198,5 +214,11 @@ async function handleDelete(row: SysMenu): Promise<void> {
         </ElTableColumn>
       </ElTable>
     </section>
+    <MenuForm
+      v-model:visible="formVisible"
+      :menu-id="editingId"
+      :parent-id="editingParentId"
+      @success="handleSaved"
+    />
   </AdminContainerCard>
 </template>

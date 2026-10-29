@@ -10,12 +10,14 @@ import {
 
 import { toErrorMessage } from '~/utils/api-error'
 
+import UserForm from './-user-form.vue'
+
 /**
  * 系统管理 - 账号管理（列表页）。
  *
  * 分页查询 + 状态切换 + 删除 + 重置密码（行内弹窗，不属于编辑表单）。
- * 新增 / 编辑拆到独立页面：`/system/user/create`、`/system/user/edit/:id`，
- * 表单见 `SystemUserForm`。用户接口支持 `editState`，状态切换走批量改状态接口。
+ * 新增 / 编辑用弹窗表单（`./-user-form.vue`），保存成功后刷新列表。
+ * 用户接口支持 `editState`，状态切换走批量改状态接口。
  */
 definePageMeta({
   layout: 'admin',
@@ -77,14 +79,23 @@ onMounted(() => {
   void loadDeptOptions()
 })
 
-/* ---------- 跳转新增 / 编辑 ---------- */
+/* ---------- 新增 / 编辑弹窗 ---------- */
 
-function goCreate(): void {
-  void navigateTo('/system/user/create')
+const formVisible = ref(false)
+const editingId = ref<string>()
+
+function openCreate(): void {
+  editingId.value = undefined
+  formVisible.value = true
 }
 
-function goEdit(row: SysUser): void {
-  void navigateTo(`/system/user/edit/${row.userId}`)
+function openEdit(row: SysUser): void {
+  editingId.value = row.userId
+  formVisible.value = true
+}
+
+function handleSaved(): void {
+  void load()
 }
 
 /* ---------- 状态 / 重置密码 / 删除 ---------- */
@@ -212,7 +223,7 @@ async function handleDelete(row: SysUser): Promise<void> {
     </ElForm>
 
     <div class="flex justify-start">
-      <ElButton type="primary" @click="goCreate">
+      <ElButton type="primary" @click="openCreate">
         <AppIcon name="lucide--plus" class="mr-1 size-4" />
         新增账号
       </ElButton>
@@ -242,7 +253,7 @@ async function handleDelete(row: SysUser): Promise<void> {
         <ElTableColumn prop="createAt" label="创建时间" width="170" />
         <ElTableColumn label="操作" width="200" fixed="right">
           <template #default="{ row }">
-            <ElButton link type="primary" size="small" @click="goEdit(row as SysUser)">
+            <ElButton link type="primary" size="small" @click="openEdit(row as SysUser)">
               编辑
             </ElButton>
             <ElButton link type="primary" size="small" @click="handleResetPassword(row as SysUser)">
@@ -268,5 +279,7 @@ async function handleDelete(row: SysUser): Promise<void> {
         />
       </div>
     </section>
-  </AdminContainerCard>>
+
+    <UserForm v-model:visible="formVisible" :user-id="editingId" @success="handleSaved" />
+  </AdminContainerCard>
 </template>

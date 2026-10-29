@@ -6,17 +6,22 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { toErrorMessage } from '~/utils/api-error'
 
 /**
- * 职位新增 / 编辑表单（独立新增页与编辑页共用）。
+ * 职位新增 / 编辑弹窗表单。
  *
- * 传 `postId` 表示编辑：先拉详情回填；不传表示新增。
- * 提交成功后回到职位列表 `/system/SysPost`。
+ * 由职位列表页通过 `v-model:visible` 打开；传 `postId` 表示编辑，打开时拉详情回填。
+ * 提交成功后关闭弹窗并 emit `success`，由列表页刷新数据。
  */
+const visible = defineModel<boolean>('visible', { default: false })
+
 const props = defineProps<{
   postId?: string
 }>()
 
+const emit = defineEmits<{
+  success: []
+}>()
+
 const api = useApi()
-const router = useRouter()
 
 const isEdit = computed(() => Boolean(props.postId))
 const title = computed(() => (isEdit.value ? '编辑职位' : '新增职位'))
@@ -53,7 +58,12 @@ const rules: FormRules = {
   postRank: [{ required: true, message: '请输入职级', trigger: 'blur' }],
 }
 
-onMounted(async () => {
+function resetForm(): void {
+  Object.assign(form, createPostForm())
+  formRef.value?.clearValidate()
+}
+
+async function loadDetail(): Promise<void> {
   if (!props.postId) {
     return
   }
@@ -73,6 +83,16 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
+}
+
+watch(visible, async (open) => {
+  if (!open) {
+    return
+  }
+  resetForm()
+  await loadDetail()
+  await nextTick()
+  formRef.value?.clearValidate()
 })
 
 /** 组装提交给后端的表单对象（空字符串转 null，避免把空串写进库） */
@@ -87,8 +107,8 @@ function buildPayload(): SysPostForm {
   }
 }
 
-function backToList(): void {
-  void router.push('/system/SysPost')
+function closeDialog(): void {
+  visible.value = false
 }
 
 async function submitForm(): Promise<void> {
@@ -110,7 +130,8 @@ async function submitForm(): Promise<void> {
       await addPostApi(api, buildPayload())
       ElMessage.success('添加成功')
     }
-    backToList()
+    visible.value = false
+    emit('success')
   } catch (error) {
     ElMessage.error(toErrorMessage(error))
   } finally {
@@ -120,59 +141,40 @@ async function submitForm(): Promise<void> {
 </script>
 
 <template>
-  <div class="mx-auto max-w-3xl space-y-4 p-6 sm:p-8">
-    <!-- 页头 -->
-    <div class="flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <div class="flex items-center gap-2">
-          <ElButton link type="primary" class="!px-0" @click="backToList">
-            <AppIcon name="lucide--arrow-left" class="mr-1 size-4" />
-            返回列表
-          </ElButton>
-        </div>
-        <h1 class="mt-1 text-xl font-bold sm:text-2xl">
-          {{ title }}
-        </h1>
-        <p class="text-muted-foreground mt-1 text-sm">
-          {{
-            isEdit
-              ? '修改职务信息后保存，返回列表即可看到最新数据。'
-              : '填写职务信息，保存后自动返回职位列表。'
-          }}
-        </p>
-      </div>
-    </div>
-
-    <!-- 表单 -->
-    <section v-loading="loading" class="border-border bg-card rounded-xl border p-4 sm:p-6">
-      <ElForm ref="formRef" :model="form" :rules="rules" label-width="96px">
-        <ElFormItem label="职务名称" prop="postName">
-          <ElInput v-model="form.postName" placeholder="请输入职务名称" />
-        </ElFormItem>
-        <ElFormItem label="职务编码" prop="postCode">
-          <ElInput v-model="form.postCode" placeholder="请输入职务编码" />
-        </ElFormItem>
-        <ElFormItem label="职级" prop="postRank">
-          <ElInput v-model="form.postRank" placeholder="请输入职级" />
-        </ElFormItem>
-        <ElFormItem label="排序" prop="orderNo">
-          <ElInputNumber v-model="form.orderNo" :min="0" class="w-full" />
-        </ElFormItem>
-        <ElFormItem label="状态" prop="status">
-          <ElRadioGroup v-model="form.status">
-            <ElRadio v-for="option in STATUS_OPTIONS" :key="option.value" :value="option.value">
-              {{ option.label }}
-            </ElRadio>
-          </ElRadioGroup>
-        </ElFormItem>
-        <ElFormItem label="备注" prop="remark">
-          <ElInput v-model="form.remark" type="textarea" :rows="3" placeholder="请输入备注" />
-        </ElFormItem>
-        <ElFormItem>
-          <ElButton @click="backToList"> 取消 </ElButton>
-          <ElButton type="primary" :loading="submitting" @click="submitForm"> 保存 </ElButton>
-        </ElFormItem>
-      </ElForm>
-    </section>
-  </div>
+  <ElDialog
+    v-model="visible"
+    :title="title"
+    width="560px"
+    :close-on-click-modal="false"
+    append-to-body
+  >
+    <ElForm ref="formRef" v-loading="loading" :model="form" :rules="rules" label-width="96px">
+      <ElFormItem label="职务名称" prop="postName">
+        <ElInput v-model="form.postName" placeholder="请输入职务名称" />
+      </ElFormItem>
+      <ElFormItem label="职务编码" prop="postCode">
+        <ElInput v-model="form.postCode" placeholder="请输入职务编码" />
+      </ElFormItem>
+      <ElFormItem label="职级" prop="postRank">
+        <ElInput v-model="form.postRank" placeholder="请输入职级" />
+      </ElFormItem>
+      <ElFormItem label="排序" prop="orderNo">
+        <ElInputNumber v-model="form.orderNo" :min="0" class="w-full" />
+      </ElFormItem>
+      <ElFormItem label="状态" prop="status">
+        <ElRadioGroup v-model="form.status">
+          <ElRadio v-for="option in STATUS_OPTIONS" :key="option.value" :value="option.value">
+            {{ option.label }}
+          </ElRadio>
+        </ElRadioGroup>
+      </ElFormItem>
+      <ElFormItem label="备注" prop="remark">
+        <ElInput v-model="form.remark" type="textarea" :rows="3" placeholder="请输入备注" />
+      </ElFormItem>
+    </ElForm>
+    <template #footer>
+      <ElButton @click="closeDialog"> 取消 </ElButton>
+      <ElButton type="primary" :loading="submitting" @click="submitForm"> 保存 </ElButton>
+    </template>
+  </ElDialog>
 </template>

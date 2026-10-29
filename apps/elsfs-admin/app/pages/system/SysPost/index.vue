@@ -4,11 +4,13 @@ import { deletePostsApi, editPostApi, fetchPostPageApi } from 'api-types/elsfs'
 
 import { toErrorMessage } from '~/utils/api-error'
 
+import PostForm from './-post-form.vue'
+
 /**
  * 系统管理 - 职位管理（列表页）。
  *
  * 分页查询 + 状态切换（整条记录 edit）+ 删除。
- * 新增 / 编辑拆到独立页面：`/system/SysPost/create`、`/system/SysPost/edit/:id`。
+ * 新增 / 编辑用弹窗表单（`./-post-form.vue`），保存成功后刷新列表。
  */
 definePageMeta({
   layout: 'admin',
@@ -39,14 +41,23 @@ onMounted(() => {
   void load()
 })
 
-/* ---------- 跳转新增 / 编辑 ---------- */
+/* ---------- 新增 / 编辑弹窗 ---------- */
 
-function goCreate(): void {
-  void navigateTo('/system/SysPost/create')
+const formVisible = ref(false)
+const editingId = ref<string>()
+
+function openCreate(): void {
+  editingId.value = undefined
+  formVisible.value = true
 }
 
-function goEdit(row: SysPost): void {
-  void navigateTo(`/system/SysPost/edit/${row.postId}`)
+function openEdit(row: SysPost): void {
+  editingId.value = row.postId
+  formVisible.value = true
+}
+
+function handleSaved(): void {
+  void load()
 }
 
 /* ---------- 状态 / 删除 ---------- */
@@ -124,7 +135,7 @@ async function handleDelete(row: SysPost): Promise<void> {
       </ElFormItem>
     </ElForm>
     <div class="flex justify-start">
-      <ElButton type="primary" @click="goCreate">
+      <ElButton type="primary" @click="openCreate">
         <AppIcon name="lucide--plus" class="mr-1 size-4" />
         新增职位
       </ElButton>
@@ -151,7 +162,7 @@ async function handleDelete(row: SysPost): Promise<void> {
         <ElTableColumn prop="createAt" label="创建时间" width="170" />
         <ElTableColumn label="操作" width="140" fixed="right">
           <template #default="{ row }">
-            <ElButton link type="primary" size="small" @click="goEdit(row as SysPost)">
+            <ElButton link type="primary" size="small" @click="openEdit(row as SysPost)">
               编辑
             </ElButton>
             <ElButton link type="danger" size="small" @click="handleDelete(row as SysPost)">
@@ -174,5 +185,7 @@ async function handleDelete(row: SysPost): Promise<void> {
         />
       </div>
     </section>
+
+    <PostForm v-model:visible="formVisible" :post-id="editingId" @success="handleSaved" />
   </AdminContainerCard>
 </template>

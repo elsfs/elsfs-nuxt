@@ -6,19 +6,24 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { toErrorMessage } from '~/utils/api-error'
 
 /**
- * 部门新增 / 编辑表单（新增页与独立编辑页共用）。
+ * 部门新增 / 编辑弹窗表单（由列表页打开）。
  *
  * 传 `deptId` 表示编辑：先拉详情回填；不传表示新增。
- * 新增时若地址栏带 `?parentId=<deptId>`（列表页行内「新增子部门」），用它预填上级部门。
- * 提交成功后回到部门列表 `/system/dept`。
+ * 新增时用 `parentId` prop 预填上级部门（列表页行内「新增子部门」会传当前行 deptId）。
+ * 文件名以 `-` 开头，Nuxt 不会为它生成路由。
  */
+const visible = defineModel<boolean>('visible', { default: false })
+
 const props = defineProps<{
   deptId?: string
+  parentId?: string
+}>()
+
+const emit = defineEmits<{
+  success: []
 }>()
 
 const api = useApi()
-const router = useRouter()
-const route = useRoute()
 
 const isEdit = computed(() => Boolean(props.deptId))
 const title = computed(() => (isEdit.value ? '编辑部门' : '新增部门'))
@@ -93,15 +98,21 @@ const deptTreeOptions = computed<DeptTreeOption[]>(() => [
   ...toTreeOptions(deptTree.value, props.deptId ?? null),
 ])
 
-/* ---------- 初始化 ---------- */
+/* ---------- 弹窗数据加载 ---------- */
 
-onMounted(async () => {
-  // 新增：行内「新增子部门」跳转过来时带 ?parentId=<deptId>
+/** 重置为初始表单（切换新增 / 编辑、重新打开时都要先清空） */
+function resetForm(): void {
+  Object.assign(form, createDeptForm())
+  formRef.value?.clearValidate()
+}
+
+/**
+ * 打开弹窗时加载数据：新增只拉部门树并用 `parentId` prop 预填上级；
+ * 编辑则再按 `deptId` 拉详情回填。
+ */
+async function loadDialogData(): Promise<void> {
   if (!props.deptId) {
-    const parentId = route.query.parentId
-    if (typeof parentId === 'string' && parentId) {
-      form.parentId = parentId
-    }
+    form.parentId = props.parentId || '0'
   }
   loading.value = true
   try {
@@ -125,10 +136,20 @@ onMounted(async () => {
   } finally {
     loading.value = false
   }
+}
+
+watch(visible, async (open) => {
+  if (!open) {
+    return
+  }
+  resetForm()
+  await loadDialogData()
+  await nextTick()
+  formRef.value?.clearValidate()
 })
 
-function backToList(): void {
-  void router.push('/system/dept')
+function closeDialog(): void {
+  visible.value = false
 }
 
 /** 组装提交给后端的表单对象（空字符串转 null，避免把空串写进库） */
@@ -165,7 +186,8 @@ async function submitForm(): Promise<void> {
       await addDeptApi(api, buildPayload())
       ElMessage.success('添加成功')
     }
-    backToList()
+    visible.value = false
+    emit('success')
   } catch (error) {
     ElMessage.error(toErrorMessage(error))
   } finally {
@@ -175,73 +197,54 @@ async function submitForm(): Promise<void> {
 </script>
 
 <template>
-  <div class="mx-auto max-w-3xl space-y-4 p-6 sm:p-8">
-    <!-- 页头 -->
-    <div class="flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <div class="flex items-center gap-2">
-          <ElButton link type="primary" class="!px-0" @click="backToList">
-            <AppIcon name="lucide--arrow-left" class="mr-1 size-4" />
-            返回列表
-          </ElButton>
-        </div>
-        <h1 class="mt-1 text-xl font-bold sm:text-2xl">
-          {{ title }}
-        </h1>
-        <p class="text-muted-foreground mt-1 text-sm">
-          {{
-            isEdit
-              ? '修改部门信息后保存，返回列表即可看到最新数据。'
-              : '填写部门信息，保存后自动返回部门列表。'
-          }}
-        </p>
-      </div>
-    </div>
-
-    <!-- 表单 -->
-    <section v-loading="loading" class="border-border bg-card rounded-xl border p-4 sm:p-6">
-      <ElForm ref="formRef" :model="form" :rules="rules" label-width="100px">
-        <ElFormItem label="上级部门" prop="parentId">
-          <ElTreeSelect
-            v-model="form.parentId"
-            :data="deptTreeOptions"
-            placeholder="请选择上级部门"
-            class="w-full"
-          />
-        </ElFormItem>
-        <ElFormItem label="部门名称" prop="deptName">
-          <ElInput v-model="form.deptName" placeholder="请输入部门名称" />
-        </ElFormItem>
-        <ElFormItem label="机构编码" prop="orgCode">
-          <ElInput v-model="form.orgCode" placeholder="请输入机构编码" />
-        </ElFormItem>
-        <ElFormItem label="机构类别" prop="orgCategory">
-          <ElInputNumber v-model="form.orgCategory" :min="0" class="w-full" />
-        </ElFormItem>
-        <ElFormItem label="联系电话" prop="mobile">
-          <ElInput v-model="form.mobile" placeholder="请输入联系电话" />
-        </ElFormItem>
-        <ElFormItem label="地址" prop="address">
-          <ElInput v-model="form.address" placeholder="请输入地址" />
-        </ElFormItem>
-        <ElFormItem label="排序" prop="orderNo">
-          <ElInputNumber v-model="form.orderNo" :min="0" class="w-full" />
-        </ElFormItem>
-        <ElFormItem label="状态" prop="status">
-          <ElRadioGroup v-model="form.status">
-            <ElRadio v-for="option in STATUS_OPTIONS" :key="option.value" :value="option.value">
-              {{ option.label }}
-            </ElRadio>
-          </ElRadioGroup>
-        </ElFormItem>
-        <ElFormItem label="部门描述" prop="deptDesc">
-          <ElInput v-model="form.deptDesc" type="textarea" :rows="3" placeholder="请输入部门描述" />
-        </ElFormItem>
-        <ElFormItem>
-          <ElButton @click="backToList"> 取消 </ElButton>
-          <ElButton type="primary" :loading="submitting" @click="submitForm"> 保存 </ElButton>
-        </ElFormItem>
-      </ElForm>
-    </section>
-  </div>
+  <ElDialog
+    v-model="visible"
+    :title="title"
+    width="640px"
+    :close-on-click-modal="false"
+    append-to-body
+  >
+    <ElForm ref="formRef" v-loading="loading" :model="form" :rules="rules" label-width="96px">
+      <ElFormItem label="上级部门" prop="parentId">
+        <ElTreeSelect
+          v-model="form.parentId"
+          :data="deptTreeOptions"
+          placeholder="请选择上级部门"
+          class="w-full"
+        />
+      </ElFormItem>
+      <ElFormItem label="部门名称" prop="deptName">
+        <ElInput v-model="form.deptName" placeholder="请输入部门名称" />
+      </ElFormItem>
+      <ElFormItem label="机构编码" prop="orgCode">
+        <ElInput v-model="form.orgCode" placeholder="请输入机构编码" />
+      </ElFormItem>
+      <ElFormItem label="机构类别" prop="orgCategory">
+        <ElInputNumber v-model="form.orgCategory" :min="0" class="w-full" />
+      </ElFormItem>
+      <ElFormItem label="联系电话" prop="mobile">
+        <ElInput v-model="form.mobile" placeholder="请输入联系电话" />
+      </ElFormItem>
+      <ElFormItem label="地址" prop="address">
+        <ElInput v-model="form.address" placeholder="请输入地址" />
+      </ElFormItem>
+      <ElFormItem label="排序" prop="orderNo">
+        <ElInputNumber v-model="form.orderNo" :min="0" class="w-full" />
+      </ElFormItem>
+      <ElFormItem label="状态" prop="status">
+        <ElRadioGroup v-model="form.status">
+          <ElRadio v-for="option in STATUS_OPTIONS" :key="option.value" :value="option.value">
+            {{ option.label }}
+          </ElRadio>
+        </ElRadioGroup>
+      </ElFormItem>
+      <ElFormItem label="部门描述" prop="deptDesc">
+        <ElInput v-model="form.deptDesc" type="textarea" :rows="3" placeholder="请输入部门描述" />
+      </ElFormItem>
+    </ElForm>
+    <template #footer>
+      <ElButton @click="closeDialog"> 取消 </ElButton>
+      <ElButton type="primary" :loading="submitting" @click="submitForm"> 保存 </ElButton>
+    </template>
+  </ElDialog>
 </template>

@@ -99,8 +99,8 @@ export const useMenuStore = defineStore('menu', () => {
 
   /**
    * 按路由地址找菜单：先精确匹配，再逐级向上找最近的一级菜单。
-   * 例如 `/system/role/create` 会命中 `/system/role`，用于多页签标题 / 图标
-   * 与收藏栏高亮（列表页与新增 / 编辑页共享同一个菜单）。
+   * 例如 `/system/role/detail/1` 会命中 `/system/role`，用于多页签标题 / 图标
+   * 与收藏栏高亮（子路由复用父级菜单）。
    */
   function menuByPath(path: string): AdminMenuLeaf | AdminMenuItem | undefined {
     const exact = leafByPath(path) ?? nodeByPath.value.get(path)
