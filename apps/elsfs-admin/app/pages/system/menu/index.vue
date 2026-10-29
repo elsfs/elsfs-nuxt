@@ -146,7 +146,7 @@ async function handleDelete(row: SysMenu): Promise<void> {
 </script>
 
 <template>
-  <AdminContainerCard>
+  <AdminContainerCard class="h-full">
     <AdminSearchForm
       :fields="SEARCH_FIELDS"
       :form="query"
@@ -163,7 +163,7 @@ async function handleDelete(row: SysMenu): Promise<void> {
     </AdminSearchForm>
 
     <!-- 菜单树 -->
-    <section class="border-border bg-card rounded-xl border p-4">
+    <section class="border-border bg-card flex min-h-0 flex-1 flex-col rounded-xl border p-4">
       <AdminTable
         :loading="loading"
         :data="filteredMenus"

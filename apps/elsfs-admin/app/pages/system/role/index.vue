@@ -168,7 +168,7 @@ async function saveMenuAuth(): Promise<void> {
 </script>
 
 <template>
-  <AdminContainerCard>
+  <AdminContainerCard class="h-full">
     <AdminSearchForm
       :fields="SEARCH_FIELDS"
       :form="query"
@@ -184,7 +184,7 @@ async function saveMenuAuth(): Promise<void> {
       </template>
     </AdminSearchForm>
     <!-- 列表 -->
-    <section class="border-border bg-card rounded-xl border p-4">
+    <section class="border-border bg-card flex min-h-0 flex-1 flex-col rounded-xl border p-4">
       <AdminTable :loading="loading" :data="rows" row-key="roleId">
         <ElTableColumn type="index" label="#" width="56" align="center" />
         <ElTableColumn prop="roleName" label="角色名称" min-width="140" />
@@ -217,7 +217,7 @@ async function saveMenuAuth(): Promise<void> {
         </ElTableColumn>
       </AdminTable>
 
-      <div class="mt-3 flex justify-end">
+      <div class="mt-3 flex shrink-0 justify-end">
         <AdminPagination
           v-model:page="current"
           v-model:rows="size"

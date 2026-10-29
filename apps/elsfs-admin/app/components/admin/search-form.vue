@@ -95,7 +95,7 @@ function handleReset(): void {
 </script>
 
 <template>
-  <div class="search-form mb-3">
+  <div class="search-form mb-3 shrink-0">
     <ElForm
       ref="formRef"
       inline

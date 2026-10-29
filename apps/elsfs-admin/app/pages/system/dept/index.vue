@@ -143,7 +143,7 @@ async function handleDelete(row: SysDept): Promise<void> {
 </script>
 
 <template>
-  <AdminContainerCard>
+  <AdminContainerCard class="h-full">
     <AdminSearchForm
       :fields="SEARCH_FIELDS"
       :form="query"
@@ -159,7 +159,7 @@ async function handleDelete(row: SysDept): Promise<void> {
       </template>
     </AdminSearchForm>
     <!-- 树形列表 -->
-    <section class="border-border bg-card rounded-xl border p-4">
+    <section class="border-border bg-card flex min-h-0 flex-1 flex-col rounded-xl border p-4">
       <AdminTable
         :key="query.keyword"
         :loading="loading"
@@ -198,7 +198,7 @@ async function handleDelete(row: SysDept): Promise<void> {
       </AdminTable>
       <p
         v-if="!loading && !tableData.length"
-        class="text-muted-foreground mt-3 text-center text-sm"
+        class="text-muted-foreground mt-3 shrink-0 text-center text-sm"
       >
         暂无部门数据
       </p>
