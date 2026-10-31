@@ -50,12 +50,12 @@ layer 自带 playground，可脱离应用单独调试样式：在 `packages/tail
 
 副作用：dev 生成的 `.nuxt/tsconfig.json` 会把模块 `src/runtime` 纳入 `vue-tsc` 的 include，所以模块里的类型错误会由 admin 的 `pnpm typecheck` 暴露；模块页面模板里用到的**应用自动导入项**（如 `app/utils/system-options` 的 `STATUS_OPTIONS`、`sexText`）必须显式 `import`——自动导入只在运行时由 Nuxt 注入，`vue-tsc` 检查模板时不认（会报 `Property 'xxx' does not exist`）。
 
-模块包根各有一份 `nuxt.config.ts`，**不参与运行**，只给 `postinstall` 里的 `nuxt-module-build prepare` 生成模块自己的 `.nuxt` 类型用（prepare 会以包根为 rootDir 跑 `nuxt prepare`，并在 overrides 里追加 `src/module`）：
+两个模块包根各有一份 `nuxt.config.ts`，**不参与运行**，只给 IDE（Volar）生成模块自己的 `.nuxt` 类型，让 `src/runtime/**` 里的 `<EleXxx>` / `<ElXxx>`、`useApi`、`ElMessage`、`onMounted`、`~/utils/*` 等能解析；删掉不影响运行时，只是 IDE 提示会消失：
 
-- `elsfs-ops` 挂 `elsfs-components` + `@element-plus/nuxt`，`elsfs-components` 挂 `@element-plus/nuxt`
-- 作用：IDE（Volar）里编辑 `src/runtime/**` 时，模板里的 `<EleXxx>` / `<ElXxx>` 能解析到自动导入的组件类型；不加这两行会「没有智能提示」
-- `@element-plus/nuxt` 只是两个模块的 devDependency，不进发布产物，`files` 里也没有 `nuxt.config.ts`
-- 宿主应用的自动导入（`useApi`、`usePagedList`、`ElMessage`、`~/utils/*` 别名）只存在于宿主应用，模块包自己的类型里解析不到，模块包内看到这些红波浪属预期，不影响 admin 的 `pnpm typecheck`
+- `elsfs-ops`：`postinstall` / `dev:prepare` 里用**普通 `nuxt prepare`** 生成类型（不是 `nuxt-module-build prepare`，后者会把 `imports.autoImport` 关掉、也不加载宿主模块）。它的 `nuxt.config.ts` 挂 `./src/module` + `elsfs-components` + `@element-plus/nuxt`，并把 `~` / `@` 别名指向 `../elsfs-admin/app`、把 admin 的 `app/composables`、`app/utils` 加入 `imports.dirs`，因此生成的 `.nuxt` 里有宿主的自动导入全局声明；`tsconfig.json` 另用 `"files": ["../elsfs-admin/app/types/nuxt.d.ts"]` 引入 `$api` / `$authToken` 的模块增强
+- `elsfs-components`：`postinstall` 仍是 `nuxt-module-build prepare && nuxt-module-build build`，但包根 `nuxt.config.ts` 挂了 `@element-plus/nuxt`，因此 `.nuxt` 里有 Element Plus 组件类型；它是独立库，不依赖 admin 的类型
+- 改完宿主的 `app/composables` / `app/utils`（新增自动导入）后，在 `apps/elsfs-ops` 里重跑一次 `pnpm postinstall`（或 `npx nuxt prepare`）再让 VS Code 重启 Vue language server，提示才会更新
+- `@element-plus/nuxt` 只是两个模块的 devDependency，`files` 里没有 `nuxt.config.ts`，都不进发布产物
 
 坑：
 

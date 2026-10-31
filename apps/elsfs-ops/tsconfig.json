@@ -1,4 +1,5 @@
 {
   "extends": "./.nuxt/tsconfig.json",
+  "files": ["../elsfs-admin/app/types/nuxt.d.ts"],
   "exclude": ["dist", "node_modules", "playground"]
 }

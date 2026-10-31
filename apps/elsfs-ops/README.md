@@ -62,6 +62,9 @@ pnpm fmt
 
 ### IDE 类型提示
 
-包根的 `nuxt.config.ts` **不参与运行**，只给 `nuxt-module-build prepare`（`postinstall` 里会跑）生成模块自己的 `.nuxt` 类型用：它额外挂了 `elsfs-components` 与 `@element-plus/nuxt`，所以 IDE 里编辑 `src/runtime/pages/**` 时，模板里的 `<EleTable>` / `<EleSearchForm>` / `<ElInput>` 等能拿到自动导入组件的类型提示（`@element-plus/nuxt` 只是 devDependency，不会被发布）。删掉这份配置运行时不受影响，但 IDE 会失去组件提示。
+模块页面依赖宿主应用（`elsfs-admin`）的别名、自动导入与 `admin` 布局，所以包根的 `nuxt.config.ts` / `tsconfig.json` 专门做了**只给 IDE（Volar）用**的接线（都不参与运行、也不进发布产物）：
 
-> 宿主应用独有的东西（`useApi`、`usePagedList`、`ElMessage`、`~/utils/*` 别名）在模块包自己的类型环境里解析不到，模块包内看到这些红波浪属预期；由 `elsfs-admin` 的 `pnpm typecheck` 负责最终校验。
+- `nuxt.config.ts`：`postinstall` / `dev:prepare` 里用普通 `nuxt prepare`（不是 `nuxt-module-build prepare`）生成模块自己的 `.nuxt`，配置里挂了 `./src/module` + `elsfs-components` + `@element-plus/nuxt`，把 `~` / `@` 指向 `../elsfs-admin/app`，并把 admin 的 `app/composables`、`app/utils` 加进 `imports.dirs` → 于是 `useApi`、`usePagedList`、`ElMessage`、`onMounted`、`~/utils/*`、`<EleTable>` 等全部有类型
+- `tsconfig.json`：用 `"files": ["../elsfs-admin/app/types/nuxt.d.ts"]` 引入 `$api` / `$authToken` 的模块增强（`useApi` 的返回类型依赖它）
+- 改完宿主的 `app/composables` / `app/utils`（新增自动导入）后，在 `apps/elsfs-ops` 重跑一次 `pnpm postinstall`（或 `npx nuxt prepare`），再在 VS Code 执行 `Vue: Restart Vue language server`，提示才会更新
+- `@element-plus/nuxt` 只是 devDependency，不会被发布

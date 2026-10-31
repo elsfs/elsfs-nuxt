@@ -1,13 +1,24 @@
+import { fileURLToPath } from 'node:url'
+
 /**
- * 这份配置不参与运行，只用于生成模块自己的 `.nuxt` 类型：
- * `postinstall` 里的 `nuxt-module-build prepare` 会以本包为 rootDir 跑一次 `nuxt prepare`，
- * 并额外加载 `src/module.ts`。
- *
- * 模块页面（`src/runtime/pages/**`）在宿主应用里由 `@element-plus/nuxt` 与
- * `elsfs-components` 自动导入 `<ElXxx>`、`<EleXxx>` 组件，但模块自己的 `.nuxt` 类型默认
- * 只有 Nuxt 内置组件，导致 IDE 里编辑页面时没有这些组件的智能提示。这里把两个模块也
- * 挂进来，生成的 `components.d.ts` 就包含它们的组件类型。
+ * 这份配置不参与运行，只用于生成模块自己的 `.nuxt` 类型（IDE 用）：
+ * postinstall 里会跑一次 `nuxt prepare`，把宿主应用 `elsfs-admin` 的别名与自动导入也
+ * 纳入类型生成，这样编辑 `src/runtime/pages/**` 时 `useApi`、`ElMessage`、`onMounted`、
+ * `~/utils/*` 等都有提示。运行时这些仍由宿主应用提供。
  */
+const adminApp = fileURLToPath(new URL('../elsfs-admin/app', import.meta.url))
+
 export default defineNuxtConfig({
-  modules: ['elsfs-components', '@element-plus/nuxt'],
+  modules: ['./src/module', 'elsfs-components', '@element-plus/nuxt'],
+  alias: {
+    '~': adminApp,
+    '@': adminApp,
+  },
+  imports: {
+    dirs: [
+      fileURLToPath(new URL('../elsfs-admin/app/composables', import.meta.url)),
+      fileURLToPath(new URL('../elsfs-admin/app/utils', import.meta.url)),
+    ],
+  },
+  typescript: { builder: 'shared' },
 })
