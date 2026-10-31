@@ -1,0 +1,14 @@
+{
+  "name": "elsfs-ops-playground",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "elsfs-ops": "file:..",
+    "nuxt": "^4.6.3"
+  }
+}

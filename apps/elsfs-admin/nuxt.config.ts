@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     '@element-plus/nuxt',
     '@nuxtjs/color-mode',
     'elsfs-components',
+    'elsfs-ops',
     Sonda(),
   ],
   $development: undefined,

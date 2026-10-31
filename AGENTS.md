@@ -10,6 +10,7 @@ pnpm workspace 单仓多包。根目录 `package.json` 只有聚合脚本（`lin
 | `elsfs-content` | `apps/elsfs-content` | Nuxt 4 应用：基于 `docus` 的文档站（Nuxt Content + Nuxt UI + NuxtHub） |
 | `tailwind-config` | `packages/tailwind-config` | Nuxt Layer，被 `elsfs-admin` 以 `extends: ['tailwind-config']` 复用 |
 | `elsfs-components` | `apps/elsfs-components` | Nuxt 模块：`elsfs-admin` 的公共 UI 组件（AppIcon、列表页卡片外壳 / 查询表单 / 表格 / 分页） |
+| `elsfs-ops` | `apps/elsfs-ops` | Nuxt 模块：系统管理页面（用户 / 角色 / 菜单 / 部门 / 职位），通过 `extendPages` 注册到使用方路由 |
 | `nuxt-request` | `packages/nuxt-request` | Nuxt 模块：axios 封装（含 playground、vitest 用例、`dist/` 构建产物） |
 | `api-types` | `apps/api-types` | Nuxt 模块：后端接口类型集合（含 playground、vitest），从 vben 项目迁入 |
 | `code-quality` | `packages/code-quality` | 共享代码质量工具链配置（ESLint / Oxlint / Oxfmt / Stylelint / CSpell / Publint） |
@@ -38,7 +39,7 @@ pnpm workspace 单仓多包。根目录 `package.json` 只有聚合脚本（`lin
 
 layer 自带 playground，可脱离应用单独调试样式：在 `packages/tailwind-config/` 下 `pnpm dev`（跑的是 `.playground`）。
 
-模块包（`elsfs-components` / `nuxt-request` / `api-types`）的 `postinstall` 会构建 `dist/`；改了 `elsfs-components` 的组件源码后要重新构建，应用侧才拿得到新代码：在 `apps/elsfs-components/` 下 `pnpm postinstall`（或 `pnpm prepack`）。`dist/` 是构建产物，不在 git 里。
+模块包（`elsfs-components` / `elsfs-ops` / `nuxt-request` / `api-types`）的 `postinstall` 会构建 `dist/`；改了 `elsfs-components` 的组件或 `elsfs-ops` 的页面源码后要重新构建，应用侧才拿得到新代码：在对应模块目录（`apps/elsfs-components/` 或 `apps/elsfs-ops/`）下 `pnpm postinstall`（或 `pnpm prepack`）。`dist/` 是构建产物，不在 git 里。
 
 坑：
 
@@ -49,7 +50,7 @@ layer 自带 playground，可脱离应用单独调试样式：在 `packages/tail
 
 ## 代码质量工具链（`packages/code-quality`）
 
-共享配置包，被 6 个 consumer 包（`elsfs-admin`、`elsfs-content`、`apps/elsfs-components`、`api-types`、`nuxt-request`、`tailwind-config`）以 `workspace:*` 引用。工具分工固定：**格式归 oxfmt，语义归 ESLint + Oxlint，样式语义归 Stylelint，拼写归 CSpell，发布元数据归 Publint**。
+共享配置包，被 7 个 consumer 包（`elsfs-admin`、`elsfs-content`、`apps/elsfs-components`、`apps/elsfs-ops`、`api-types`、`nuxt-request`、`tailwind-config`）以 `workspace:*` 引用。工具分工固定：**格式归 oxfmt，语义归 ESLint + Oxlint，样式语义归 Stylelint，拼写归 CSpell，发布元数据归 Publint**。
 
 | 工具 | 共享配置 | 各包入口文件 |
 | --- | --- | --- |
@@ -99,7 +100,7 @@ Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 
 
 ## 路由、布局与守卫
 
-现有页面：`/`(index)、`/auth/login`、`/auth/register`、`/auth/code-login`、`/auth/qrcode-login`、`/auth/forget-password`、`/datshboard`、`/about`、`/posts/[id]`、`/menu/[id]`（后台菜单占位页）。
+现有页面：`/`(index)、`/auth/login`、`/auth/register`、`/auth/code-login`、`/auth/qrcode-login`、`/auth/forget-password`、`/datshboard`、`/about`、`/posts/[id]`、`/menu/[id]`（后台菜单占位页）。系统管理页（`/system/user`、`/system/role`、`/system/menu`、`/system/dept`、`/system/SysPost`）由 `elsfs-ops` 模块提供，**不在** `app/pages` 里。
 
 - 认证类页面统一用 `definePageMeta({ layout: 'auth', middleware: 'guest' })`；**其余页面无需显式声明守卫**，由全局中间件统一兜底
 - `app/middleware/auth.global.ts`（全局中间件）：除 `/auth` 下的认证页外，所有路由都必须登录，未登录跳 `/auth/login?redirect=<原地址>`（认证页在 `app/pages/auth/` 下，路由带 `/auth` 前缀，**没有** `/login` 这个路径）；`guest.ts`：已登录访问登录/注册页时跳回 `redirect` 或 `/`
@@ -164,6 +165,7 @@ Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 
 - 新增错误码：先在 `server/` 用 `createError({ message: 'XXX' })` 抛出，再到 `i18n/locales/{zh-CN,en}.json` 的 `errors` 下补 key，否则 UI 只能显示 key
 - 新增认证表单：在 `useAuthValidation.ts` 加 zod 工厂 → 页面用 vee-validate 的 `toTypedSchema` 接上 → 文案补双语言
 - 新增 iconify 图标：优先直接在模板写 `icon-[lucide--xxx]`；要按名传参就登记进 `elsfs-components` 的 `app-icon/index.vue` 的 `ICONIFY_CLASSES`（改完模块源码要重新构建 `dist/`）
+- 新增系统管理页面：在 `apps/elsfs-ops/src/runtime/pages/system/<页面>/index.vue` 添加（路由 `/system/<页面>`），重建模块 `dist/` 后生效
 - 新增组件：公用组件放 `elsfs-components` 的 `src/runtime/components/<组件名>/index.vue`（构建后自动导入；需要 `Ele` 前缀的组件文件夹用 `ele-` 开头，如 `ele-table/index.vue` → `<EleTable>`）；只给布局用、且依赖应用 store 的放 `app/components/` 根
 
 ## elsfs-content（文档站）专有坑

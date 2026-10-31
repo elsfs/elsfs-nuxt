@@ -1,0 +1,78 @@
+{
+  "name": "elsfs-ops",
+  "version": "1.0.0",
+  "description": "系统管理页面（用户 / 角色 / 菜单 / 部门 / 职位）的 Nuxt 模块",
+  "license": "MIT",
+  "repository": "elsfs/elsfs-nuxt",
+  "workspaces": [
+    "playground"
+  ],
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "main": "./dist/module.mjs",
+  "typesVersions": {
+    "*": {
+      ".": [
+        "./dist/types.d.mts"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/types.d.mts",
+      "import": "./dist/module.mjs",
+      "default": "./dist/module.mjs"
+    }
+  },
+  "scripts": {
+    "postinstall": "nuxt-module-build prepare && nuxt-module-build build",
+    "prepack": "nuxt-module-build build",
+    "dev": "npm run dev:prepare && nuxt dev playground",
+    "dev:build": "nuxt build playground",
+    "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxt prepare playground",
+    "release": "pnpm lint && pnpm test && pnpm prepack && changelogen --release && pnpm publish && git push --follow-tags",
+    "lint": "pnpm lint:eslint && pnpm lint:oxlint && pnpm lint:style && pnpm lint:spell",
+    "lint:eslint": "eslint .",
+    "lint:oxlint": "oxlint",
+    "lint:style": "stylelint --allow-empty-input \"**/*.{css,vue}\"",
+    "lint:spell": "cspell lint \"**/*.{ts,vue,js,mjs,cjs,json,jsonc,md,mdx,css,yaml,yml}\"",
+    "fmt": "oxfmt -c ../../packages/code-quality/oxfmt.json",
+    "fmt:check": "oxfmt --check -c ../../packages/code-quality/oxfmt.json",
+    "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^4.6.3",
+    "api-types": "workspace:*",
+    "elsfs-components": "workspace:*"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "^3.4.2",
+    "@nuxt/module-builder": "^1.0.3",
+    "@nuxt/schema": "^4.6.3",
+    "@nuxt/test-utils": "^4.3.3",
+    "@types/node": "latest",
+    "changelogen": "^0.6.2",
+    "code-quality": "workspace:*",
+    "cspell": "catalog:",
+    "element-plus": "^2.14.5",
+    "eslint": "^10.12.0",
+    "nuxt": "^4.6.3",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "postcss-html": "catalog:",
+    "stylelint": "catalog:",
+    "stylelint-config-standard": "catalog:",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.3",
+    "vue": "catalog:",
+    "vue-tsc": "^3.3.12"
+  },
+  "peerDependencies": {
+    "element-plus": "^2.14.5",
+    "vue": "^3.5.0"
+  }
+}
