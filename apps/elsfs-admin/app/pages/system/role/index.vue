@@ -8,8 +8,8 @@ import {
   fetchRolePageApi,
   saveRoleMenuApi,
 } from 'api-types/elsfs'
+import type { SearchFormField } from 'elsfs-components/types/search-form'
 
-import type { SearchFormField } from '~/types/search-form'
 import { toErrorMessage } from '~/utils/api-error'
 
 import RoleForm from './-role-form.vue'

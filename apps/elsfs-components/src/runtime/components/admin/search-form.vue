@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import type { FormInstance } from 'element-plus'
+import { computed, ref } from 'vue'
 
-import type { SearchFormField } from '~/types/search-form'
+import type { SearchFormField } from '../../types/search-form'
+import AppIcon from '../AppIcon.vue'
 
 /**
  *

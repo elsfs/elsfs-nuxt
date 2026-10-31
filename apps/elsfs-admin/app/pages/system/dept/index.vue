@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { SysDept } from 'api-types/elsfs'
 import { deleteDeptsApi, editDeptApi, fetchDeptTreeApi } from 'api-types/elsfs'
+import type { SearchFormField } from 'elsfs-components/types/search-form'
 
-import type { SearchFormField } from '~/types/search-form'
 import { toErrorMessage } from '~/utils/api-error'
 
 import DeptForm from './-dept-form.vue'

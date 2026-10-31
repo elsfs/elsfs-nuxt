@@ -1,8 +1,15 @@
-import Sonda from 'sonda/nuxt';
+import Sonda from 'sonda/nuxt'
 
 export default defineNuxtConfig({
   extends: ['tailwind-config'],
-  modules: ['@nuxt/eslint', '@pinia/nuxt', '@element-plus/nuxt', '@nuxtjs/color-mode',Sonda()],
+  modules: [
+    '@nuxt/eslint',
+    '@pinia/nuxt',
+    '@element-plus/nuxt',
+    '@nuxtjs/color-mode',
+    'elsfs-components',
+    Sonda(),
+  ],
   $development: undefined,
   $env: undefined,
   $meta: undefined,
@@ -57,6 +64,6 @@ export default defineNuxtConfig({
     },
   },
   sourcemap: {
-    client: true
+    client: true,
   },
 })

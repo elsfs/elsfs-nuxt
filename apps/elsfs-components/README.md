@@ -1,84 +1,53 @@
-<!--
-Get your module up and running quickly.
+# elsfs-components
 
-Find and replace all on all files (CMD+SHIFT+F):
-- Name: My Module
-- Package name: my-module
-- Description: My new Nuxt module
--->
+`elsfs-admin` 的公共 UI 组件 Nuxt 模块：把列表页里反复出现的「卡片外壳 / 查询表单 / 表格 / 分页」以及图标组件集中到一处，应用侧通过 Nuxt 自动导入直接使用。
 
-# My Module
+## 组件
 
-[![npm version][npm-version-src]][npm-version-href]
-[![npm downloads][npm-downloads-src]][npm-downloads-href]
-[![License][license-src]][license-href]
-[![Nuxt][nuxt-src]][nuxt-href]
+| 组件                 | 文件                                              | 说明                                                    |
+| -------------------- | ------------------------------------------------- | ------------------------------------------------------- |
+| `AppIcon`            | `src/runtime/components/AppIcon.vue`              | 统一图标入口：iconify（本地图标集）与 Element Plus 图标 |
+| `AdminContainerCard` | `src/runtime/components/admin/container-card.vue` | 查询 / 列表 / 表单的卡片外壳                            |
+| `AdminSearchForm`    | `src/runtime/components/admin/search-form.vue`    | 配置驱动的搜索表单                                      |
+| `AdminTable`         | `src/runtime/components/admin/table.vue`          | `ElTable` 薄封装（默认 `fill` 撑满父容器）              |
+| `AdminPagination`    | `src/runtime/components/admin/pagination.vue`     | `ElPagination` 薄封装                                   |
 
-My new Nuxt module for doing amazing things.
+布局（`app/layouts/`）专用组件不在此模块内，仍留在各自应用里。
 
-- [✨ &nbsp;Release Notes](/CHANGELOG.md)
-<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-module?file=playground%2Fapp.vue) -->
-<!-- - [📖 &nbsp;Documentation](https://example.com) -->
+`SearchFormField` 等类型通过子路径导出：
 
-## Features
-
-<!-- Highlight some of the features your module provide here -->
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
-
-## Quick Setup
-
-Install the module to your Nuxt application with one command:
-
-```bash
-npx nuxt module add my-module
+```ts
+import type { SearchFormField } from 'elsfs-components/types/search-form'
 ```
 
-That's it! You can now use My Module in your Nuxt app ✨
+## 使用
 
+应用需要自带 `@element-plus/nuxt`（Element Plus 组件由它自动导入）与 Tailwind v4，并完成两步接入：
 
-## Contribution
+```ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['elsfs-components'],
+})
+```
 
-<details>
-  <summary>Local development</summary>
-  
-  ```bash
-  # Install dependencies
-  npm install
-  
-  # Generate type stubs
-  npm run dev:prepare
-  
-  # Develop with the playground
-  npm run dev
-  
-  # Build the playground
-  npm run dev:build
-  
-  # Run ESLint
-  npm run lint
-  
-  # Run Vitest
-  npm run test
-  npm run test:watch
-  
-  # Release new version
-  npm run release
-  ```
+```css
+/* assets/css/main.css */
+@import 'tailwindcss';
+/* 把模块组件目录登记为 Tailwind source，模块里独有的工具类才会生成 */
+@import 'elsfs-components/styles.css';
+```
 
-</details>
+`vue` / `element-plus` / `@element-plus/icons-vue` 是 peer 依赖；模块会通过 Vite `resolve.dedupe` 保证运行时只有一份实例。
 
+## 开发
 
-<!-- Badges -->
-[npm-version-src]: https://img.shields.io/npm/v/my-module/latest.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-version-href]: https://npmjs.com/package/my-module
+```bash
+pnpm dev          # 构建 stub 并启动 playground
+pnpm dev:prepare  # 只生成 stub / 类型
+pnpm prepack      # 构建 dist（postinstall 也会自动构建）
+pnpm lint
+pnpm fmt
+```
 
-[npm-downloads-src]: https://img.shields.io/npm/dm/my-module.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-downloads-href]: https://npm.chart.dev/my-module
-
-[license-src]: https://img.shields.io/npm/l/my-module.svg?style=flat&colorA=020420&colorB=00DC82
-[license-href]: https://npmjs.com/package/my-module
-
-[nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt
-[nuxt-href]: https://nuxt.com
+源码在 `src/`：`src/module.ts` 注册组件目录，`src/runtime/**` 会原样构建到 `dist/runtime/**`。

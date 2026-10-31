@@ -1,20 +1,10 @@
 // @ts-check
-import { createConfigForNuxt } from '@nuxt/eslint-config/flat'
+import { createNuxtEslintConfig } from 'code-quality/eslint'
 
 // Run `npx @eslint/config-inspector` to inspect the resolved config interactively
-export default createConfigForNuxt({
-  features: {
-    // Rules for module authors
-    tooling: true,
-    // Rules for formatting
-    stylistic: true,
-  },
+// 共享基线来自 packages/code-quality，playground 一并纳入 src 检查
+export default createNuxtEslintConfig({
   dirs: {
-    src: [
-      './playground',
-    ],
+    src: ['./playground'],
   },
 })
-  .append(
-    // your custom flat config here...
-  )

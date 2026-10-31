@@ -9,6 +9,7 @@ pnpm workspace 单仓多包。根目录 `package.json` 只有聚合脚本（`lin
 | `elsfs-nuxt` | `apps/elsfs-admin` | Nuxt 4 应用：认证后台 |
 | `elsfs-content` | `apps/elsfs-content` | Nuxt 4 应用：基于 `docus` 的文档站（Nuxt Content + Nuxt UI + NuxtHub） |
 | `tailwind-config` | `packages/tailwind-config` | Nuxt Layer，被 `elsfs-admin` 以 `extends: ['tailwind-config']` 复用 |
+| `elsfs-components` | `apps/elsfs-components` | Nuxt 模块：`elsfs-admin` 的公共 UI 组件（AppIcon、列表页卡片外壳 / 查询表单 / 表格 / 分页） |
 | `nuxt-request` | `packages/nuxt-request` | Nuxt 模块：axios 封装（含 playground、vitest 用例、`dist/` 构建产物） |
 | `api-types` | `apps/api-types` | Nuxt 模块：后端接口类型集合（含 playground、vitest），从 vben 项目迁入 |
 | `code-quality` | `packages/code-quality` | 共享代码质量工具链配置（ESLint / Oxlint / Oxfmt / Stylelint / CSpell / Publint） |
@@ -37,6 +38,8 @@ pnpm workspace 单仓多包。根目录 `package.json` 只有聚合脚本（`lin
 
 layer 自带 playground，可脱离应用单独调试样式：在 `packages/tailwind-config/` 下 `pnpm dev`（跑的是 `.playground`）。
 
+模块包（`elsfs-components` / `nuxt-request` / `api-types`）的 `postinstall` 会构建 `dist/`；改了 `elsfs-components` 的组件源码后要重新构建，应用侧才拿得到新代码：在 `apps/elsfs-components/` 下 `pnpm postinstall`（或 `pnpm prepack`）。`dist/` 是构建产物，不在 git 里。
+
 坑：
 
 - `apps/elsfs-admin/tsconfig.json` 只继承 `./.nuxt/tsconfig.json`，该文件由 `postinstall`（`nuxt prepare`）生成；类型检查报「找不到类型」时先 `pnpm install` 或重跑 `nuxt prepare`。**别把它改回 `references` 引用 `.nuxt/tsconfig.{app,server,shared,node}.json`**：那些文件是 `noEmit` 且没开 `composite`，`vue-tsc --noEmit` 会直接刷一屏 TS6305/TS6306
@@ -46,7 +49,7 @@ layer 自带 playground，可脱离应用单独调试样式：在 `packages/tail
 
 ## 代码质量工具链（`packages/code-quality`）
 
-共享配置包，被 5 个 consumer 包（`elsfs-admin`、`elsfs-content`、`api-types`、`nuxt-request`、`tailwind-config`）以 `workspace:*` 引用。工具分工固定：**格式归 oxfmt，语义归 ESLint + Oxlint，样式语义归 Stylelint，拼写归 CSpell，发布元数据归 Publint**。
+共享配置包，被 6 个 consumer 包（`elsfs-admin`、`elsfs-content`、`apps/elsfs-components`、`api-types`、`nuxt-request`、`tailwind-config`）以 `workspace:*` 引用。工具分工固定：**格式归 oxfmt，语义归 ESLint + Oxlint，样式语义归 Stylelint，拼写归 CSpell，发布元数据归 Publint**。
 
 | 工具 | 共享配置 | 各包入口文件 |
 | --- | --- | --- |
@@ -86,6 +89,8 @@ layer 自带 playground，可脱离应用单独调试样式：在 `packages/tail
 
 Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 的 `main` 指向它），样式在 `src/assets/theme.css`，`app.config.ts` 暴露 `elsfsComponents`，`.playground/` 仅用于调试。
 
+模块 `apps/elsfs-components/`：`src/module.ts` 用 `addComponentsDir` 注册 `src/runtime/components/`，构建后组件经 Nuxt 自动导入（`components/admin/table.vue` → `<AdminTable>`、`components/AppIcon.vue` → `<AppIcon>`）。`src/runtime/types/`（如 `SearchFormField`）、`src/runtime/utils/iconify.ts`、`src/runtime/styles.css` 一起构建到 `dist/runtime/`；`styles.css` 用 `@source "./components"` 把组件目录登记给 Tailwind。
+
 真实存在的拼写/命名错误路径，找不到时别奇怪：
 
 - `server/utiks/`（非 `utils`；目前只有 `constants.ts`，含 Hacker News API base）
@@ -105,8 +110,8 @@ Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 
 
 ### 组件
 
-- `app/components/auth/` 下的文件自动导入后是 PascalCase：`code-login.vue` → `AuthCodeLogin`，`login.vue` → `AuthLogin`，`third-party-login.vue` → `AuthThirdPartyLogin`，以此类推
-- `app/components/authentication-form-view.vue` → `AuthenticationFormView`
+- 公共组件已迁到 `elsfs-components` 模块，经 Nuxt 自动导入：`AppIcon`、`AdminContainerCard`、`AdminSearchForm`、`AdminTable`、`AdminPagination`；搜索字段类型从 `elsfs-components/types/search-form` 导入 `SearchFormField`
+- 布局专用组件仍留在应用 `app/components/admin/`：`favorite-menus.vue` → `AdminFavoriteMenus`、`menu-drawer.vue` → `AdminMenuDrawer`、`notice-bell.vue` → `AdminNoticeBell`、`tabs-view.vue` → `AdminTabsView`（`admin/` 目录前缀拼进组件名）；它们依赖应用的 menu/tabs store，不迁到模块
 - 页面过渡在 `nuxt.config.ts` 里配置（`pageTransition: { name: 'page', mode: 'out-in' }`，`experimental.viewTransition: true`），`/about` 单独用 `layoutTransition`
 
 ## 样式（Tailwind v4）
@@ -115,14 +120,15 @@ Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 
 - 两份 CSS 入口都要注意：应用侧 `assets/css/main.css` 与 `assets/css/tokens.css`（在 `nuxt.config.ts` 的 `css` 里按序加载），layer 侧 `src/assets/theme.css` 由 layer 的 `nuxt.config.ts` 注入
 - `theme.css` 顶部先声明级联层顺序 `@layer properties, theme, base, ant, antd, el, td, components, utilities;`（`el` 层是给 Element Plus 预留的位置，工具类排在最后才能覆盖组件库样式）；改动层顺序会静默影响覆盖效果
 - **不要跨文件重复 `@import 'tailwindcss'`**：`main.css` 已导入，layer 也导入；重复引入会产生多份 preflight/层声明
-- Tailwind 不自动扫描 node_modules，monorepo 类名靠 layer 里 `@source '../../../packages/'`、`@source '../../../apps/'` 显式声明；**`@source` 的相对路径以编译时的 base（应用 rootDir）为基准**，不是以 CSS 文件所在目录为基准
+- Tailwind 不自动扫描 workspace 里的其它包：`elsfs-components` 组件目录靠 `apps/elsfs-admin/assets/css/main.css` 里的 `@import 'elsfs-components/styles.css'` 登记为 source（模块内是 `@source "./components"`，相对模块的 CSS 文件解析）；**新增 / 移动模块组件目录时要同步改模块的 `src/runtime/styles.css`**，否则组件里独有的工具类不会生成 CSS
+- layer `theme.css` 里的 `@source '../../../packages/'`、`@source '../../../apps/'` 是按 `.playground` 的 base 写的，在 `elsfs-admin` 里并不指向仓库根（应用自身目录由 Tailwind 自动扫描）；跨包类名要像上面 `elsfs-components/styles.css` 那样显式登记，别指望这两行
 - 语义色走 HSL 通道变量：layer 把 `bg-background`/`text-foreground`/`text-primary` 等映射为 `hsl(var(--background))` 形式，**上游通道值由应用的 `assets/css/tokens.css` 提供**（`:root` 亮色、`:root.dark` 暗色）；新增语义色要两边同时补
 - 暗色是 class 变体，layer 里写死为 `@custom-variant dark (&:is(.dark *))`：它只匹配 `.dark` 的**后代**，因此 `.dark` 必须加在祖先元素上（color-mode 默认加在 `<html>`）；谁把变体改成 `&:is(.dark)`，暗色工具类就会失效。切换用 `@nuxtjs/color-mode` 的 `useColorMode()`（应用未覆盖模块默认配置）；`tokens.css` 的暗色令牌选择器是 `:root.dark`，二者是配套的两件事
 
 ### 图标（容易踩）
 
 - 应用装了 `@iconify-json/lucide`，layer 装了 `@iconify-json/mdi`，插件 `@iconify/tailwind4` 由 layer 提供
-- 统一用 `app/components/AppIcon.vue`：既能渲染 iconify（渲染 `<i class="icon-[...]">`），也能渲染 Element Plus 图标（按 PascalCase 查 `@element-plus/icons-vue`）
+- 统一用 `elsfs-components` 模块的 `AppIcon`（`apps/elsfs-components/src/runtime/components/AppIcon.vue`）：既能渲染 iconify（渲染 `<i class="icon-[...]">`），也能渲染 Element Plus 图标（按 PascalCase 查 `@element-plus/icons-vue`）
 - **图标类名必须能被 Tailwind 扫到**：要么在使用处写完整字面类名 `icon-[lucide--shield-check]`，要么先在 `AppIcon.vue` 的 `ICONIFY_CLASSES` 登记表里加一行。运行时字符串拼接出来的类名扫描不到，图标会直接不显示——新增图标最常见的坑
 - 旧写法 `i-lucide-shield-check` 仍可用（内部正则转换），新代码优先 `icon-[lucide--shield-check]`
 - 用 Element Plus 图标时传短名（如 `name="medal"`、`name="circle-check"`，大小写不敏感），不要写 `ElIconXxx`
@@ -157,8 +163,8 @@ Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 
 - 新增受保护页面：建 `app/pages/xxx.vue` 即可（全局中间件 `auth.global.ts` 会自动要求登录并加载菜单，无需再写 `middleware`），文案同时补两个语言包
 - 新增错误码：先在 `server/` 用 `createError({ message: 'XXX' })` 抛出，再到 `i18n/locales/{zh-CN,en}.json` 的 `errors` 下补 key，否则 UI 只能显示 key
 - 新增认证表单：在 `useAuthValidation.ts` 加 zod 工厂 → 页面用 vee-validate 的 `toTypedSchema` 接上 → 文案补双语言
-- 新增 iconify 图标：优先直接在模板写 `icon-[lucide--xxx]`；要按名传参就登记进 `AppIcon.vue` 的 `ICONIFY_CLASSES`
-- 新增组件：放 `app/components/auth/` 会得到 `AuthXxx` 名字（自动导入），公用组件放 `app/components/` 根
+- 新增 iconify 图标：优先直接在模板写 `icon-[lucide--xxx]`；要按名传参就登记进 `elsfs-components` 的 `AppIcon.vue` 的 `ICONIFY_CLASSES`（改完模块源码要重新构建 `dist/`）
+- 新增组件：公用组件放 `elsfs-components` 的 `src/runtime/components/`（构建后自动导入，`admin/*.vue` → `AdminXxx`）；只给布局用、且依赖应用 store 的放 `app/components/` 根
 
 ## elsfs-content（文档站）专有坑
 

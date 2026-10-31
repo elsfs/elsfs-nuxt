@@ -24,6 +24,7 @@
     "@pinia/nuxt": "catalog:",
     "api-types": "workspace:*",
     "dayjs": "1.11.23",
+    "elsfs-components": "workspace:*",
     "nuxt-request": "workspace:*",
     "tailwind-config": "workspace:*",
     "tailwindcss": "^4.3.3",

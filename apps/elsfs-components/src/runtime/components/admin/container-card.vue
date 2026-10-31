@@ -1,13 +1,16 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 /**
- *
  * 统一「查询区 / 列表 / 表单」的外壳：圆角、描边、背景，可选标题栏（标题 + 右侧操作区）
- * 与底部插槽。参考组件从它们的 tagsView store 取当前页签标题，这里改用本项目的
- * tabs store + `useMenuTitle()`，传了 `title` 时优先用传入值。
+ * 与底部插槽。
+ *
+ * 作为模块里的公共组件，这里不依赖应用状态：标题只由 `title` 决定。
+ * 需要展示「当前页签标题」等动态值时应由应用侧把值传进来。
  */
 const props = withDefaults(
   defineProps<{
-    /** 标题文案；不传时回退到当前页签标题 */
+    /** 标题文案 */
     title?: string
     /** 是否显示标题栏（参考组件默认不显示） */
     showTitle?: boolean
@@ -27,18 +30,8 @@ const props = withDefaults(
   },
 )
 
-const route = useRoute()
-const tabsStore = useTabsStore()
-const menuTitle = useMenuTitle()
-
-/** 标题：优先显式传入，否则回退到当前页签标题（与顶部页签一致） */
-const displayTitle = computed<string>(() => {
-  if (props.title) {
-    return props.title
-  }
-  const tab = tabsStore.tabs.find((item) => item.path === route.path)
-  return tab ? menuTitle(tab.title) : ''
-})
+/** 标题栏文案 */
+const displayTitle = computed<string>(() => props.title)
 </script>
 
 <template>

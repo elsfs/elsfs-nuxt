@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+/* elsfs-components 的组件用 Tailwind 工具类，这里把模块组件目录登记为 Tailwind source */
+@import 'elsfs-components/styles.css';
 
 /* ================= 页面过渡动画 ================= */
 .page-enter-active,

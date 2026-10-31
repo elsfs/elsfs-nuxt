@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { SysMenu, SysMenuForm } from 'api-types/elsfs'
 import { deleteMenusApi, editMenuApi, fetchMenuTreeApi } from 'api-types/elsfs'
+import type { SearchFormField } from 'elsfs-components/types/search-form'
 
-import type { SearchFormField } from '~/types/search-form'
 import { toErrorMessage } from '~/utils/api-error'
 
 import MenuForm from './-menu-form.vue'

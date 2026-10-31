@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import type { SysPost, SysPostPageQuery } from 'api-types/elsfs'
 import { deletePostsApi, editPostApi, fetchPostPageApi } from 'api-types/elsfs'
+import type { SearchFormField } from 'elsfs-components/types/search-form'
 
-import type { SearchFormField } from '~/types/search-form'
 import { toErrorMessage } from '~/utils/api-error'
 
 import PostForm from './-post-form.vue'

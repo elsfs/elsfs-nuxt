@@ -1,56 +1,89 @@
 {
   "name": "elsfs-components",
   "version": "1.0.0",
-  "description": "My new Nuxt module",
-  "repository": "your-org/my-module",
+  "description": "共享 UI 组件的 Nuxt 模块（AppIcon、列表页外壳、查询表单、表格、分页）",
   "license": "MIT",
+  "repository": "elsfs/elsfs-nuxt",
+  "workspaces": [
+    "playground"
+  ],
+  "files": [
+    "dist"
+  ],
   "type": "module",
-  "exports": {
-    ".": {
-      "types": "./dist/types.d.mts",
-      "import": "./dist/module.mjs"
-    }
-  },
   "main": "./dist/module.mjs",
   "typesVersions": {
     "*": {
       ".": [
         "./dist/types.d.mts"
+      ],
+      "types/search-form": [
+        "./dist/runtime/types/search-form.d.ts"
       ]
     }
   },
-  "files": [
-    "dist"
-  ],
-  "workspaces": [
-    "playground"
-  ],
+  "exports": {
+    ".": {
+      "types": "./dist/types.d.mts",
+      "import": "./dist/module.mjs",
+      "default": "./dist/module.mjs"
+    },
+    "./types/search-form": {
+      "types": "./dist/runtime/types/search-form.d.ts",
+      "import": "./dist/runtime/types/search-form.js",
+      "default": "./dist/runtime/types/search-form.js"
+    },
+    "./styles.css": "./dist/runtime/styles.css"
+  },
   "scripts": {
+    "postinstall": "nuxt-module-build prepare && nuxt-module-build build",
     "prepack": "nuxt-module-build build",
     "dev": "npm run dev:prepare && nuxt dev playground",
     "dev:build": "nuxt build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxt prepare playground",
-    "release": "npm run lint && npm run test && npm run prepack && changelogen --release && npm publish && git push --follow-tags",
-    "lint": "eslint .",
+    "release": "pnpm lint && pnpm test && pnpm prepack && changelogen --release && pnpm publish && git push --follow-tags",
+    "lint": "pnpm lint:eslint && pnpm lint:oxlint && pnpm lint:style && pnpm lint:spell",
+    "lint:eslint": "eslint .",
+    "lint:oxlint": "oxlint",
+    "lint:style": "stylelint --allow-empty-input \"**/*.{css,vue}\"",
+    "lint:spell": "cspell lint \"**/*.{ts,vue,js,mjs,cjs,json,jsonc,md,mdx,css,yaml,yml}\"",
+    "fmt": "oxfmt -c ../../packages/code-quality/oxfmt.json",
+    "fmt:check": "oxfmt --check -c ../../packages/code-quality/oxfmt.json",
     "test": "vitest run",
     "test:watch": "vitest watch",
     "test:types": "vue-tsc --noEmit && cd playground && vue-tsc --noEmit"
   },
   "dependencies": {
+    "@iconify-json/lucide": "^1.2.123",
+    "@iconify-json/mdi": "^1.2.0",
     "@nuxt/kit": "^4.6.3"
   },
   "devDependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
     "@nuxt/devtools": "^3.4.2",
-    "@nuxt/eslint-config": "^1.17.0",
     "@nuxt/module-builder": "^1.0.3",
     "@nuxt/schema": "^4.6.3",
     "@nuxt/test-utils": "^4.3.3",
     "@types/node": "latest",
     "changelogen": "^0.6.2",
+    "code-quality": "workspace:*",
+    "cspell": "catalog:",
+    "element-plus": "^2.14.5",
     "eslint": "^10.12.0",
     "nuxt": "^4.6.3",
+    "oxfmt": "catalog:",
+    "oxlint": "catalog:",
+    "postcss-html": "catalog:",
+    "stylelint": "catalog:",
+    "stylelint-config-standard": "catalog:",
     "typescript": "^6.0.3",
     "vitest": "^5.0.3",
+    "vue": "catalog:",
     "vue-tsc": "^3.3.12"
+  },
+  "peerDependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
+    "element-plus": "^2.14.5",
+    "vue": "^3.5.0"
   }
 }

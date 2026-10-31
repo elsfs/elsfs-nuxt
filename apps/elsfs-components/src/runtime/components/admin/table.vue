@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { StyleValue } from 'vue'
+import { computed, useAttrs } from 'vue'
 
 /**
  * 表格（`ElTable` 的薄封装）。
@@ -108,13 +109,17 @@ const tableAttrs = computed(() => {
 /* 表头文字加粗 */
 .admin-table :deep(.el-table__header-wrapper th.el-table__cell) {
   font-weight: 700;
-  /* 表头常态背景色 */
-  background-color: #f0f5ff;   /* 极浅蓝，清爽 */
-  color: #1f2d3d;              /* 深蓝灰，与浅蓝底协调 */
+
+  /* 表头常态背景色（极浅蓝，清爽） */
+  background-color: #f0f5ff;
+
+  /* 深蓝灰，与浅蓝底协调 */
+  color: #1f2d3d;
 }
+
 /**
-选中表头的单元格 th
-选中表体数据行的单元格 td
+ * 选中表头的单元格 th
+ * 选中表体数据行的单元格 td
  */
 .admin-table :deep(.el-table__header-wrapper th.el-table__cell),
 .admin-table :deep(.el-table__body-wrapper .el-table__row > td.el-table__cell) {

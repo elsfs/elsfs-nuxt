@@ -1,6 +1,6 @@
 export default defineNuxtConfig({
-  modules: ['my-module'],
+  modules: ['elsfs-components'],
   devtools: { enabled: true },
   compatibilityDate: 'latest',
-  myModule: {},
+  elsfsComponents: {},
 })

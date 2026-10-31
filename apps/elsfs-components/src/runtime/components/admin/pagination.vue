@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 /**
  *
  * 对 `ElPagination` 的薄封装：
