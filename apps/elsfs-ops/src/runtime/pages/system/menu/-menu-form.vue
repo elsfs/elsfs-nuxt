@@ -4,6 +4,7 @@ import { addMenuApi, editMenuApi, fetchMenuByIdApi, fetchMenuTreeApi } from 'api
 import type { FormInstance, FormRules } from 'element-plus'
 
 import { toErrorMessage } from '~/utils/api-error'
+import { MENU_TYPE_OPTIONS, STATUS_OPTIONS } from '~/utils/system-options'
 
 /**
  * 菜单新增 / 编辑弹窗表单（由菜单列表页打开，文件以 `-` 前缀命名，不生成路由）。

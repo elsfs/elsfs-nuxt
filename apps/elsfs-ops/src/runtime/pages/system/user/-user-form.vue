@@ -14,6 +14,7 @@ import {
 import type { FormInstance, FormRules } from 'element-plus'
 
 import { toErrorMessage } from '~/utils/api-error'
+import { SEX_OPTIONS, STATUS_OPTIONS } from '~/utils/system-options'
 
 /**
  * 账号新增 / 编辑弹窗表单（由账号列表页打开）。

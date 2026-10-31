@@ -54,3 +54,5 @@ pnpm fmt
 
 源码在 `src/`：`src/module.ts` 注册组件目录，`src/runtime/**` 会原样构建到 `dist/runtime/**`。
 Tailwind 扫描入口是包根的 `styles.css`（`@source "./src/runtime/components"`），不要在 `dist/` 里生成它——dev server 运行期间重建 dist 会让入口文件短暂缺失。
+
+`elsfs-admin` 的 `nuxt dev` 会按 `src/module.ts` 直接加载本模块源码，改组件即时 HMR，不需要先 `pnpm postinstall`；但 `nuxt build` 和 `pnpm typecheck` 仍走 `dist/`，构建前要重建。

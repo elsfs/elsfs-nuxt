@@ -1,0 +1,12 @@
+/*
+ * Tailwind 源登记：把模块页面目录加入扫描范围。
+ *
+ * 使用方在 CSS 入口里按顺序写：
+ *
+ *   @import 'tailwindcss';
+ *   @import 'elsfs-ops/styles.css';
+ *
+ * 本文件放在包根目录（不是构建产物 dist/ 里），dev 期间页面里新增的工具类会立即
+ * 重新生成 CSS。@source 的相对路径以本文件所在目录为基准。
+ */
+@source "./src/runtime/pages";

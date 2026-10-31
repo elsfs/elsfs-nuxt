@@ -172,7 +172,7 @@ async function handleDelete(row: SysMenu): Promise<void> {
         default-expand-all
         empty-text="暂无菜单数据"
       >
-        <ElTableColumn prop="menuName" label="菜单名称" min-width="220">
+        <ElTableColumn prop="menuName" label="菜单名称" min-width="220" show-overflow-tooltip>
           <template #default="{ row }">
             <span class="inline-flex items-center">
               <AppIcon :name="row.icon ?? 'menu'" fallback="menu" class="mr-1 size-4" />

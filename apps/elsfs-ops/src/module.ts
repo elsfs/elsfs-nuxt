@@ -1,5 +1,5 @@
 import { existsSync, readdirSync } from 'node:fs'
-import { join } from 'node:path'
+import { join, resolve, sep } from 'node:path'
 
 import { createResolver, defineNuxtModule, extendPages } from '@nuxt/kit'
 
@@ -59,5 +59,22 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.vite.resolve ||= {}
     nuxt.options.vite.resolve.dedupe ||= []
     nuxt.options.vite.resolve.dedupe.push('vue', 'element-plus')
+
+    // 开发时页面直接从 `src/runtime/pages` 加载，新增 / 删除页面目录不会让 extendPages
+    // 重跑（它只在启动和路由重算时执行）。把目录加入 watch 并监听变化，必要时重启
+    // dev server 重新扫描路由；页面文件本身的改动由 Vite HMR 处理，不会触发重启。
+    if (nuxt.options.dev && options.pages !== false) {
+      if (!nuxt.options.watch.includes(pagesDir)) nuxt.options.watch.push(pagesDir)
+
+      nuxt.hook('builder:watch', (event, relativePath) => {
+        const path = resolve(nuxt.options.srcDir, relativePath)
+        if (path !== pagesDir && !path.startsWith(pagesDir + sep)) return
+
+        if (event === 'addDir' || event === 'unlinkDir') return nuxt.callHook('restart')
+        if ((event === 'add' || event === 'unlink') && path.endsWith(`${sep}index.vue`)) {
+          return nuxt.callHook('restart')
+        }
+      })
+    }
   },
 })

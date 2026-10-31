@@ -4,6 +4,7 @@ import { addPostApi, editPostApi, fetchPostByIdApi } from 'api-types/elsfs'
 import type { FormInstance, FormRules } from 'element-plus'
 
 import { toErrorMessage } from '~/utils/api-error'
+import { STATUS_OPTIONS } from '~/utils/system-options'
 
 /**
  * 职位新增 / 编辑弹窗表单。

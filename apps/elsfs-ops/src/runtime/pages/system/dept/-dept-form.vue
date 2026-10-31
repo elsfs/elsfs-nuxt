@@ -4,6 +4,7 @@ import { addDeptApi, editDeptApi, fetchDeptByIdApi, fetchDeptTreeApi } from 'api
 import type { FormInstance, FormRules } from 'element-plus'
 
 import { toErrorMessage } from '~/utils/api-error'
+import { STATUS_OPTIONS } from '~/utils/system-options'
 
 /**
  * 部门新增 / 编辑弹窗表单（由列表页打开）。

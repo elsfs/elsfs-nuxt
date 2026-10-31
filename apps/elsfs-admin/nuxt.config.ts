@@ -1,4 +1,16 @@
+import { fileURLToPath } from 'node:url'
+
 import Sonda from 'sonda/nuxt'
+
+/**
+ * `nuxt dev` 启动时 NODE_ENV 为 development，`nuxt build` 为 production。
+ *
+ * dev 下直接从 workspace 里其它包的源码加载（而不是各自构建好的 `dist/`），改组件、
+ * 页面或公共包源码会立即 HMR，不用手动重建 dist；生产构建仍走各包 package.json 指向的
+ * `dist/` 产物，两边行为通过这里显式区分。
+ */
+const isDev = process.env.NODE_ENV === 'development'
+const workspacePath = (path: string) => fileURLToPath(new URL(path, import.meta.url))
 
 export default defineNuxtConfig({
   extends: ['tailwind-config'],
@@ -7,8 +19,10 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@element-plus/nuxt',
     '@nuxtjs/color-mode',
-    'elsfs-components',
-    'elsfs-ops',
+    // dev 下按源码路径加载模块：模块内 createResolver(import.meta.url) 会解析到
+    // src/runtime，组件 / 页面源码改动即时生效；生产构建按包名加载 dist 产物。
+    isDev ? workspacePath('../elsfs-components/src/module.ts') : 'elsfs-components',
+    isDev ? workspacePath('../elsfs-ops/src/module.ts') : 'elsfs-ops',
     Sonda(),
   ],
   $development: undefined,
@@ -46,6 +60,19 @@ export default defineNuxtConfig({
   vite: {
     optimizeDeps: {
       include: ['dayjs'],
+    },
+    // dev 下把公共包（api-types / nuxt-request）的子路径导入指到源码，改完即时生效；
+    // 生产构建仍按 package.json 的 exports 走 dist 入口。
+    resolve: {
+      alias: isDev
+        ? {
+            'api-types/elsfs': workspacePath('../api-types/src/api/elsfs/index.ts'),
+            'api-types/request': workspacePath('../api-types/src/api/request.ts'),
+            'nuxt-request/runtime': workspacePath(
+              '../../packages/nuxt-request/src/runtime/utils/index.ts',
+            ),
+          }
+        : {},
     },
   },
   nitro: {

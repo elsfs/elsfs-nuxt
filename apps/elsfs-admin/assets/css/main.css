@@ -1,6 +1,8 @@
 @import 'tailwindcss';
 /* elsfs-components 的组件用 Tailwind 工具类，这里把模块组件目录登记为 Tailwind source */
 @import 'elsfs-components/styles.css';
+/* elsfs-ops 的页面同样在应用目录外，需要单独登记，否则页面里独有的工具类不会生成 */
+@import 'elsfs-ops/styles.css';
 
 /* ================= 页面过渡动画 ================= */
 .page-enter-active,

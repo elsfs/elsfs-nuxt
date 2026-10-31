@@ -39,12 +39,23 @@ pnpm workspace 单仓多包。根目录 `package.json` 只有聚合脚本（`lin
 
 layer 自带 playground，可脱离应用单独调试样式：在 `packages/tailwind-config/` 下 `pnpm dev`（跑的是 `.playground`）。
 
-模块包（`elsfs-components` / `elsfs-ops` / `nuxt-request` / `api-types`）的 `postinstall` 会构建 `dist/`；改了 `elsfs-components` 的组件或 `elsfs-ops` 的页面源码后要重新构建，应用侧才拿得到新代码：在对应模块目录（`apps/elsfs-components/` 或 `apps/elsfs-ops/`）下 `pnpm postinstall`（或 `pnpm prepack`）。`dist/` 是构建产物，不在 git 里。
+模块包（`elsfs-components` / `elsfs-ops` / `nuxt-request` / `api-types`）的 `postinstall` 会构建 `dist/`，`dist/` 是构建产物、不在 git 里。
+
+**`elsfs-admin` 跑 dev 时不需要重建 dist**：`apps/elsfs-admin/nuxt.config.ts` 用 `NODE_ENV` 区分 dev / 生产，dev 下直接加载 workspace 里其它包的源码：
+
+- `elsfs-components` / `elsfs-ops` 按源码路径加载（`.../elsfs-components/src/module.ts`、`.../elsfs-ops/src/module.ts`），模块内 `createResolver(import.meta.url)` 会解析到 `src/runtime`，改组件 / 页面源码即时 HMR；`elsfs-ops` 在新增 / 删除页面目录时会自动重启 dev server 重新扫描路由（页面文件本身的改动只走 HMR，不重启）
+- `api-types` / `nuxt-request` 通过 Vite `resolve.alias` 指向源码入口（`apps/api-types/src/api/{elsfs,request}.ts`、`packages/nuxt-request/src/runtime/utils/index.ts`），改源码即时生效
+
+生产构建（`nuxt build` / `nuxt generate`）和 `pnpm typecheck`（类型走各包 `exports` 里的 `dist` 声明）仍然用 `dist/`，改完源码要重建：在对应包目录下 `pnpm postinstall`（或 `pnpm prepack`）。
+
+副作用：dev 生成的 `.nuxt/tsconfig.json` 会把模块 `src/runtime` 纳入 `vue-tsc` 的 include，所以模块里的类型错误会由 admin 的 `pnpm typecheck` 暴露；模块页面模板里用到的**应用自动导入项**（如 `app/utils/system-options` 的 `STATUS_OPTIONS`、`sexText`）必须显式 `import`——自动导入只在运行时由 Nuxt 注入，`vue-tsc` 检查模板时不认（会报 `Property 'xxx' does not exist`）。
 
 坑：
 
 - `apps/elsfs-admin/tsconfig.json` 只继承 `./.nuxt/tsconfig.json`，该文件由 `postinstall`（`nuxt prepare`）生成；类型检查报「找不到类型」时先 `pnpm install` 或重跑 `nuxt prepare`。**别把它改回 `references` 引用 `.nuxt/tsconfig.{app,server,shared,node}.json`**：那些文件是 `noEmit` 且没开 `composite`，`vue-tsc --noEmit` 会直接刷一屏 TS6305/TS6306
 - lint 输出管道给 `tail`/`head` 会吞掉 ESLint 的退出码（拿到的是管道最后一条命令的状态）；要判断成败就别接管道
+- dev 下按源码加载模块时，Vite 会用文件最近的 tsconfig；模块包根 `tsconfig.json` 继承各自生成的 `.nuxt/tsconfig.json`，所以**清掉模块包的 `.nuxt/` 后 dev 会报 `TSCONFIG_ERROR ... Tsconfig not found`**，先在模块目录 `pnpm postinstall`（或仓库根 `pnpm install`）把 `.nuxt/` 和 `dist/` 生成回来
+- dev 首次加载 `api-types` / `nuxt-request` 源码时，Vite 会发现 `axios` / `qs` / `vue-i18n` 未预构建，自动预构建并 reload 一次页面，属正常现象（这几个包没装在 `elsfs-admin` 根，别写进 `optimizeDeps.include`）
 - 仓库没有 turbo/nx 之类的任务编排器；根 `package.json` 只有 `pnpm -r` 聚合脚本（`lint`/`fmt`/`fmt:check`/`typecheck`），**`build` 未聚合**（两个应用的构建环境不同：content 需要 `.data`/`better-sqlite3`）
 - 根 `.npmrc`：`legacy-peer-deps=true`、项目本地 store `.pnpm-store`；`packages/tailwind-config/.npmrc` 另有一份（`shamefully-hoist=true`、`strict-peer-dependencies=false`；后者的键名在当前 pnpm 版本已不生效）
 
@@ -90,7 +101,7 @@ layer 自带 playground，可脱离应用单独调试样式：在 `packages/tail
 
 Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 的 `main` 指向它），样式在 `src/assets/theme.css`，`app.config.ts` 暴露 `elsfsComponents`，`.playground/` 仅用于调试。
 
-模块 `apps/elsfs-components/`：组件「一个文件夹一个组件」（`<folder>/index.vue`），`src/module.ts` 用 `addComponentsDir` 注册（`pathPrefix: false` 取消目录前缀，文件夹名即组件名），构建后组件经 Nuxt 自动导入（`app-icon/index.vue` → `<AppIcon>`）；对 Element Plus 的封装文件夹统一以 `ele-` 开头，组件名带 `Ele` 前缀（`ele-table/index.vue` → `<EleTable>`）。`src/runtime/types/`（如 `SearchFormField`）、`src/runtime/utils/iconify.ts` 构建到 `dist/runtime/`；Tailwind source 入口是**包根**的 `styles.css`（`@source "./src/runtime/components"`，不是构建产物），避免 dev 期间重建 dist 时入口文件短暂缺失。
+模块 `apps/elsfs-components/`：组件「一个文件夹一个组件」（`<folder>/index.vue`），`src/module.ts` 用 `addComponentsDir` 注册（`pathPrefix: false` 取消目录前缀，文件夹名即组件名），构建后组件经 Nuxt 自动导入（`app-icon/index.vue` → `<AppIcon>`）；对 Element Plus 的封装文件夹统一以 `ele-` 开头，组件名带 `Ele` 前缀（`ele-table/index.vue` → `<EleTable>`）。`src/runtime/types/`（如 `SearchFormField`）、`src/runtime/utils/iconify.ts` 构建到 `dist/runtime/`；Tailwind source 入口是**包根**的 `styles.css`（`@source "./src/runtime/components"`，不是构建产物），避免 dev 期间重建 dist 时入口文件短暂缺失。`elsfs-admin` dev 下按 `src/module.ts` 加载模块（见上文「模块包」一段），改 `src/runtime/**` 即时 HMR。
 
 真实存在的拼写/命名错误路径，找不到时别奇怪：
 
@@ -121,7 +132,7 @@ Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 
 - 两份 CSS 入口都要注意：应用侧 `assets/css/main.css` 与 `assets/css/tokens.css`（在 `nuxt.config.ts` 的 `css` 里按序加载），layer 侧 `src/assets/theme.css` 由 layer 的 `nuxt.config.ts` 注入
 - `theme.css` 顶部先声明级联层顺序 `@layer properties, theme, base, ant, antd, el, td, components, utilities;`（`el` 层是给 Element Plus 预留的位置，工具类排在最后才能覆盖组件库样式）；改动层顺序会静默影响覆盖效果
 - **不要跨文件重复 `@import 'tailwindcss'`**：`main.css` 已导入，layer 也导入；重复引入会产生多份 preflight/层声明
-- Tailwind 不自动扫描 workspace 里的其它包：`elsfs-components` 组件目录靠 `apps/elsfs-admin/assets/css/main.css` 里的 `@import 'elsfs-components/styles.css'` 登记为 source（模块根目录的 `styles.css` 里是 `@source "./src/runtime/components"`，相对该 CSS 文件解析；放包根而不是 `dist/`，避免 dev 期间重建 dist 导致入口文件短暂缺失）；**新增 / 移动模块组件目录时要同步改模块的 `styles.css`**，否则组件里独有的工具类不会生成 CSS
+- Tailwind 不自动扫描 workspace 里的其它包：`elsfs-components` 组件目录靠 `apps/elsfs-admin/assets/css/main.css` 里的 `@import 'elsfs-components/styles.css'` 登记为 source（模块根目录的 `styles.css` 里是 `@source "./src/runtime/components"`，相对该 CSS 文件解析；放包根而不是 `dist/`，避免 dev 期间重建 dist 导致入口文件短暂缺失）；`elsfs-ops` 的页面目录同理，靠 `@import 'elsfs-ops/styles.css'`（`@source "./src/runtime/pages"`）登记；**新增 / 移动模块组件或页面目录时要同步改对应包的 `styles.css`**，否则里面独有的工具类不会生成 CSS（曾经漏登记 `elsfs-ops` 页面，导致页面里 `max-h-[60vh]` 这类工具类缺失）
 - layer `theme.css` 里的 `@source '../../../packages/'`、`@source '../../../apps/'` 是按 `.playground` 的 base 写的，在 `elsfs-admin` 里并不指向仓库根（应用自身目录由 Tailwind 自动扫描）；跨包类名要像上面 `elsfs-components/styles.css` 那样显式登记，别指望这两行
 - 语义色走 HSL 通道变量：layer 把 `bg-background`/`text-foreground`/`text-primary` 等映射为 `hsl(var(--background))` 形式，**上游通道值由应用的 `assets/css/tokens.css` 提供**（`:root` 亮色、`:root.dark` 暗色）；新增语义色要两边同时补
 - 暗色是 class 变体，layer 里写死为 `@custom-variant dark (&:is(.dark *))`：它只匹配 `.dark` 的**后代**，因此 `.dark` 必须加在祖先元素上（color-mode 默认加在 `<html>`）；谁把变体改成 `&:is(.dark)`，暗色工具类就会失效。切换用 `@nuxtjs/color-mode` 的 `useColorMode()`（应用未覆盖模块默认配置）；`tokens.css` 的暗色令牌选择器是 `:root.dark`，二者是配套的两件事
@@ -164,9 +175,9 @@ Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 
 - 新增受保护页面：建 `app/pages/xxx.vue` 即可（全局中间件 `auth.global.ts` 会自动要求登录并加载菜单，无需再写 `middleware`），文案同时补两个语言包
 - 新增错误码：先在 `server/` 用 `createError({ message: 'XXX' })` 抛出，再到 `i18n/locales/{zh-CN,en}.json` 的 `errors` 下补 key，否则 UI 只能显示 key
 - 新增认证表单：在 `useAuthValidation.ts` 加 zod 工厂 → 页面用 vee-validate 的 `toTypedSchema` 接上 → 文案补双语言
-- 新增 iconify 图标：优先直接在模板写 `icon-[lucide--xxx]`；要按名传参就登记进 `elsfs-components` 的 `app-icon/index.vue` 的 `ICONIFY_CLASSES`（改完模块源码要重新构建 `dist/`）
-- 新增系统管理页面：在 `apps/elsfs-ops/src/runtime/pages/system/<页面>/index.vue` 添加（路由 `/system/<页面>`），重建模块 `dist/` 后生效
-- 新增组件：公用组件放 `elsfs-components` 的 `src/runtime/components/<组件名>/index.vue`（构建后自动导入；需要 `Ele` 前缀的组件文件夹用 `ele-` 开头，如 `ele-table/index.vue` → `<EleTable>`）；只给布局用、且依赖应用 store 的放 `app/components/` 根
+- 新增 iconify 图标：优先直接在模板写 `icon-[lucide--xxx]`；要按名传参就登记进 `elsfs-components` 的 `app-icon/index.vue` 的 `ICONIFY_CLASSES`（dev 下改完即时 HMR，生产构建前重建模块 `dist/`）
+- 新增系统管理页面：在 `apps/elsfs-ops/src/runtime/pages/system/<页面>/index.vue` 添加（路由 `/system/<页面>`），dev 下会自动重启并刷新路由；生产构建前重建模块 `dist/`
+- 新增组件：公用组件放 `elsfs-components` 的 `src/runtime/components/<组件名>/index.vue`（dev 下即时自动导入，生产构建前重建 `dist/`；需要 `Ele` 前缀的组件文件夹用 `ele-` 开头，如 `ele-table/index.vue` → `<EleTable>`）；只给布局用、且依赖应用 store 的放 `app/components/` 根
 
 ## elsfs-content（文档站）专有坑
 
