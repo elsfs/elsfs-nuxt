@@ -8,7 +8,9 @@
     "playground"
   ],
   "files": [
-    "dist"
+    "dist",
+    "styles.css",
+    "src/runtime/components"
   ],
   "type": "module",
   "main": "./dist/module.mjs",
@@ -33,7 +35,7 @@
       "import": "./dist/runtime/types/search-form.js",
       "default": "./dist/runtime/types/search-form.js"
     },
-    "./styles.css": "./dist/runtime/styles.css"
+    "./styles.css": "./styles.css"
   },
   "scripts": {
     "postinstall": "nuxt-module-build prepare && nuxt-module-build build",

@@ -1,0 +1,13 @@
+/*
+ * Tailwind 源登记：把模块组件目录加入扫描范围。
+ *
+ * 使用方在 CSS 入口里按顺序写：
+ *
+ *   @import 'tailwindcss';
+ *   @import 'elsfs-components/styles.css';
+ *
+ * 本文件放在包根目录（不是构建产物 dist/ 里），避免 dev server 运行期间重新构建
+ * dist 时入口文件短暂缺失、导致 Vite 报 "no valid target file was found"。
+ * @source 的相对路径以本文件所在目录为基准。
+ */
+@source "./src/runtime/components";

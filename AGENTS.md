@@ -89,7 +89,7 @@ layer 自带 playground，可脱离应用单独调试样式：在 `packages/tail
 
 Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 的 `main` 指向它），样式在 `src/assets/theme.css`，`app.config.ts` 暴露 `elsfsComponents`，`.playground/` 仅用于调试。
 
-模块 `apps/elsfs-components/`：组件「一个文件夹一个组件」（`<folder>/index.vue`），`src/module.ts` 用 `addComponentsDir` 注册（`pathPrefix: false` 取消目录前缀，文件夹名即组件名），构建后组件经 Nuxt 自动导入（`app-icon/index.vue` → `<AppIcon>`）；对 Element Plus 的封装文件夹统一以 `ele-` 开头，组件名带 `Ele` 前缀（`ele-table/index.vue` → `<EleTable>`）。`src/runtime/types/`（如 `SearchFormField`）、`src/runtime/utils/iconify.ts`、`src/runtime/styles.css` 一起构建到 `dist/runtime/`；`styles.css` 用 `@source "./components"` 把组件目录登记给 Tailwind。
+模块 `apps/elsfs-components/`：组件「一个文件夹一个组件」（`<folder>/index.vue`），`src/module.ts` 用 `addComponentsDir` 注册（`pathPrefix: false` 取消目录前缀，文件夹名即组件名），构建后组件经 Nuxt 自动导入（`app-icon/index.vue` → `<AppIcon>`）；对 Element Plus 的封装文件夹统一以 `ele-` 开头，组件名带 `Ele` 前缀（`ele-table/index.vue` → `<EleTable>`）。`src/runtime/types/`（如 `SearchFormField`）、`src/runtime/utils/iconify.ts` 构建到 `dist/runtime/`；Tailwind source 入口是**包根**的 `styles.css`（`@source "./src/runtime/components"`，不是构建产物），避免 dev 期间重建 dist 时入口文件短暂缺失。
 
 真实存在的拼写/命名错误路径，找不到时别奇怪：
 
@@ -120,7 +120,7 @@ Layer `packages/tailwind-config/`：入口是 `nuxt.config.ts`（`package.json` 
 - 两份 CSS 入口都要注意：应用侧 `assets/css/main.css` 与 `assets/css/tokens.css`（在 `nuxt.config.ts` 的 `css` 里按序加载），layer 侧 `src/assets/theme.css` 由 layer 的 `nuxt.config.ts` 注入
 - `theme.css` 顶部先声明级联层顺序 `@layer properties, theme, base, ant, antd, el, td, components, utilities;`（`el` 层是给 Element Plus 预留的位置，工具类排在最后才能覆盖组件库样式）；改动层顺序会静默影响覆盖效果
 - **不要跨文件重复 `@import 'tailwindcss'`**：`main.css` 已导入，layer 也导入；重复引入会产生多份 preflight/层声明
-- Tailwind 不自动扫描 workspace 里的其它包：`elsfs-components` 组件目录靠 `apps/elsfs-admin/assets/css/main.css` 里的 `@import 'elsfs-components/styles.css'` 登记为 source（模块内是 `@source "./components"`，相对模块的 CSS 文件解析）；**新增 / 移动模块组件目录时要同步改模块的 `src/runtime/styles.css`**，否则组件里独有的工具类不会生成 CSS
+- Tailwind 不自动扫描 workspace 里的其它包：`elsfs-components` 组件目录靠 `apps/elsfs-admin/assets/css/main.css` 里的 `@import 'elsfs-components/styles.css'` 登记为 source（模块根目录的 `styles.css` 里是 `@source "./src/runtime/components"`，相对该 CSS 文件解析；放包根而不是 `dist/`，避免 dev 期间重建 dist 导致入口文件短暂缺失）；**新增 / 移动模块组件目录时要同步改模块的 `styles.css`**，否则组件里独有的工具类不会生成 CSS
 - layer `theme.css` 里的 `@source '../../../packages/'`、`@source '../../../apps/'` 是按 `.playground` 的 base 写的，在 `elsfs-admin` 里并不指向仓库根（应用自身目录由 Tailwind 自动扫描）；跨包类名要像上面 `elsfs-components/styles.css` 那样显式登记，别指望这两行
 - 语义色走 HSL 通道变量：layer 把 `bg-background`/`text-foreground`/`text-primary` 等映射为 `hsl(var(--background))` 形式，**上游通道值由应用的 `assets/css/tokens.css` 提供**（`:root` 亮色、`:root.dark` 暗色）；新增语义色要两边同时补
 - 暗色是 class 变体，layer 里写死为 `@custom-variant dark (&:is(.dark *))`：它只匹配 `.dark` 的**后代**，因此 `.dark` 必须加在祖先元素上（color-mode 默认加在 `<html>`）；谁把变体改成 `&:is(.dark)`，暗色工具类就会失效。切换用 `@nuxtjs/color-mode` 的 `useColorMode()`（应用未覆盖模块默认配置）；`tokens.css` 的暗色令牌选择器是 `:root.dark`，二者是配套的两件事
