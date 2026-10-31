@@ -62,6 +62,7 @@
   },
   "devDependencies": {
     "@element-plus/icons-vue": "^2.3.2",
+    "@element-plus/nuxt": "1.1.5",
     "@nuxt/devtools": "^3.4.2",
     "@nuxt/module-builder": "^1.0.3",
     "@nuxt/schema": "^4.6.3",

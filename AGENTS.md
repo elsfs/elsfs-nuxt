@@ -50,6 +50,13 @@ layer 自带 playground，可脱离应用单独调试样式：在 `packages/tail
 
 副作用：dev 生成的 `.nuxt/tsconfig.json` 会把模块 `src/runtime` 纳入 `vue-tsc` 的 include，所以模块里的类型错误会由 admin 的 `pnpm typecheck` 暴露；模块页面模板里用到的**应用自动导入项**（如 `app/utils/system-options` 的 `STATUS_OPTIONS`、`sexText`）必须显式 `import`——自动导入只在运行时由 Nuxt 注入，`vue-tsc` 检查模板时不认（会报 `Property 'xxx' does not exist`）。
 
+模块包根各有一份 `nuxt.config.ts`，**不参与运行**，只给 `postinstall` 里的 `nuxt-module-build prepare` 生成模块自己的 `.nuxt` 类型用（prepare 会以包根为 rootDir 跑 `nuxt prepare`，并在 overrides 里追加 `src/module`）：
+
+- `elsfs-ops` 挂 `elsfs-components` + `@element-plus/nuxt`，`elsfs-components` 挂 `@element-plus/nuxt`
+- 作用：IDE（Volar）里编辑 `src/runtime/**` 时，模板里的 `<EleXxx>` / `<ElXxx>` 能解析到自动导入的组件类型；不加这两行会「没有智能提示」
+- `@element-plus/nuxt` 只是两个模块的 devDependency，不进发布产物，`files` 里也没有 `nuxt.config.ts`
+- 宿主应用的自动导入（`useApi`、`usePagedList`、`ElMessage`、`~/utils/*` 别名）只存在于宿主应用，模块包自己的类型里解析不到，模块包内看到这些红波浪属预期，不影响 admin 的 `pnpm typecheck`
+
 坑：
 
 - `apps/elsfs-admin/tsconfig.json` 只继承 `./.nuxt/tsconfig.json`，该文件由 `postinstall`（`nuxt prepare`）生成；类型检查报「找不到类型」时先 `pnpm install` 或重跑 `nuxt prepare`。**别把它改回 `references` 引用 `.nuxt/tsconfig.{app,server,shared,node}.json`**：那些文件是 `noEmit` 且没开 `composite`，`vue-tsc --noEmit` 会直接刷一屏 TS6305/TS6306

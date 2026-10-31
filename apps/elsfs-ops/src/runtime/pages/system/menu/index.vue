@@ -4,6 +4,7 @@ import { deleteMenusApi, editMenuApi, fetchMenuTreeApi } from 'api-types/elsfs'
 import type { SearchFormField } from 'elsfs-components/types/search-form'
 
 import { toErrorMessage } from '~/utils/api-error'
+import { menuTypeText } from '~/utils/system-options'
 
 import MenuForm from './-menu-form.vue'
 

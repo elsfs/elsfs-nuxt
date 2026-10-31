@@ -56,3 +56,5 @@ pnpm fmt
 Tailwind 扫描入口是包根的 `styles.css`（`@source "./src/runtime/components"`），不要在 `dist/` 里生成它——dev server 运行期间重建 dist 会让入口文件短暂缺失。
 
 `elsfs-admin` 的 `nuxt dev` 会按 `src/module.ts` 直接加载本模块源码，改组件即时 HMR，不需要先 `pnpm postinstall`；但 `nuxt build` 和 `pnpm typecheck` 仍走 `dist/`，构建前要重建。
+
+包根的 `nuxt.config.ts` **不参与运行**，只给 `nuxt-module-build prepare`（`postinstall` 里会跑）生成模块自己的 `.nuxt` 类型用：它额外挂了 `@element-plus/nuxt`，所以 IDE 里编辑 `src/runtime/components/**` 时，模板里的 `<ElPagination>` / `<ElTable>` 等 Element Plus 组件有类型提示（`@element-plus/nuxt` 只是 devDependency，不会被发布）。删掉这份配置运行时不受影响，但 IDE 会失去 Element Plus 组件提示。

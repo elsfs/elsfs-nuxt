@@ -59,3 +59,9 @@ pnpm fmt
 `elsfs-admin` 的 `nuxt dev` 会按 `src/module.ts` 直接加载本模块源码，改页面即时生效，不需要先 `pnpm postinstall`；但 `nuxt build` 和 `pnpm typecheck` 仍走 `dist/`，构建前要重建。
 
 页面模板里用到应用 `app/utils/system-options` 的自动导入项（`STATUS_OPTIONS`、`sexText`、`menuTypeText` 等）时，要在页面里显式 `import { ... } from '~/utils/system-options'`：自动导入只在运行时由 Nuxt 注入，`vue-tsc` 检查模板时不会把自动导入当成全局变量（否则报 `Property 'xxx' does not exist`）。
+
+### IDE 类型提示
+
+包根的 `nuxt.config.ts` **不参与运行**，只给 `nuxt-module-build prepare`（`postinstall` 里会跑）生成模块自己的 `.nuxt` 类型用：它额外挂了 `elsfs-components` 与 `@element-plus/nuxt`，所以 IDE 里编辑 `src/runtime/pages/**` 时，模板里的 `<EleTable>` / `<EleSearchForm>` / `<ElInput>` 等能拿到自动导入组件的类型提示（`@element-plus/nuxt` 只是 devDependency，不会被发布）。删掉这份配置运行时不受影响，但 IDE 会失去组件提示。
+
+> 宿主应用独有的东西（`useApi`、`usePagedList`、`ElMessage`、`~/utils/*` 别名）在模块包自己的类型环境里解析不到，模块包内看到这些红波浪属预期；由 `elsfs-admin` 的 `pnpm typecheck` 负责最终校验。
