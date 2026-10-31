@@ -48,6 +48,7 @@
     "oxfmt": "catalog:",
     "oxlint": "catalog:",
     "postcss-html": "catalog:",
+    "sonda": "^0.14.0",
     "stylelint": "catalog:",
     "stylelint-config-standard": "catalog:",
     "typescript": "catalog:",

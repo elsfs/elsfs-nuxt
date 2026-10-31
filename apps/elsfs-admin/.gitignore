@@ -5,6 +5,7 @@
 .nitro
 .cache
 dist
+.sonda
 
 # TypeScript incremental build info
 *.tsbuildinfo
