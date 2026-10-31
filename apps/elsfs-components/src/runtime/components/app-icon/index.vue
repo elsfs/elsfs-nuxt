@@ -3,7 +3,7 @@ import * as ElementPlusIcons from '@element-plus/icons-vue'
 import type { Component, VNode } from 'vue'
 import { computed, useAttrs } from 'vue'
 
-import { resolveIconifyIcon } from '../utils/iconify'
+import { resolveIconifyIcon } from '../../utils/iconify'
 
 export interface IconProps {
   /**

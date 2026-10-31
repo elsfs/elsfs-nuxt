@@ -11,7 +11,7 @@ import { computed } from 'vue'
  *
  * 用法：
  * ```vue
- * <AdminPagination
+ * <ElePagination
  *   v-model:page="current"
  *   v-model:rows="size"
  *   :total="total"

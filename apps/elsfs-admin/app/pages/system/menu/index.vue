@@ -146,8 +146,8 @@ async function handleDelete(row: SysMenu): Promise<void> {
 </script>
 
 <template>
-  <AdminContainerCard class="h-full">
-    <AdminSearchForm
+  <EleContainerCard class="h-full">
+    <EleSearchForm
       :fields="SEARCH_FIELDS"
       :form="query"
       :loading="loading"
@@ -160,11 +160,11 @@ async function handleDelete(row: SysMenu): Promise<void> {
           新增菜单
         </ElButton>
       </template>
-    </AdminSearchForm>
+    </EleSearchForm>
 
     <!-- 菜单树 -->
     <section class="border-border bg-card flex min-h-0 flex-1 flex-col rounded-xl border p-4">
-      <AdminTable
+      <EleTable
         :loading="loading"
         :data="filteredMenus"
         row-key="id"
@@ -213,7 +213,7 @@ async function handleDelete(row: SysMenu): Promise<void> {
             </ElButton>
           </template>
         </ElTableColumn>
-      </AdminTable>
+      </EleTable>
     </section>
     <MenuForm
       v-model:visible="formVisible"
@@ -221,5 +221,5 @@ async function handleDelete(row: SysMenu): Promise<void> {
       :parent-id="editingParentId"
       @success="handleSaved"
     />
-  </AdminContainerCard>
+  </EleContainerCard>
 </template>

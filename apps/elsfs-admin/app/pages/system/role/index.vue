@@ -168,8 +168,8 @@ async function saveMenuAuth(): Promise<void> {
 </script>
 
 <template>
-  <AdminContainerCard class="h-full">
-    <AdminSearchForm
+  <EleContainerCard class="h-full">
+    <EleSearchForm
       :fields="SEARCH_FIELDS"
       :form="query"
       :loading="loading"
@@ -182,10 +182,10 @@ async function saveMenuAuth(): Promise<void> {
           新增角色
         </ElButton>
       </template>
-    </AdminSearchForm>
+    </EleSearchForm>
     <!-- 列表 -->
     <section class="border-border bg-card flex min-h-0 flex-1 flex-col rounded-xl border p-4">
-      <AdminTable :loading="loading" :data="rows" row-key="roleId">
+      <EleTable :loading="loading" :data="rows" row-key="roleId">
         <ElTableColumn type="index" label="#" width="56" align="center" />
         <ElTableColumn prop="roleName" label="角色名称" min-width="140" />
         <ElTableColumn prop="roleCode" label="角色编码" min-width="140" />
@@ -215,10 +215,10 @@ async function saveMenuAuth(): Promise<void> {
             </ElButton>
           </template>
         </ElTableColumn>
-      </AdminTable>
+      </EleTable>
 
       <div class="mt-3 flex shrink-0 justify-end">
-        <AdminPagination
+        <ElePagination
           v-model:page="current"
           v-model:rows="size"
           :total="total"
@@ -253,5 +253,5 @@ async function saveMenuAuth(): Promise<void> {
         <ElButton type="primary" :loading="menuSaving" @click="saveMenuAuth"> 保存授权 </ElButton>
       </template>
     </ElDialog>
-  </AdminContainerCard>
+  </EleContainerCard>
 </template>

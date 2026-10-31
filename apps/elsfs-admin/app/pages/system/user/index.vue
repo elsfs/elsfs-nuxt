@@ -176,8 +176,8 @@ async function handleDelete(row: SysUser): Promise<void> {
 </script>
 
 <template>
-  <AdminContainerCard class="h-full">
-    <AdminSearchForm
+  <EleContainerCard class="h-full">
+    <EleSearchForm
       :fields="SEARCH_FIELDS"
       :form="query"
       :loading="loading"
@@ -190,10 +190,10 @@ async function handleDelete(row: SysUser): Promise<void> {
           新增账号
         </ElButton>
       </template>
-    </AdminSearchForm>
+    </EleSearchForm>
     <!-- 列表 -->
     <section class="border-border bg-card flex min-h-0 flex-1 flex-col rounded-xl border p-4">
-      <AdminTable :loading="loading" :data="rows" row-key="userId">
+      <EleTable :loading="loading" :data="rows" row-key="userId">
         <ElTableColumn prop="username" label="用户名" min-width="120" show-overflow-tooltip />
         <ElTableColumn prop="nickname" label="昵称" min-width="110" show-overflow-tooltip />
         <ElTableColumn prop="phone" label="手机号" width="130" />
@@ -227,10 +227,10 @@ async function handleDelete(row: SysUser): Promise<void> {
             </ElButton>
           </template>
         </ElTableColumn>
-      </AdminTable>
+      </EleTable>
 
       <div class="mt-3 flex shrink-0 justify-end">
-        <AdminPagination
+        <ElePagination
           v-model:page="current"
           v-model:rows="size"
           :total="total"
@@ -241,5 +241,5 @@ async function handleDelete(row: SysUser): Promise<void> {
     </section>
 
     <UserForm v-model:visible="formVisible" :user-id="editingId" @success="handleSaved" />
-  </AdminContainerCard>
+  </EleContainerCard>
 </template>

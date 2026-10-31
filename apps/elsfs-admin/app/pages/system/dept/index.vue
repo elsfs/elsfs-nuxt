@@ -143,8 +143,8 @@ async function handleDelete(row: SysDept): Promise<void> {
 </script>
 
 <template>
-  <AdminContainerCard class="h-full">
-    <AdminSearchForm
+  <EleContainerCard class="h-full">
+    <EleSearchForm
       :fields="SEARCH_FIELDS"
       :form="query"
       :loading="loading"
@@ -157,10 +157,10 @@ async function handleDelete(row: SysDept): Promise<void> {
           新增部门
         </ElButton>
       </template>
-    </AdminSearchForm>
+    </EleSearchForm>
     <!-- 树形列表 -->
     <section class="border-border bg-card flex min-h-0 flex-1 flex-col rounded-xl border p-4">
-      <AdminTable
+      <EleTable
         :key="query.keyword"
         :loading="loading"
         :data="tableData"
@@ -195,7 +195,7 @@ async function handleDelete(row: SysDept): Promise<void> {
             </ElButton>
           </template>
         </ElTableColumn>
-      </AdminTable>
+      </EleTable>
       <p
         v-if="!loading && !tableData.length"
         class="text-muted-foreground mt-3 shrink-0 text-center text-sm"
@@ -210,5 +210,5 @@ async function handleDelete(row: SysDept): Promise<void> {
       :parent-id="editingParentId"
       @success="handleSaved"
     />
-  </AdminContainerCard>
+  </EleContainerCard>
 </template>

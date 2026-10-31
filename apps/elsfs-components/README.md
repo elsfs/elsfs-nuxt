@@ -4,13 +4,15 @@
 
 ## 组件
 
-| 组件                 | 文件                                              | 说明                                                    |
-| -------------------- | ------------------------------------------------- | ------------------------------------------------------- |
-| `AppIcon`            | `src/runtime/components/AppIcon.vue`              | 统一图标入口：iconify（本地图标集）与 Element Plus 图标 |
-| `AdminContainerCard` | `src/runtime/components/admin/container-card.vue` | 查询 / 列表 / 表单的卡片外壳                            |
-| `AdminSearchForm`    | `src/runtime/components/admin/search-form.vue`    | 配置驱动的搜索表单                                      |
-| `AdminTable`         | `src/runtime/components/admin/table.vue`          | `ElTable` 薄封装（默认 `fill` 撑满父容器）              |
-| `AdminPagination`    | `src/runtime/components/admin/pagination.vue`     | `ElPagination` 薄封装                                   |
+组件采用「一个文件夹一个组件」的结构：`<folder>/index.vue`，文件夹名就是组件名；组件目录注册时 `pathPrefix: false`，目录层级不参与命名。对 Element Plus 的封装文件夹统一以 `ele-` 开头（如 `ele-table/index.vue`）；文件夹名即组件名，所以这些组件名带 `Ele` 前缀。
+
+| 组件               | 文件                                                  | 说明                                                    |
+| ------------------ | ----------------------------------------------------- | ------------------------------------------------------- |
+| `AppIcon`          | `src/runtime/components/app-icon/index.vue`           | 统一图标入口：iconify（本地图标集）与 Element Plus 图标 |
+| `EleContainerCard` | `src/runtime/components/ele-container-card/index.vue` | 查询 / 列表 / 表单的卡片外壳                            |
+| `EleSearchForm`    | `src/runtime/components/ele-search-form/index.vue`    | 配置驱动的搜索表单                                      |
+| `EleTable`         | `src/runtime/components/ele-table/index.vue`          | `ElTable` 薄封装（默认 `fill` 撑满父容器）              |
+| `ElePagination`    | `src/runtime/components/ele-pagination/index.vue`     | `ElPagination` 薄封装                                   |
 
 布局（`app/layouts/`）专用组件不在此模块内，仍留在各自应用里。
 

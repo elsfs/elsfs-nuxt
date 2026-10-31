@@ -101,8 +101,8 @@ async function handleDelete(row: SysPost): Promise<void> {
 </script>
 
 <template>
-  <AdminContainerCard class="h-full">
-    <AdminSearchForm
+  <EleContainerCard class="h-full">
+    <EleSearchForm
       :fields="SEARCH_FIELDS"
       :form="query"
       :loading="loading"
@@ -115,10 +115,10 @@ async function handleDelete(row: SysPost): Promise<void> {
           新增职位
         </ElButton>
       </template>
-    </AdminSearchForm>
+    </EleSearchForm>
     <!-- 列表 -->
     <section class="border-border bg-card flex min-h-0 flex-1 flex-col rounded-xl border p-4">
-      <AdminTable :loading="loading" :data="rows" row-key="postId">
+      <EleTable :loading="loading" :data="rows" row-key="postId">
         <ElTableColumn type="index" label="#" width="56" align="center" />
         <ElTableColumn prop="postName" label="职务名称" min-width="140" />
         <ElTableColumn prop="postCode" label="职务编码" min-width="140" />
@@ -146,10 +146,10 @@ async function handleDelete(row: SysPost): Promise<void> {
             </ElButton>
           </template>
         </ElTableColumn>
-      </AdminTable>
+      </EleTable>
 
       <div class="mt-3 flex shrink-0 justify-end">
-        <AdminPagination
+        <ElePagination
           v-model:page="current"
           v-model:rows="size"
           :total="total"
@@ -160,5 +160,5 @@ async function handleDelete(row: SysPost): Promise<void> {
     </section>
 
     <PostForm v-model:visible="formVisible" :post-id="editingId" @success="handleSaved" />
-  </AdminContainerCard>
+  </EleContainerCard>
 </template>

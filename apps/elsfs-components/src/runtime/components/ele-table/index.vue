@@ -9,23 +9,23 @@ import { computed, useAttrs } from 'vue'
  * - `loading` 直接驱动 `v-loading`（不用在页面里再写指令）；
  * - 默认占满父容器剩余高度（`fill`）：表数据超出时在表格内部滚动，表头固定；
  *   父容器需要是 flex 布局（列表页里是 `flex-1` 的卡片 `<section>`）；
- *   有分页时把 `AdminPagination` 放在组件后面，它自然贴在底部；
+ *   有分页时把 `ElePagination` 放在组件后面，它自然贴在底部；
  * - 其余 props / 事件 / 透传属性全部交给 `ElTable`，列仍然用 `ElTableColumn`
  *   直接写在默认插槽里，`append` / `empty` 插槽也会转发给 `ElTable`。
  *
  * 用法：
  * ```vue
- * <AdminContainerCard class="h-full">
- *   <AdminSearchForm ... />
+ * <EleContainerCard class="h-full">
+ *   <EleSearchForm ... />
  *   <section class="flex min-h-0 flex-1 flex-col p-4">
- *     <AdminTable :loading="loading" :data="rows" row-key="id">
+ *     <EleTable :loading="loading" :data="rows" row-key="id">
  *       <ElTableColumn prop="name" label="名称" />
- *     </AdminTable>
+ *     </EleTable>
  *     <div class="mt-3 flex shrink-0 justify-end">
- *       <AdminPagination v-model:page="current" v-model:rows="size" :total="total" />
+ *       <ElePagination v-model:page="current" v-model:rows="size" :total="total" />
  *     </div>
  *   </section>
- * </AdminContainerCard>
+ * </EleContainerCard>
  * ```
  */
 defineOptions({ inheritAttrs: false })
